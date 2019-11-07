@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+<body>
+		<table id="abendsTable">
+            <thead>
+                <th >Jobname</th>
+                <th >Site</th>
+                <th >Date</th>
+                <th >Time</th>
+                <th>Action</th>
+                <th >Time of action</th>
+            </thead>
+			<tbody id="abendsTbody">
+			<tbody>
+        </table>
+		<br>
+		<table id="longRunningTable">
+            <thead>
+                <th >Jobname</th>
+                <th >Site</th>
+				<th >Date</th>
+                <th >Time</th>
+                <th >Action</th>
+                <th>Team</th>
+                <th >Time of action</th>
+            </thead>
+			<tbody id="longRunningTbody">
+			<tbody>
+        </table>
+		
+		
+	<script>
+		var outlookApp = new ActiveXObject("Outlook.Application");
+		var nameSpace = outlookApp.getNameSpace("MAPI");
+		//nameSpace.logon("ja20076062@wipro.com","jjgm@WL6062",false,false);
+		var mailFolder = nameSpace.GetDefaultFolder(6).Folders("tempNovember").Items.Item(1).ConversationTopic;
+		var emails = nameSpace.GetDefaultFolder(6).Folders("tempNovember").Items;
+		var abendsTbody = document.getElementById("abendsTbody");	
+		var longRunningTbody = document.getElementById("longRunningTbody");	
+		
+		for( var i=1; i <= emails.count; i++ ){
+			var zjobs = [];
+			var myBody = emails.Item(i).Body;
+			var emailSubject = emails.Item(i).ConversationTopic;
+			
+			if( emailSubject.indexOf("ABEND") > 0){
+				if( emailSubject.indexOf("*")>0 || emailSubject.indexOf("MULTIPLE")>0 || emailSubject.indexOf("&") > 0){ //multiple job
+					zjobs = extractJobs(myBody);
+				}else{ //single job
+					var jobname =  emailSubject.split("|")[1].split(" ")[2];
+					zjobs.push(jobname);
+				}
+			}else{ 
+				var jobname =  emailSubject.split("|")[1].split(" ")[2];
+				zjobs.push(jobname);
+			
+			}
+			
+			//((mailFolder.split("|"))[1]).split(" ")[2]
+			var site = emails.Item(i).ConversationTopic.split("|")[0].split(" ")[0];
+				//((mailFolder.split("|"))[0]).split(" ")[0];
+			var myDate = emails.Item(i).SentOn;
+				//nameSpace.GetDefaultFolder(6).Folders("tempOctober").Items.Item(1).SentOn;
+				//nameSpace.GetDefaultFolder(6).Folders("tempOctober").Items.Item(1).Body;
+			var convertedDate = new Date(myDate);
+			var recipients = emails.Item(i).cc + emails.Item(i).to; //to,cc,bcc
+
+			//manipulate Time
+			var emailTimeSent = emails.Item(i).SentOn;
+			var timeColumnConvertedDate = new Date(emailTimeSent);
+			var tempDate = new Date();
+			tempDate.setHours( timeColumnConvertedDate.getHours() );
+			tempDate.setMinutes( timeColumnConvertedDate.getMinutes() );
+			tempDate.setSeconds( timeColumnConvertedDate.getSeconds() );
+			var rerunMinute = 5; 
+			var notifyMinute = 3; 
+			var markCompleteMinute = 2; 
+			var longRunninMinute = 3;
+			
+			//var result = new Date(timeColumnConvertedDate.setMinutes( timeColumnConvertedDate.getMinutes() - minuteLess )).toJSON().split("T")[1].split(".")[0];
+			//find Action
+
+			if( emails.Item(i).ConversationTopic.indexOf("ABEND") > 0){ //abends
+				if( emails.Item(i).Body.indexOf("rerun") > 0 && emails.Item(i).Body.indexOf("complete") < 0){
+					var action = "rerun as per programmer";
+					var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
+				}else if( emails.Item(i).Body.indexOf("NO RECOVERY REQUIRED") > 0 ){
+					if( emails.Item(i).Body.indexOf("as per") > 0 ){
+						var action = "mark complete as per ps25";
+						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - markCompleteMinute )).toTimeString().split(" ")[0];
+					}else{
+						var action = "mark complete as per programmer";
+						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - markCompleteMinute )).toTimeString().split(" ")[0];
+					}
+				}else if( emails.Item(i).Body.indexOf("check and advise") > 0 ) {
+					var action = "notify programmer";
+					var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - notifyMinute )).toTimeString().split(" ")[0];
+				}
+				var logType = "abend";
+				//var newRow = abendsTbody.insertRow(-1)
+				displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
+			}else{ 
+				var logType = "longRunning";
+				var action = "long running";
+				//var newRow = longRunningTbody.insertRow(-1)
+				var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - longRunninMinute )).toTimeString().split(" ")[0];
+				displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
+			}
+		}
+		function extractJobs(myBody){
+			var myArray = myBody.split("\n");
+			var result = [];
+			console.log( myArray);
+			for( var j = 0; j < myArray.length; j++){
+				var lineN = myArray[j];
+
+				if( lineN.indexOf("Z") >= 0  ){ //if line has a char 'Z', then there is a job
+					//console.log( lineN.substring(lineN.indexOf("Z"),8))//get all Zjobs 
+					result.push( lineN.substring(lineN.indexOf("Z"),8) )
+					
+					if( myArray[j+2].indexOf("Z") < 0 ){
+						break;
+					}
+				}
+			}
+			console.log(result);
+			return result;
+			//var line12 = myBody.split("\n")[12]; 
+			//console.log(myBody.split("\n")[12].indexOf("Z")); //extract every job
+			//console.log(line12.substring(0, 11));
+		}
+		function displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients){
+			//(logType == "abend") ? (var newRow = abendsTbody.insertRow(-1)):(var newRow = longRunningTbody.insertRow(-1));
+			//console.log(zjobs)
+			if( logType === "abend" ) {
+				var newRow = abendsTbody.insertRow(-1)
+			}else{
+				var newRow = longRunningTbody.insertRow(-1)
+			}
+			if( zjobs.length == 1){
+				//var newRow = abendsTbody.insertRow(-1)
+				newRow.insertCell(-1).innerHTML = zjobs[0];
+				newRow.insertCell(-1).innerHTML = site;
+				newRow.insertCell(-1).innerHTML = convertedDate.toJSON().split("T")[0];
+				newRow.insertCell(-1).innerHTML = timeResult;
+				newRow.insertCell(-1).innerHTML = action;
+				if(logType === "abend"){
+					newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
+				}
+			}else{
+				for(var i=0; i< zjobs.length; i++ ){
+					newRow.insertCell(-1).innerHTML = zjobs[i];
+					newRow.insertCell(-1).innerHTML = site;
+					newRow.insertCell(-1).innerHTML = convertedDate.toJSON().split("T")[0];
+					newRow.insertCell(-1).innerHTML = timeResult;
+					newRow.insertCell(-1).innerHTML = action;
+					newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
+					if( i < zjobs.length){
+						var newRow = abendsTbody.insertRow(-1)
+					}
+				}
+			}
+			
+			if( logType === "longRunning" ) { //team
+				if( recipients.indexOf("data_mart") > 0 ){
+					var team = "Datamart";
+				}else if ( recipients.indexOf("scssupport") > 0 ){
+					var team = "SCS";
+				}else if ( recipients.indexOf("dcit") > 0 ){
+					var team = "Dcit";
+				}else if ( recipients.indexOf("debatch") > 0 ){
+					var team = "Debatch";
+				}else if ( recipients.indexOf("logistic") > 0 ){
+					var team = "Logistic";
+				}else if ( recipients.indexOf("hrsprodsup") > 0 ){
+					var team = "Hrsprodsup";
+				}else if ( recipients.indexOf("firm") > 0 ){
+					var team = "Firm";
+				}else if ( recipients.indexOf("emk-dba") > 0 ){
+					var team = "Emk-Dba";
+				}else if ( recipients.indexOf("ap-mmpp") > 0 ){
+					var team = "Ap-mmpp";
+				}else if ( recipients.indexOf("sapbw") > 0 ){
+					var team = "Sapbw";
+				}else if ( recipients.indexOf("wwmit_qms") > 0 ){
+					var team = "wwmit_qms";
+				}else{
+					var team = "SAP";//sap_yr
+				}
+				newRow.insertCell(-1).innerHTML = team;
+				newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
+			}
+			
+				
+
+		}
+		
+
+		//manipulate Time
+		//var myDate = emails.Item(1).SentOn;
+		//var convertedDate = new Date(myDate);
+		//var minuteLess = new Date(convertedDate.setMinutes( convertedDate.getMinutes() - 5 )).toJSON().split("T")[1].split(".")[0];
+
+	
+		
+		//Excell export..Jake please continue this:)
+	//	var ExcelApp = new ActiveXObject("Excel.Application");  
+	//var ExcelSheet = new ActiveXObject("Excel.Sheet");
+		// Make Excel visible through the Application object.  
+	//ExcelSheet.Application.Visible = true;  
+	    // Place some text in the first cell of the sheet.  
+	//ExcelSheet.ActiveSheet.Cells(1,1).Value = "This is column A, row 1";  
+		// Save the sheet.  
+	//ExcelSheet.SaveAs("C:\\TEST.XLS");  
+		// Close Excel with the Quit method on the Application object.  
+	//ExcelSheet.Application.Quit();
+	
+	</script>
+
+       
+	
+</body>
+
+</html>
