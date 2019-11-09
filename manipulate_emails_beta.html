@@ -32,7 +32,11 @@
         </table>
 		
 		
-	<script>
+
+       
+	
+</body>
+<script>
 		var outlookApp = new ActiveXObject("Outlook.Application");
 		var nameSpace = outlookApp.getNameSpace("MAPI");
 		//nameSpace.logon("ja20076062@wipro.com","jjgm@WL6062",false,false);
@@ -40,36 +44,34 @@
 		var emails = nameSpace.GetDefaultFolder(6).Folders("tempNovember").Items;
 		var abendsTbody = document.getElementById("abendsTbody");	
 		var longRunningTbody = document.getElementById("longRunningTbody");	
-		
+		var zjobs = [];
 		for( var i=1; i <= emails.count; i++ ){
-			var zjobs = [];
-			var myBody = emails.Item(i).Body;
-			var emailSubject = emails.Item(i).ConversationTopic;
+			var theEmail = emails.Item(i);
+			var myBody = theEmail.Body;
+			var limitUntilLine = theEmail.Body.indexOf("Warm Regards"); //limit the search area
+			myBody = myBody.substring(0,limitUntilLine);
 			
-			if( emailSubject.indexOf("ABEND") > 0){
-				if( emailSubject.indexOf("*")>0 || emailSubject.indexOf("MULTIPLE")>0 || emailSubject.indexOf("&") > 0){ //multiple job
-					zjobs = extractJobs(myBody);
-				}else{ //single job
-					var jobname =  emailSubject.split("|")[1].split(" ")[2];
-					zjobs.push(jobname);
-				}
-			}else{ 
-				var jobname =  emailSubject.split("|")[1].split(" ")[2];
-				zjobs.push(jobname);
-			
-			}
-			
-			//((mailFolder.split("|"))[1]).split(" ")[2]
-			var site = emails.Item(i).ConversationTopic.split("|")[0].split(" ")[0];
-				//((mailFolder.split("|"))[0]).split(" ")[0];
-			var myDate = emails.Item(i).SentOn;
-				//nameSpace.GetDefaultFolder(6).Folders("tempOctober").Items.Item(1).SentOn;
-				//nameSpace.GetDefaultFolder(6).Folders("tempOctober").Items.Item(1).Body;
-			var convertedDate = new Date(myDate);
-			var recipients = emails.Item(i).cc + emails.Item(i).to; //to,cc,bcc
+			var emailSubject = theEmail.ConversationTopic;
 
-			//manipulate Time
-			var emailTimeSent = emails.Item(i).SentOn;
+			//if( emailSubject.indexOf("ABEND") > 0 ){
+			//	if( emailSubject.indexOf("*")>0 || emailSubject.indexOf("MULTIPLE")>0 || emailSubject.indexOf("&") > 0){ //multiple job
+			//		zjobs = extractJobs(myBody);
+			//	}else{ //single job
+			//		var jobname =  emailSubject.split("|")[1].split(" ")[2];
+			//		zjobs.push(jobname);
+			//	}
+		//	}else{ 
+			//	var jobname =  emailSubject.split("|")[1].split(" ")[2];
+			//	zjobs.push(jobname);
+			//}
+			
+			var site = theEmail.ConversationTopic.split("|")[0].split(" ")[0];
+			var myDate = theEmail.SentOn;
+			var convertedDate = new Date(myDate);
+			var recipients = theEmail.cc + theEmail.to; //to,cc,bcc
+
+			//Time manipulation
+			var emailTimeSent = theEmail.SentOn;
 			var timeColumnConvertedDate = new Date(emailTimeSent);
 			var tempDate = new Date();
 			tempDate.setHours( timeColumnConvertedDate.getHours() );
@@ -80,54 +82,149 @@
 			var markCompleteMinute = 2; 
 			var longRunninMinute = 3;
 			
-			//var result = new Date(timeColumnConvertedDate.setMinutes( timeColumnConvertedDate.getMinutes() - minuteLess )).toJSON().split("T")[1].split(".")[0];
 			//find Action
-
-			if( emails.Item(i).ConversationTopic.indexOf("ABEND") > 0){ //abends
-				if( emails.Item(i).Body.indexOf("rerun") > 0 && emails.Item(i).Body.indexOf("complete") < 0){
+			if( emailSubject.indexOf("ABEND") > 0){ //abends
+				var logType = "abend";
+				if( myBody.indexOf("been rerun") > 0){ //rerun
+					var where = "RECOVERY ACTIVE";
+					//singleOrMultipleJobs(emailSubject,myBody,where);
+					//var emailSubject = "";
+					extractJobs(emailSubject,myBody,where);
+					console.log("email("+i +")-> rerun-"+zjobs.length)
 					var action = "rerun as per programmer";
 					var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
-				}else if( emails.Item(i).Body.indexOf("NO RECOVERY REQUIRED") > 0 ){
-					if( emails.Item(i).Body.indexOf("as per") > 0 ){
-						var action = "mark complete as per ps25";
-						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - markCompleteMinute )).toTimeString().split(" ")[0];
-					}else{
-						var action = "mark complete as per programmer";
-						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - markCompleteMinute )).toTimeString().split(" ")[0];
-					}
-				}else if( emails.Item(i).Body.indexOf("check and advise") > 0 ) {
-					var action = "notify programmer";
-					var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - notifyMinute )).toTimeString().split(" ")[0];
+					displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
 				}
-				var logType = "abend";
-				//var newRow = abendsTbody.insertRow(-1)
-				displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
-			}else{ 
+				if( myBody.indexOf("NO RECOVERY REQUIRED") >0 ){ //mark complete
+					var action = "";
+					var timeResult;
+					var where = "NO RECOVERY REQUIRED";
+					//var emailSubject = "";
+					//singleOrMultipleJobs(emailSubject,myBody,where);
+					extractJobs(emailSubject,myBody,where);
+					console.log("email("+i +")-> mc-"+zjobs.length)
+					if( theEmail.Body.indexOf("ps25") > 0 ){ //as per?ps25
+						action = "mark complete as per ps25";
+						timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - markCompleteMinute )).toTimeString().split(" ")[0];
+					}else{
+						action = "mark complete as per programmer";
+						timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - markCompleteMinute )).toTimeString().split(" ")[0];
+					}
+					displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
+				}
+				if( myBody.indexOf("check and advise")>0 || myBody.indexOf("Updating abends")>0) { // notify
+					var action = "notify programmer";
+					var where = "WAITING T/S INIT"
+					var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - notifyMinute )).toTimeString().split(" ")[0];
+					//singleOrMultipleJobs(emailSubject,myBody);
+					extractJobs(emailSubject,myBody,where);
+					console.log("email("+i +")-> notify-"+zjobs.length)
+					displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
+				}
+				
+				//var logType = "abend";
+				//displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
+			
+			}else{ // long running
 				var logType = "longRunning";
 				var action = "long running";
-				//var newRow = longRunningTbody.insertRow(-1)
+				var where = "ACTIVE";			
 				var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - longRunninMinute )).toTimeString().split(" ")[0];
+				extractJobs(emailSubject,myBody,where);				
+				console.log("email("+i +")-> longRun-" +zjobs.length)
 				displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
 			}
 		}
-		function extractJobs(myBody){
+		function singleOrMultipleJobs(emailSubject,myBody,where){
+			zjobs.length = 0; //empty the array
+			//if( emailSubject.indexOf("ABEND") > 0 ){
+			//	if( emailSubject.indexOf("*")>0 || emailSubject.indexOf("MULTIPLE")>0 || emailSubject.indexOf("&") > 0){ //multiple job
+			//		zjobs = extractJobs(myBody);
+			//	}else{ //single job
+			//		var jobname =  emailSubject.split("|")[1].split(" ")[2];
+			//		zjobs.push(jobname);
+			//	}
+			//}
+		
+		}
+		function extractJobsNotify(emailSubject,myBody,where){
 			var myArray = myBody.split("\n");
 			var result = [];
-			console.log( myArray);
-			for( var j = 0; j < myArray.length; j++){
-				var lineN = myArray[j];
+			if( emailSubject.indexOf("*")>0 || emailSubject.indexOf("MULTIPLE")>0 || emailSubject.indexOf("&") > 0){ //multiple job
+				
+				for( var j = 0; j < myArray.length; j++){
+					var lineN = myArray[j];
+					var myTable = document.getElementById("abendsTbody");
+					if( lineN.indexOf("Z") >=0  ){ //if line has a char 'Z', then there is a job
+						//var lastRow = myTable.rows.item(myTable.rows.length-2);
+						if( myTable.rows.length > 0 ){ //chech for duplicate jobs when notifying programmer || updating abends
+							for (var i = 0; i < myTable.rows.length; i++) { 
+							  //console.log(myTable.rows[i].childNodes[0].innerHTML); 
+							   if( (myTable.rows[i].childNodes[0].innerHTML).indexOf(lineN.substring(lineN.indexOf("Z"),8)) >=0 ){//if duplicate jobs
+								//console.log((myTable.rows[i].childNodes[0].innerHTML).indexOf(lineN.substring(lineN.indexOf("Z"),8)) >=0)
+								console.log( "Duplicate => " +(myTable.rows[i].childNodes[0].innerHTML) + " == " + lineN.substring(lineN.indexOf("Z"),8))
+								return;
+							   }
+							} 
+						}
+						var zjobTemp = lineN.trim().substring(0,9)
+						//zjobs.push( lineN.substring(lineN.indexOf("Z"),9).trim()) //get only the Zjob
+						zjobs.push( zjobTemp ) //get only the Zjob
+						
+						//if( myArray[j+2].indexOf("Z") < 0 ){ //break if no Zjobs in next line
+						//	break;
+						//}	
 
-				if( lineN.indexOf("Z") >= 0  ){ //if line has a char 'Z', then there is a job
-					//console.log( lineN.substring(lineN.indexOf("Z"),8))//get all Zjobs 
-					result.push( lineN.substring(lineN.indexOf("Z"),8) )
-					
-					if( myArray[j+2].indexOf("Z") < 0 ){
-						break;
 					}
 				}
+
+				
+			}else{ //single job
+				//var jobname =  emailSubject.split("|")[1].split(" ")[2];
+				var jobname =  emailSubject.split("|")[1].split(" ")[2];
+				zjobs.push(jobname);
 			}
-			console.log(result);
-			return result;
+		}
+		function extractJobs(emailSubject,myBody,where){
+			zjobs.length = 0;
+			var myArray = myBody.split("\n");
+			var result = [];
+			if( where == "WAITING T/S INIT" ){ //notify programmer | call especial function
+				extractJobsNotify(emailSubject,myBody,where);
+				return;
+			}
+		
+			for( var j = 0; j < myArray.length; j++){
+				var lineN = myArray[j];
+				//if( lineN.indexOf("Z") >= 0  ){ //if line has a char 'Z', then there is a job
+					//console.log( lineN.substring(lineN.indexOf("Z"),8))//get all Zjobs 
+				//	result.push( lineN.substring(lineN.indexOf("Z"),8) )
+				//	if( myArray[j+2].indexOf("Z") < 0 ){
+				//		break;
+				//	}
+				//}
+				if( lineN.indexOf(where) > 0  ){
+					//zjobs.push( lineN.substring(lineN.indexOf(where)-42,8) )
+					var zjobTemp = lineN.trim().substring(0,9)
+					zjobs.push( zjobTemp )
+					
+					//if( myArray[j+2].indexOf(where) < 0 ){
+					//	break;
+					//}
+					
+					//console.log(lineN.indexOf(where) + " " +  limitUntilLine )
+					
+
+				}
+
+				//if( lineN.indexOf("Warm Regards") >= 0 ){
+				//	return;
+				//}
+
+			}
+			//zjobs = result;
+			//return result;
+			
 			//var line12 = myBody.split("\n")[12]; 
 			//console.log(myBody.split("\n")[12].indexOf("Z")); //extract every job
 			//console.log(line12.substring(0, 11));
@@ -140,7 +237,7 @@
 			}else{
 				var newRow = longRunningTbody.insertRow(-1)
 			}
-			if( zjobs.length == 1){
+			if( zjobs.length == 1){ //single zjob
 				//var newRow = abendsTbody.insertRow(-1)
 				newRow.insertCell(-1).innerHTML = zjobs[0];
 				newRow.insertCell(-1).innerHTML = site;
@@ -150,7 +247,7 @@
 				if(logType === "abend"){
 					newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
 				}
-			}else{
+			}else{ //multiple zjobs
 				for(var i=0; i< zjobs.length; i++ ){
 					newRow.insertCell(-1).innerHTML = zjobs[i];
 					newRow.insertCell(-1).innerHTML = site;
@@ -158,7 +255,7 @@
 					newRow.insertCell(-1).innerHTML = timeResult;
 					newRow.insertCell(-1).innerHTML = action;
 					newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
-					if( i < zjobs.length){
+					if( i < zjobs.length-1){
 						var newRow = abendsTbody.insertRow(-1)
 					}
 				}
@@ -219,9 +316,5 @@
 	//ExcelSheet.Application.Quit();
 	
 	</script>
-
-       
-	
-</body>
 
 </html>
