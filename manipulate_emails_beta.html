@@ -104,7 +104,8 @@
 					//singleOrMultipleJobs(emailSubject,myBody,where);
 					extractJobs(emailSubject,myBody,where,fullEmail);
 					console.log("email("+i +")-> mc-"+zjobs.length+" found")
-					if( theEmail.Body.indexOf("ps25")>0 || theEmail.Body.indexOf("ps22")>0){ //as per?ps25
+					if( myBody.indexOf("ps25")>0 || myBody.indexOf("ps22")>0){ //as per?ps25
+						console.log(theEmail.Body.indexOf("ps25"))
 						action = "mark complete as per ps25";
 						timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - markCompleteMinute )).toTimeString().split(" ")[0];
 					}else{
@@ -234,31 +235,31 @@
 			}
 			
 			console.log(zjobs) 
-			
 			if( where == "RECOVERY" ){ //rerun
-				for( var r = 0; r < myArray.length; r++){
-					var lineN = myArray[r];
-					if( lineN.indexOf( "Z" ) >=0 ){
-						for( var s=0; s < zjobsTemp.length; s++ ){
-							if( lineN.trim().indexOf( zjobsTemp[s] )>= 0 && lineN.trim().indexOf( zjobsTemp[s] ) <3 && lineN.indexOf("RECOVERY ACTIVE") > 0){//there is already job in threads
+				var splitFrom = fullEmail.split("From");
+				
+				if( splitFrom[0].indexOf( "RECOVERY ACTIVE") >=0 ){
+					
+				
+				}
+				for(var r=0; r<splitFrom.length;r++){
+					for( var s=0; s < zjobsTemp.length; s++ ){
+						if( r==0 && splitFrom[r].indexOf( zjobsTemp[s] ) >=0 && splitFrom[r].indexOf( "RECOVERY ACTIVE") >=0){ //there is active recovery in myBody //RR as per programmer
+							if( zjobs.length >0){
+								var logType = "abend";
 								var action = "rerun as per programmer";
 								//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
 								var timeResult = "fix";
-								displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
-								
+								var oneAtATime = [];
+								oneAtATime.push(zjobsTemp[s])
+								displayRow(oneAtATime,site,convertedDate,timeResult,action,logType,recipients);
+								zjobs.splice( zjobs.indexOf(zjobsTemp[s]), 1) //remove job zjobs array
+								console.log(zjobsTemp)
 							}
-							if( lineN.indexOf( zjobsTemp[s] )>= 0 && lineN.trim().indexOf( zjobsTemp[s] ) <3 && lineN.indexOf("RECOVERY FAILED") > 0 ){ //RR as per ps25 
-								var action = "rerun as per ps25";
-								//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
-								var timeResult = "fix";
-								displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
-								break;
-							}
-						}
-
-						
+						}				
 					}
 				}
+					
 				
 				return;
 			}
@@ -358,7 +359,6 @@
 		}
 		function displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients){
 			//(logType == "abend") ? (var newRow = abendsTbody.insertRow(-1)):(var newRow = longRunningTbody.insertRow(-1));
-			
 			if( logType === "abend" ) {
 				var newRow = abendsTbody.insertRow(-1)
 			}else{
