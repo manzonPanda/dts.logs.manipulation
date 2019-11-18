@@ -91,7 +91,7 @@
 					//singleOrMultipleJobs(emailSubject,myBody,where);
 					//var emailSubject = "";
 					extractJobs(emailSubject,myBody,where,fullEmail);
-					console.log("email("+i +")-> rerun-"+zjobs.length+" found")
+					//console.log("email("+i +")-> rerun-"+zjobs.length+" found")
 					//var action = "rerun as per programmer";
 					//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
 					//displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
@@ -186,6 +186,8 @@
 		}
 		function extractJobs(emailSubject,myBody,where,fullEmail){
 			var zjobsTemp = [];
+			var zjobsRecoveryActive = [];
+			var zjobsRecoveryFailed = [];
 			zjobs.length = 0;
 			var myArray = myBody.split("\n");
 			var mySecondArray = fullEmail.split("\n");
@@ -209,11 +211,16 @@
 				}else{ //abend
 					//get all zjobs first and then compare it to full email thread-if there is duplicate-then someone already report it
 					if( lineN.trim().indexOf("Z") >= 0 && lineN.trim().indexOf("Z") <3 && lineN.indexOf(where) >= 0 ){
-						if( where == "RECOVERY" ){ //RECOVERY ACTIVE || RECOVERY FAILED => job has been rerun
-							if( lineN.indexOf("RECOVERY ACTIVE") > 0 || lineN.indexOf("RECOVERY FAILED") > 0){
+						if( where == "RECOVERY" ){ //RECOVERY ACTIVE || RECOVERY FAILED => job has been rerun || RR as ps25
+							if( lineN.indexOf("RECOVERY ACTIVE") > 0 ){
 								var temp = lineN.substring( lineN.indexOf("Z")).replace(/\s+/g, "-").split("-")[0];
-								zjobsTemp.push(temp);
-								zjobs.push( temp )
+								//zjobsTemp.push(temp);
+								zjobsRecoveryActive.push( temp )
+							}
+							if( lineN.indexOf("RECOVERY FAILED") > 0 ){
+								var temp = lineN.substring( lineN.indexOf("Z")).replace(/\s+/g, "-").split("-")[0];
+								//zjobsTemp.push(temp);
+								zjobsRecoveryFailed.push( temp )
 							}
 						}else{
 							var temp = lineN.substring( lineN.indexOf("Z")).replace(/\s+/g, "-").split("-")[0];
@@ -234,33 +241,56 @@
 				//}
 			}
 			
-			console.log(zjobs) 
+			//console.log(zjobs) 
 			if( where == "RECOVERY" ){ //rerun
 				var splitFrom = fullEmail.split("From");
-				
-				if( splitFrom[0].indexOf( "RECOVERY ACTIVE") >=0 ){
-					
-				
+				if( zjobsRecoveryActive.length > 0 ){ 
+				console.log(zjobsRecoveryActive) 
+					//for( var s=0; s < zjobsRecoveryActive.length; s++ ){ //RR as programmer
+						var logType = "abend";
+						var action = "rerun as per programmer";
+						//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
+						var timeResult = "fix";
+						//var oneAtATime = [];
+						//oneAtATime.push(zjobsTemp[s])
+						displayRow(zjobsRecoveryActive,site,convertedDate,timeResult,action,logType,recipients);
+						//zjobs.splice( zjobs.indexOf(zjobsTemp[s]), 1) //remove job zjobs array
+								
+					//}
+						console.log("email("+emailSubject +")-> rerun-"+zjobsRecoveryActive.length+" found")
 				}
-				for(var r=0; r<splitFrom.length;r++){
-					for( var s=0; s < zjobsTemp.length; s++ ){
-						if( r==0 && splitFrom[r].indexOf( zjobsTemp[s] ) >=0 && splitFrom[r].indexOf( "RECOVERY ACTIVE") >=0){ //there is active recovery in myBody //RR as per programmer
-							if( zjobs.length >0){
-								var logType = "abend";
-								var action = "rerun as per programmer";
-								//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
-								var timeResult = "fix";
-								var oneAtATime = [];
-								oneAtATime.push(zjobsTemp[s])
-								displayRow(oneAtATime,site,convertedDate,timeResult,action,logType,recipients);
-								zjobs.splice( zjobs.indexOf(zjobsTemp[s]), 1) //remove job zjobs array
-								console.log(zjobsTemp)
-							}
-						}				
+				if( zjobsRecoveryFailed.length > 0 ){ //RR as programmer || RR as ps25
+					console.log(zjobsRecoveryFailed) 
+					
+					for( var y = myArray.length; y < mySecondArray.length; y++){ //clear zjobs that was rerun
+						var lineN = mySecondArray[y];
+						if( lineN.indexOf( "Z" ) >= 0 && lineN.indexOf( "RECOVERY" ) >0){ 
+							for( var h=0; h < zjobsRecoveryFailed.length; h++ ){
+								if( lineN.trim().indexOf( zjobsRecoveryFailed[h] ) >=0  ){
+									zjobsRecoveryFailed.splice( zjobsRecoveryFailed.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
+									break;
+								}
+							}	
+						}
 					}
-				}
+
+					for( var h=0; h < zjobsRecoveryFailed.length; h++ ){
+						var logType = "abend";
+						var action = "rerun as per ps25";
+						//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
+						var timeResult = "fix";
+						var oneAtATime = [];
+						oneAtATime.push(zjobsRecoveryFailed[h])
+						displayRow(oneAtATime,site,convertedDate,timeResult,action,logType,recipients);
+						console.log("email("+emailSubject +")-> rerunAsPs25- 1 found")
+						//zjobsTemp.splice( zjobsRecoveryFailed.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
+						//console.log(zjobsTemp)
+					}	
+
 					
-				
+
+				}
+		
 				return;
 			}
 			
@@ -276,6 +306,7 @@
 			
 			//for longRunning notify only
 			if( where == "longRunning" ){
+			console.log(zjobs)
 				var mySecondArray = fullEmail.split("\n");
 				zjobs = zjobsTemp;
 				//console.log(mySecondArray[1].indexOf("dts@msg.ti.com [mailto:dts@msg.ti.com]"));
@@ -305,6 +336,7 @@
 			
 			//for abend notify  only
 			if( where == "WAITING T/S INIT"){ //notify programmer | long running notify
+			console.log(zjobs)
 				if( zjobs.length == 0 ){ //single job; found 0 in searching zjobs for loop() above;
 					var jobname =  emailSubject.split("|")[1].split(" ")[2];
 					//zjobs.push(jobname);
@@ -324,7 +356,7 @@
 						for( var m=0; m < zjobsTemp.length; m++ ){
 							if( lineN.indexOf( zjobsTemp[m] )>= 0 && lineN.indexOf("RECOVERY FAILED") > 0 ){
 								console.log("job rerun failed")
-								//return;
+								return;
 							}
 						}
 					}
