@@ -87,6 +87,7 @@
 			//if( emailSubject.indexOf("ABEND") > 0){ //abends
 				var logType = "abend";
 				if( myBody.indexOf("been rerun")>0 || myBody.indexOf("RECOVERY FAILED") > 0){ //rerun || RR as per ps25
+					// || myBody.indexOf("RECOVERY FAILED") > 0
 					var where = "RECOVERY";
 					//singleOrMultipleJobs(emailSubject,myBody,where);
 					//var emailSubject = "";
@@ -244,8 +245,8 @@
 			//console.log(zjobs) 
 			if( where == "RECOVERY" ){ //rerun
 				var splitFrom = fullEmail.split("From");
-				if( zjobsRecoveryActive.length > 0 ){ 
-				console.log(zjobsRecoveryActive) 
+				if( zjobsRecoveryActive.length > 0 ){
+					console.log(zjobsRecoveryActive) 
 					//for( var s=0; s < zjobsRecoveryActive.length; s++ ){ //RR as programmer
 						var logType = "abend";
 						var action = "rerun as per programmer";
@@ -259,36 +260,97 @@
 					//}
 						console.log("email("+emailSubject +")-> rerun-"+zjobsRecoveryActive.length+" found")
 				}
+				console.log( myArray.length + ":"+mySecondArray.length)
 				if( zjobsRecoveryFailed.length > 0 ){ //RR as programmer || RR as ps25
 					console.log(zjobsRecoveryFailed) 
-					
+					var zjobsRRps25 = [];
+					var zjobsRRprogrammer = [];
+					var indexOfAutoEmail = 0;
 					for( var y = myArray.length; y < mySecondArray.length; y++){ //clear zjobs that was rerun
 						var lineN = mySecondArray[y];
-						if( lineN.indexOf( "Z" ) >= 0 && lineN.indexOf( "RECOVERY" ) >0){ 
-							for( var h=0; h < zjobsRecoveryFailed.length; h++ ){
+						if( lineN.indexOf( "From: pcp2@msg.ti.com [mailto:pcp2@msg.ti.com] " ) >= 0  ){
+							var from = lineN.indexOf( "From: dts@msg.ti.com [mailto:dts@msg.ti.com]" );
+							var fromNumberline = mySecondArray.indexOf(mySecondArray[y]);
+							indexOfAutoEmail = fromNumberline;
+							//console.log(indexOfAutoEmail)
+						}
+						
+						if( (lineN.indexOf( "Z" ) >= 0 && splitFrom.length>2) || (lineN.indexOf( "Z" ) >= 0 && lineN.indexOf( "RECOVERY" ) >0) || (lineN.indexOf( "Z" ) >= 0 && !(y>indexOfAutoEmail)) && y <= mySecondArray.length-1 ) {  //RR as programmer
+							for( var h=0; h < zjobsRecoveryFailed.length; h++ ){//remove all duplicates
 								if( lineN.trim().indexOf( zjobsRecoveryFailed[h] ) >=0  ){
+									console.log("programmer")
+									//zjobsRRprogrammer.push(zjobsRecoveryFailed[h] ) 
 									zjobsRecoveryFailed.splice( zjobsRecoveryFailed.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
 									break;
 								}
-							}	
+	
+							}
+							if( y == mySecondArray.length-1 && zjobsRecoveryFailed.length > 0){
+								zjobsRRprogrammer = zjobsRecoveryFailed;
+							}
+						}
+						//console.log(splitFrom.length)
+						if( (lineN.indexOf( "Z" ) >= 0 && splitFrom.length <=2 ) || splitFrom.length ==1 && y <= mySecondArray.length-1 ){ //RR as ps25
+							for( var h=0; h < zjobsRecoveryFailed.length; h++ ){
+								if( lineN.trim().indexOf( zjobsRecoveryFailed[h] ) >=0  ){
+									console.log("ps25-1")
+									zjobsRRps25.push(zjobsRecoveryFailed[h] ) 
+									console.log(zjobsRecoveryFailed.splice( zjobsRecoveryFailed.indexOf(zjobsTemp[h]), 1)) //remove job zjobs array
+									break;
+								}
+							}
+							
+							if(splitFrom.length ==1){
+								console.log("ps25-2")
+								for( var h=0; h < zjobsRecoveryFailed.length; h++ ){
+									zjobsRRps25.push(zjobsRecoveryFailed[h] )
+									zjobsRecoveryFailed.splice( zjobsRecoveryFailed.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
+									break;
+								}
+							}
+							
+							//if( y == mySecondArray.length-1 && zjobsRecoveryFailed.length > 0){
+							//	zjobsRRps25 = zjobsRecoveryFailed;
+							//}
+						
+
+						}
+						
+						if( y == mySecondArray.length-1){
+							console.log("point")
+							if( zjobsRRprogrammer.length >0 ){
+								for( var h=0; h < zjobsRRprogrammer.length; h++ ){//RR as programmer
+									var logType = "abend";
+									var action = "rerun as per programmer";
+									//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
+									var timeResult = "fix";
+									var oneAtATime = [];
+									oneAtATime.push(zjobsRRprogrammer[h])
+									displayRow(oneAtATime,site,convertedDate,timeResult,action,logType,recipients);
+									console.log("email("+emailSubject +")-> rerunAsProgrammer- 1 found")
+									zjobsRRprogrammer.splice( zjobsRRprogrammer.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
+									//console.log(zjobsTemp)
+								}
+							}
 						}
 					}
-
-					for( var h=0; h < zjobsRecoveryFailed.length; h++ ){
-						var logType = "abend";
-						var action = "rerun as per ps25";
-						//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
-						var timeResult = "fix";
-						var oneAtATime = [];
-						oneAtATime.push(zjobsRecoveryFailed[h])
-						displayRow(oneAtATime,site,convertedDate,timeResult,action,logType,recipients);
-						console.log("email("+emailSubject +")-> rerunAsPs25- 1 found")
-						//zjobsTemp.splice( zjobsRecoveryFailed.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
-						//console.log(zjobsTemp)
-					}	
-
+					//console.log(zjobsRecoveryFailed)
 					
-
+					//console.log(zjobsRRps25)
+					if( zjobsRRps25.length > 0){
+						for( var h=0; h < zjobsRRps25.length; h++ ){//RR as Ps25
+							var logType = "abend";
+							var action = "rerun as per ps25";
+							//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
+							var timeResult = "fix";
+							var oneAtATime = [];
+							oneAtATime.push(zjobsRRps25[h])
+							displayRow(oneAtATime,site,convertedDate,timeResult,action,logType,recipients);
+							console.log("email("+emailSubject +")-> rerunAsPs25- 1 found")
+							//zjobsTemp.splice( zjobsRecoveryFailed.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
+							//console.log(zjobsTemp)
+						}	
+					}
 				}
 		
 				return;
