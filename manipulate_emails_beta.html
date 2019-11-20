@@ -17,8 +17,8 @@
 			<tbody>
         </table>
 		<br>
-		<table id="longRunningTable">
-            <thead>
+		<table id="longRunningTable" >
+            <thead >
                 <th >Jobname</th>
                 <th >Site</th>
 				<th >Date</th>
@@ -27,14 +27,26 @@
                 <th>Team</th>
                 <th >Time of action</th>
             </thead>
-			<tbody id="longRunningTbody">
+			<tbody id="longRunningTbody" >
 			<tbody>
         </table>
-		
-		
-
-       
-	
+		<br><br><br>
+		<!--uncomment me:)
+		FolderName: <input type="text" value="tempNovember"><br>
+		SignatureName: <input type="text" value="Jake James Manzon"><br>
+		Abend-Notify-Keywords: <input type="text" value="check and advise;Updating abends;Updating;check"><br>
+		Abend-RR-Keywords: <input type="text" value="been rerun"><br>
+		Abend-MC-Keywords: <input type="text" value="marked"><br>
+		Abend-LongRunning-Keywords: <input type="text" value="running"><br>
+		<br>
+		Notify-Minute<input type="number" min="1" ><br>
+		Rerun-Minute<input type="number" min="1" ><br>
+		MC-Minute<input type="number" min="1"  ><br>
+		LongRunning-Minute<input type="number" min="1"  ><br>
+		<br>
+		<input type="button" value="CREATE LOGS">
+		-->
+      
 </body>
 <script>
 		var outlookApp = new ActiveXObject("Outlook.Application");
@@ -45,6 +57,7 @@
 		var abendsTbody = document.getElementById("abendsTbody");	
 		var longRunningTbody = document.getElementById("longRunningTbody");	
 		var zjobs = [];
+		
 		for( var i=1; i <= emails.count; i++ ){
 			var theEmail = emails.Item(i);
 			var myBody = theEmail.Body;
@@ -91,7 +104,7 @@
 					var where = "RECOVERY";
 					//singleOrMultipleJobs(emailSubject,myBody,where);
 					//var emailSubject = "";
-					extractJobs(emailSubject,myBody,where,fullEmail);
+					extractJobs(emailSubject,myBody,where,fullEmail,tempDate);
 					//console.log("email("+i +")-> rerun-"+zjobs.length+" found")
 					//var action = "rerun as per programmer";
 					//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
@@ -115,9 +128,9 @@
 					}
 					displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
 				}
-				if( myBody.indexOf("check and advise")>0 || myBody.indexOf("Updating abends")>0 || myBody.indexOf("check")>0 || myBody.indexOf("Updating")>0 ){ // notify
+				if( myBody.indexOf("check and advise")>0 || myBody.indexOf("Updating abends")>0 || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 )|| myBody.indexOf("Updating")>0 ){ // notify
 					var action = "notify programmer";
-					var where = "WAITING T/S INIT"
+					var where = "WAITING T/S"; //some email forgot the whole status
 					var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - notifyMinute )).toTimeString().split(" ")[0];
 					//singleOrMultipleJobs(emailSubject,myBody);
 					extractJobs(emailSubject,myBody,where,fullEmail);
@@ -185,7 +198,7 @@
 				zjobs.push(jobname);
 			}
 		}
-		function extractJobs(emailSubject,myBody,where,fullEmail){
+		function extractJobs(emailSubject,myBody,where,fullEmail,tempDate){
 			var zjobsTemp = [];
 			var zjobsRecoveryActive = [];
 			var zjobsRecoveryFailed = [];
@@ -241,17 +254,18 @@
 				//	return;
 				//}
 			}
-			
+								
 			//console.log(zjobs) 
 			if( where == "RECOVERY" ){ //rerun
 				var splitFrom = fullEmail.split("From");
 				if( zjobsRecoveryActive.length > 0 ){
+
 					console.log(zjobsRecoveryActive) 
 					//for( var s=0; s < zjobsRecoveryActive.length; s++ ){ //RR as programmer
 						var logType = "abend";
 						var action = "rerun as per programmer";
-						//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
-						var timeResult = "fix";
+						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
+						//var timeResult = "fix";
 						//var oneAtATime = [];
 						//oneAtATime.push(zjobsTemp[s])
 						displayRow(zjobsRecoveryActive,site,convertedDate,timeResult,action,logType,recipients);
@@ -262,6 +276,7 @@
 				}
 				console.log( myArray.length + ":"+mySecondArray.length)
 				if( zjobsRecoveryFailed.length > 0 ){ //RR as programmer || RR as ps25
+				
 					console.log(zjobsRecoveryFailed) 
 					var zjobsRRps25 = [];
 					var zjobsRRprogrammer = [];
@@ -281,11 +296,13 @@
 									console.log("programmer")
 									//zjobsRRprogrammer.push(zjobsRecoveryFailed[h] ) 
 									zjobsRecoveryFailed.splice( zjobsRecoveryFailed.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
+					  //correct->  //zjobsRecoveryFailed.splice( zjobsRecoveryFailed.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
 									break;
 								}
 	
 							}
-							if( y == mySecondArray.length-1 && zjobsRecoveryFailed.length > 0){
+							if( y == mySecondArray.length-1 && zjobsRecoveryFailed.length >= 0){
+								console.log("in")
 								zjobsRRprogrammer = zjobsRecoveryFailed;
 							}
 						}
@@ -294,8 +311,8 @@
 							for( var h=0; h < zjobsRecoveryFailed.length; h++ ){
 								if( lineN.trim().indexOf( zjobsRecoveryFailed[h] ) >=0  ){
 									console.log("ps25-1")
-									zjobsRRps25.push(zjobsRecoveryFailed[h] ) 
-									console.log(zjobsRecoveryFailed.splice( zjobsRecoveryFailed.indexOf(zjobsTemp[h]), 1)) //remove job zjobs array
+									zjobsRRps25.push(zjobsRecoveryFailed.splice( h-1, 1) ) 
+									//console.log(zjobsRecoveryFailed.splice( zjobsRecoveryFailed.indexOf(zjobsRecoveryFailed[h]), 1)) //remove job zjobs array
 									break;
 								}
 							}
@@ -304,26 +321,27 @@
 								console.log("ps25-2")
 								for( var h=0; h < zjobsRecoveryFailed.length; h++ ){
 									zjobsRRps25.push(zjobsRecoveryFailed[h] )
-									zjobsRecoveryFailed.splice( zjobsRecoveryFailed.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
+									zjobsRecoveryFailed.splice( h-1, 1) //remove job zjobs array
 									break;
 								}
 							}
 							
-							//if( y == mySecondArray.length-1 && zjobsRecoveryFailed.length > 0){
-							//	zjobsRRps25 = zjobsRecoveryFailed;
-							//}
+							if( y == mySecondArray.length-1 && zjobsRecoveryFailed.length > 0){
+								zjobsRRps25 = zjobsRecoveryFailed;
+							}
 						
 
 						}
 						
 						if( y == mySecondArray.length-1){
 							console.log("point")
+							console.log(zjobsRecoveryFailed)
 							if( zjobsRRprogrammer.length >0 ){
 								for( var h=0; h < zjobsRRprogrammer.length; h++ ){//RR as programmer
 									var logType = "abend";
 									var action = "rerun as per programmer";
-									//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
-									var timeResult = "fix";
+									var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
+									//var timeResult = "fix";
 									var oneAtATime = [];
 									oneAtATime.push(zjobsRRprogrammer[h])
 									displayRow(oneAtATime,site,convertedDate,timeResult,action,logType,recipients);
@@ -341,8 +359,8 @@
 						for( var h=0; h < zjobsRRps25.length; h++ ){//RR as Ps25
 							var logType = "abend";
 							var action = "rerun as per ps25";
-							//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
-							var timeResult = "fix";
+							var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
+							//var timeResult = "fix";
 							var oneAtATime = [];
 							oneAtATime.push(zjobsRRps25[h])
 							displayRow(oneAtATime,site,convertedDate,timeResult,action,logType,recipients);
@@ -366,9 +384,8 @@
 				}
 			}
 			
-			//for longRunning notify only
-			if( where == "longRunning" ){
-			console.log(zjobs)
+			if( where == "longRunning" ){//for longRunning notify only
+			 console.log(zjobs)
 				var mySecondArray = fullEmail.split("\n");
 				zjobs = zjobsTemp;
 				//console.log(mySecondArray[1].indexOf("dts@msg.ti.com [mailto:dts@msg.ti.com]"));
@@ -396,9 +413,9 @@
 				}
 			}
 			
-			//for abend notify  only
-			if( where == "WAITING T/S INIT"){ //notify programmer | long running notify
-			console.log(zjobs)
+			if( where == "WAITING T/S"  ){ //notify programmer //for abend notify  only
+			//console.log("here")
+			//console.log(zjobs)
 				if( zjobs.length == 0 ){ //single job; found 0 in searching zjobs for loop() above;
 					var jobname =  emailSubject.split("|")[1].split(" ")[2];
 					//zjobs.push(jobname);
@@ -427,7 +444,7 @@
 				//only when notify || search job duplication in thread->don't notify
 				for( var l = myArray.length; l < mySecondArray.length; l++){
 					var lineN = mySecondArray[l];
-					if( lineN.indexOf( "Z" ) >= 0 ){ 
+					if( lineN.indexOf( "Z" ) >= 0 ){
 						for( var m=0; m < zjobsTemp.length; m++ ){
 							//lineN.trim().indexOf("Z") >= 0 && lineN.trim().indexOf("Z") < 3
 							//if( lineN.indexOf( zjobsTemp[m] ) >= 0 ){//there is already job in threads
@@ -505,7 +522,7 @@
 					newRow.insertCell(-1).innerHTML = convertedDate.toJSON().split("T")[0];
 					newRow.insertCell(-1).innerHTML = timeResult;
 					newRow.insertCell(-1).innerHTML = action;
-					newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
+					//newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
 					
 					if( logType == "longRunning" ) { //team
 						if( recipients.indexOf("data_mart") > 0 ){
