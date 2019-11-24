@@ -11,9 +11,29 @@
 		color:white;
 		text-align: right;
 	}
+progress[value]  {
+  /* Reset the default appearance */
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+
+  /* Get rid of default border in Firefox. */
+  border: none;
+
+  /* Dimensions */
+  width: 100%;
+  height: 20px;
+
+  /* For IE10 */
+  color: green; 
+}
 </style>
 </head>
 <body>
+
+<progress max="150" value="0" id="myBar" ></progress>
+
+</div>
 		<table id="abendsTable">
             <thead>
                 <th >Jobname</th>
@@ -22,6 +42,7 @@
                 <th >Time</th>
                 <th>Action</th>
                 <th >Time of action</th>
+                <th style="color:red">DebugMe</th>
             </thead>
 			<tbody id="abendsTbody">
 			<tbody>
@@ -36,6 +57,7 @@
                 <th >Action</th>
                 <th>Team</th>
                 <th >Time of action</th>
+                <th style="color:red">DebugMe</th>
             </thead>
 			<tbody id="longRunningTbody" >
 			<tbody>
@@ -49,10 +71,10 @@
 		Abend-MC-Keywords: <input type="text" id="mcKeywords" value="NO RECOVERY REQUIRED;marked"><br>
 		Abend-LongRunning-Keywords: <input type="text" id="longRunningKeywords" value="running"><br>
 		<br>
-		Notify-Minute: <input type="number"id="notifyMinute"  min="1" value="3"><br>
-		Rerun-Minute: <input type="number" id="rerunMinute" min="1" value="5"><br>
-		MC-Minute: <input type="number" id="mcMinute" min="1"  value="0"><br>
-		LongRunning-Minute: <input type="number" id="longRunningMinute" min="1" value="4"><br>
+		Notify-Minutes: <input type="number"id="notifyMinute"  min="1" value="3"><br>
+		Rerun-Minutes: <input type="number" id="rerunMinute" min="1" value="5"><br>
+		MC-Minutes: <input type="number" id="mcMinute" min="1"  value="2"><br>
+		LongRunning-Minutes: <input type="number" id="longRunningMinute" min="1" value="4"><br>
 		<br>
 		
 		<button type="button" onclick="inputValidation()"> CREATE LOGS</button>
@@ -70,6 +92,9 @@
 		var longRunningMinute = 0;
 		
 		function inputValidation(){
+			document.getElementById("abendsTbody").innerHTML = "";
+			document.getElementById("longRunningTbody").innerHTML = "";
+			
 			var folderName = document.getElementById("folderName").value;
 			var signatureName = document.getElementById("signatureName").value;
 			var abendNotifyKeywords = document.getElementById("abendNotifyKeywords").value;
@@ -125,25 +150,32 @@
 		var site;
 		var convertedDate;
 		var recipients;
-		
+		var globalEmailSubject;
+
 		function startEmailsManipulation(abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression){
 			var outlookApp = new ActiveXObject("Outlook.Application");
 			var nameSpace = outlookApp.getNameSpace("MAPI");
 			//nameSpace.logon("ja20076062@wipro.com","jjgm@WL6062",false,false);
-			var mailFolder = nameSpace.GetDefaultFolder(6).Folders("tempNovember").Items.Item(1).ConversationTopic;
-			var emails = nameSpace.GetDefaultFolder(6).Folders("tempNovember").Items;
+			var mailFolder = nameSpace.GetDefaultFolder(6).Folders(document.getElementById("folderName").value).Items.Item(1).ConversationTopic;
+			var emails = nameSpace.GetDefaultFolder(6).Folders(document.getElementById("folderName").value).Items;
 			 abendsTbody = document.getElementById("abendsTbody");	
 			 longRunningTbody = document.getElementById("longRunningTbody");	
 			
 			for( var i=1; i <= emails.count; i++ ){
+				var elem = document.getElementById("myBar");
+				elem.value = i;
+	
 				var theEmail = emails.Item(i);
 				var myBody = theEmail.Body;
-				var fullEmail = theEmail.Body;
-				var limitUntilLine = theEmail.Body.indexOf("Jake James Manzon"); //limit the search area
+				var fullEmail = theEmail.Body; 
+				var limitUntilLine = theEmail.Body.indexOf(document.getElementById("signatureName").value); //limit the search area
 				myBody = myBody.substring(0,limitUntilLine);
-				
 				var emailSubject = theEmail.ConversationTopic;
-
+				globalEmailSubject = theEmail.ConversationTopic;
+				if( emailSubject.toUpperCase().indexOf("TURNOVER ") >=0 ){
+					continue;
+				}
+	
 				//if( emailSubject.indexOf("ABEND") > 0 ){
 				//	if( emailSubject.indexOf("*")>0 || emailSubject.indexOf("MULTIPLE")>0 || emailSubject.indexOf("&") > 0){ //multiple job
 				//		zjobs = extractJobs(myBody);
@@ -201,13 +233,12 @@
 							console.log(theEmail.Body.indexOf("ps25"))
 							action = "mark complete as per ps25";
 							timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - markCompleteMinute )).toTimeString().split(" ")[0];
-
 							console.log("mcMinute: " +tempDate.getMinutes() - markCompleteMinute)
 						}else{
 							action = "mark complete as per programmer";
 							timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - markCompleteMinute )).toTimeString().split(" ")[0];
 						}
-						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
+						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					}
 			//-> Abend Notify expression=> myBody.indexOf("advise")>0 ||myBody.indexOf("check and advise")>0 || myBody.indexOf("Updating abends")>0 || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 )|| myBody.indexOf("Updating")>0
 					if(  eval(abendNotifyExpression) || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 ) ){ // notify
@@ -216,8 +247,8 @@
 						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - notifyMinute )).toTimeString().split(" ")[0];
 						//singleOrMultipleJobs(emailSubject,myBody);
 						extractJobs(emailSubject,myBody,where,fullEmail);
-						console.log("email("+i +")-> notify-"+zjobs.length+" found")
-						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
+						console.log("email["+i +","+emailSubject+"]-> notify-"+zjobs.length+" found")
+						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					}
 					
 					//var logType = "abend";
@@ -231,12 +262,16 @@
 						var where = "longRunning";			
 						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - longRunningMinute )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);				
-						console.log("email("+i +")-> longRun-" +zjobs.length+" found")
-						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
+						console.log("email["+i +","+emailSubject+"]-> longRun-" +zjobs.length+" found")
+						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+						
 					}
 				//}
 				
 				//console.log("Success!")
+				if (i <= emails.count) {
+					setTimeout(myFunction, 100);
+				}
 			}
 		}
 
@@ -303,6 +338,7 @@
 				//}
 				if( where == "longRunning" ){//long running
 					if( lineN.trim().indexOf("Z") >= 0 && lineN.trim().indexOf("Z") < 3){
+						//var temp = lineN.trim().split(" ")[0];
 						var temp = lineN.trim().substring(0,8);
 						zjobsTemp.push(temp);
 						zjobs.push( temp )
@@ -327,7 +363,6 @@
 							zjobs.push( temp )
 						}
 					}
-
 				}
 				
 				//if( lineN.indexOf(where) >= 0  ){
@@ -353,7 +388,7 @@
 						//var timeResult = "fix";
 						//var oneAtATime = [];
 						//oneAtATime.push(zjobsTemp[s])
-						displayRow(zjobsRecoveryActive,site,convertedDate,timeResult,action,logType,recipients);
+						displayRow(zjobsRecoveryActive,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 						//zjobs.splice( zjobs.indexOf(zjobsTemp[s]), 1) //remove job zjobs array
 								
 					//}
@@ -429,7 +464,7 @@
 									//var timeResult = "fix";
 									var oneAtATime = [];
 									oneAtATime.push(zjobsRRprogrammer[h])
-									displayRow(oneAtATime,site,convertedDate,timeResult,action,logType,recipients);
+									displayRow(oneAtATime,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 									console.log("email("+emailSubject +")-> rerunAsProgrammer- 1 found")
 									zjobsRRprogrammer.splice( zjobsRRprogrammer.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
 									//console.log(zjobsTemp)
@@ -449,7 +484,7 @@
 							//var timeResult = "fix";
 							var oneAtATime = [];
 							oneAtATime.push(zjobsRRps25[h])
-							displayRow(oneAtATime,site,convertedDate,timeResult,action,logType,recipients);
+							displayRow(oneAtATime,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 							console.log("email("+emailSubject +")-> rerunAsPs25- 1 found")
 							//zjobsTemp.splice( zjobsRecoveryFailed.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
 							//console.log(zjobsTemp)
@@ -503,9 +538,8 @@
 			//console.log("here")
 			//console.log(zjobs)
 				if( zjobs.length == 0 ){ //single job; found 0 in searching zjobs for loop() above;
-					var jobname =  emailSubject.split("|")[1].split(" ")[2];
-					//zjobs.push(jobname);
-					//console.log("in")
+					var jobname =  emailSubject.substring( emailSubject.indexOf("Z")  )  
+					//var jobname =  emailSubject.split("|")[1].split(" ")[2];
 						zjobsTemp.push(jobname)
 						console.log(zjobsTemp)
 				}
@@ -554,7 +588,7 @@
 			//console.log(myBody.split("\n")[12].indexOf("Z")); //extract every job
 			//console.log(line12.substring(0, 11));
 		}
-		function displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients){
+		function displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject){
 			//(logType == "abend") ? (var newRow = abendsTbody.insertRow(-1)):(var newRow = longRunningTbody.insertRow(-1));
 			if( logType === "abend" ) {
 				var newRow = abendsTbody.insertRow(-1)
@@ -571,6 +605,12 @@
 				newRow.insertCell(-1).innerHTML = action;
 				if(logType === "abend"){
 					newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
+					var cell = document.createElement("td");
+						cell.setAttribute("style","color:#e57373");
+					var cellText = document.createTextNode(globalEmailSubject);
+						cell.appendChild(cellText);
+						newRow.appendChild(cell);
+					//newRow.insertCell(-1).innerHTML = globalEmailSubject;
 				}
 				if( logType == "longRunning" ) { //team
 						if( recipients.indexOf("data_mart") > 0 ){
@@ -600,7 +640,14 @@
 						}
 						newRow.insertCell(-1).innerHTML = team;
 						newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
+						var cell = document.createElement("td");
+							cell.setAttribute("style","color:#e57373");
+						var cellText = document.createTextNode(globalEmailSubject);
+							cell.appendChild(cellText);
+							newRow.appendChild(cell);
+						//newRow.insertCell(-1).innerHTML = globalEmailSubject;
 					}
+					console.log("SUCCESS")
 			}else{ //multiple zjobs
 				for(var i=0; i< zjobs.length; i++ ){
 					newRow.insertCell(-1).innerHTML = zjobs[i];
@@ -608,8 +655,15 @@
 					newRow.insertCell(-1).innerHTML = convertedDate.toJSON().split("T")[0];
 					newRow.insertCell(-1).innerHTML = timeResult;
 					newRow.insertCell(-1).innerHTML = action;
-					//newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
-					
+					if(logType === "abend"){
+						newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
+						var cell = document.createElement("td");
+							cell.setAttribute("style","color:#e57373");
+						var cellText = document.createTextNode(globalEmailSubject);
+							cell.appendChild(cellText);
+							newRow.appendChild(cell);
+						//newRow.insertCell(-1).innerHTML = globalEmailSubject;
+					}
 					if( logType == "longRunning" ) { //team
 						if( recipients.indexOf("data_mart") > 0 ){
 							var team = "Datamart";
@@ -638,6 +692,13 @@
 						}
 						newRow.insertCell(-1).innerHTML = team;
 						newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
+
+						var cell = document.createElement("td");
+							cell.setAttribute("style","color:#e57373");
+						var cellText = document.createTextNode(globalEmailSubject);
+							cell.appendChild(cellText);
+							newRow.appendChild(cell);
+
 					}
 					
 					
