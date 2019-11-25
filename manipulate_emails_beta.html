@@ -12,26 +12,26 @@
 		text-align: right;
 	}
 progress[value]  {
-  /* Reset the default appearance */
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-
-  /* Get rid of default border in Firefox. */
   border: none;
-
-  /* Dimensions */
   width: 100%;
   height: 20px;
-
-  /* For IE10 */
   color: green; 
+  
 }
 </style>
 </head>
 <body>
 
-<progress max="150" value="0" id="myBar" ></progress>
+<progress max="100" value="0" id="myBar" >
+
+</progress>
+<div id="fakeProgress" style="display:none">
+	<progress></progress>
+</div>
+
 
 </div>
 		<table id="abendsTable">
@@ -79,10 +79,10 @@ progress[value]  {
 		
 		<button type="button" onclick="inputValidation()"> CREATE LOGS</button>
 	
-		<!--<div class="footer">
-				<p>© Nov 2019 Made by <a href="#">Jake</a> and <a href="#">Duke</a> :)	</p>
+		<div class="footer">
+				<p>Nov 25th 2019 - Made by Duke and Jake :)	</p>
 		</div>
-		-->
+		
       
 </body>
 <script>
@@ -141,6 +141,7 @@ progress[value]  {
 				l != longRunningKeywords.split(";").length-1 ? newLongRunningKeywordsExpression += " || " : "";
 			}
 			//start
+			document.getElementById("fakeProgress").style.display = "block";
 			startEmailsManipulation(newAbendNotifyKeywordsExpression,newRerunKeywordsExpression,newMcKeywordsExpression,newLongRunningKeywordsExpression  );
 		}
 		
@@ -151,7 +152,8 @@ progress[value]  {
 		var convertedDate;
 		var recipients;
 		var globalEmailSubject;
-
+		var i = 1;
+		
 		function startEmailsManipulation(abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression){
 			var outlookApp = new ActiveXObject("Outlook.Application");
 			var nameSpace = outlookApp.getNameSpace("MAPI");
@@ -160,11 +162,27 @@ progress[value]  {
 			var emails = nameSpace.GetDefaultFolder(6).Folders(document.getElementById("folderName").value).Items;
 			 abendsTbody = document.getElementById("abendsTbody");	
 			 longRunningTbody = document.getElementById("longRunningTbody");	
+			var emailCount = emails.count;
+			document.getElementById("myBar").setAttribute("max",emails.count);
+					console.log(emails)
+			i = 1;
+			myLoop( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression);
+  			
 			
-			for( var i=1; i <= emails.count; i++ ){
-				var elem = document.getElementById("myBar");
-				elem.value = i;
-	
+		}
+		
+		function myLoop ( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression ) { 
+
+		   setTimeout(function () { 
+			  //////////////////////////////////////////////////////////////////
+			  var elem = document.getElementById("myBar");
+					elem.value = i;
+				if( i == emailCount-1 ){
+					document.getElementById("fakeProgress").style.display = "none";
+				}
+  
+
+				console.log( emails )
 				var theEmail = emails.Item(i);
 				var myBody = theEmail.Body;
 				var fullEmail = theEmail.Body; 
@@ -173,7 +191,9 @@ progress[value]  {
 				var emailSubject = theEmail.ConversationTopic;
 				globalEmailSubject = theEmail.ConversationTopic;
 				if( emailSubject.toUpperCase().indexOf("TURNOVER ") >=0 ){
-					continue;
+				     i++;                    
+					myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression);     
+ 
 				}
 	
 				//if( emailSubject.indexOf("ABEND") > 0 ){
@@ -208,7 +228,7 @@ progress[value]  {
 				//find Action
 				//if( emailSubject.indexOf("ABEND") > 0){ //abends
 					var logType = "abend";
-			//-> RR expression=> myBody.indexOf("been rerun")>0 || myBody.indexOf("RECOVERY FAILED") > 0
+			  //-> RR expression=> myBody.indexOf("been rerun")>0 || myBody.indexOf("RECOVERY FAILED") > 0
 					if( eval(rerunExpression) ){ //rerun || RR as per ps25
 						// || myBody.indexOf("RECOVERY FAILED") > 0
 						var where = "RECOVERY";
@@ -220,7 +240,7 @@ progress[value]  {
 						//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
 						//displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
 					}
-			//-> MC expression=> myBody.indexOf("NO RECOVERY REQUIRED")>0 || myBody.indexOf("marked") >0
+			  //-> MC expression=> myBody.indexOf("NO RECOVERY REQUIRED")>0 || myBody.indexOf("marked") >0
 					if( eval(mcExpression) ){ //mark complete
 						var action = "";
 						var timeResult;
@@ -240,7 +260,7 @@ progress[value]  {
 						}
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					}
-			//-> Abend Notify expression=> myBody.indexOf("advise")>0 ||myBody.indexOf("check and advise")>0 || myBody.indexOf("Updating abends")>0 || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 )|| myBody.indexOf("Updating")>0
+			  //-> Abend Notify expression=> myBody.indexOf("advise")>0 ||myBody.indexOf("check and advise")>0 || myBody.indexOf("Updating abends")>0 || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 )|| myBody.indexOf("Updating")>0
 					if(  eval(abendNotifyExpression) || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 ) ){ // notify
 						var action = "notify programmer";
 						var where = "WAITING T/S"; //some email forgot the whole status
@@ -255,7 +275,7 @@ progress[value]  {
 					//displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
 				
 				//}else{ // long running
-			//-> LR expression=> myBody.indexOf("running ") >0
+			  //-> LR expression=> myBody.indexOf("running ") >0
 					if( eval(longRunningExpression) ){
 						var logType = "longRunning";
 						var action = "long running";
@@ -266,14 +286,17 @@ progress[value]  {
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 						
 					}
-				//}
-				
-				//console.log("Success!")
-				if (i <= emails.count) {
-					setTimeout(myFunction, 100);
-				}
-			}
+
+			  
+			  //////////////////////////////////////////////////////////////////
+			  i++;                    
+			  if (i <= emailCount) {
+				 myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression);     
+			  }               
+		   }, 500)
 		}
+
+
 
 		function singleOrMultipleJobs(emailSubject,myBody,where){
 			zjobs.length = 0; //empty the array
