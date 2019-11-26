@@ -19,13 +19,14 @@ progress[value]  {
   width: 100%;
   height: 20px;
   color: green; 
-  
+   border-radius: 9px;
+   content: attr('80%');
 }
 </style>
 </head>
 <body>
 
-<progress max="100" value="0" id="myBar" >
+<progress style="display:none" max="100" value="0" id="myBar" data-label="50%">
 
 </progress>
 <div id="fakeProgress" style="display:none">
@@ -69,12 +70,16 @@ progress[value]  {
 		Abend-Notify-Keywords: <input type="text" id="abendNotifyKeywords" value="advise;check and advise;Updating abends;Updating"><br>
 		Abend-RR-Keywords: <input type="text" id="rerunKeywords" value="been rerun;RECOVERY FAILED"><br>
 		Abend-MC-Keywords: <input type="text" id="mcKeywords" value="NO RECOVERY REQUIRED;marked"><br>
-		Abend-LongRunning-Keywords: <input type="text" id="longRunningKeywords" value="running"><br>
+		LongRunning-Keywords: <input type="text" id="longRunningKeywords" value="running"><br>
+		Hold & Release-Keywords: <input type="text" id="holdReleaseKeywords" value="HELD;RELEASED"><br>
+		Missed-Dueout-Keywords: <input type="text" id="missedDueOutKeywords" value="HELD;RELEASED"><br>
 		<br>
 		Notify-Minutes: <input type="number"id="notifyMinute"  min="1" value="3"><br>
 		Rerun-Minutes: <input type="number" id="rerunMinute" min="1" value="5"><br>
 		MC-Minutes: <input type="number" id="mcMinute" min="1"  value="2"><br>
 		LongRunning-Minutes: <input type="number" id="longRunningMinute" min="1" value="4"><br>
+		Hold & Release-Minutes: <input type="number" id="holdReleaseMinute" min="1" value="2"><br>
+		Missed-Dueout-Minutes: <input type="number" id="missedDueOutMinute" min="1" value="3"><br>
 		<br>
 		
 		<button type="button" onclick="inputValidation()"> CREATE LOGS</button>
@@ -90,6 +95,8 @@ progress[value]  {
 		var notifyMinute = 0; 
 		var markCompleteMinute = 0; 
 		var longRunningMinute = 0;
+		var holdReleaseMinute = 0;
+		var missedDueOutMinute = 0;
 		
 		function inputValidation(){
 			document.getElementById("abendsTbody").innerHTML = "";
@@ -101,20 +108,27 @@ progress[value]  {
 			var rerunKeywords = document.getElementById("rerunKeywords").value;
 			var mcKeywords = document.getElementById("mcKeywords").value;
 			var longRunningKeywords = document.getElementById("longRunningKeywords").value;
+			var holdReleaseKeywords = document.getElementById("holdReleaseKeywords").value;
+			var missedDueOutKeywords = document.getElementById("missedDueOutKeywords").value;
 				folderName=='' ? folderName = 'tempNovember' : ''
 				signatureName=='' ? signatureName = 'Jake James Manzon' : ''
 				abendNotifyKeywords=='' ? abendNotifyKeywords = 'advise;check and advise;Updating abends;Updating' : ''
 				rerunKeywords=='' ? rerunKeywords = 'been rerun;RECOVERY FAILED' : ''
 				mcKeywords=='' ? mcKeywords = 'NO RECOVERY REQUIRED;marked' : ''
 				longRunningKeywords=='' ? longRunningKeywords = 'running' : ''
+				holdReleaseKeywords=='' ? holdReleaseKeywords = 'HELD;RELEASED' : ''
 			var tempNotifyMinute = document.getElementById("notifyMinute").value;
 			var tempRerunMinute = document.getElementById("rerunMinute").value;
 			var tempMcMinute = document.getElementById("mcMinute").value;
 			var tempLongRunningMinute = document.getElementById("longRunningMinute").value;
+			var tempHoldReleaseMinute = document.getElementById("holdReleaseMinute").value;
+			var tempMissedDueOutMinute = document.getElementById("missedDueOutMinute").value;
 				tempNotifyMinute=='' ? notifyMinute = 0 : notifyMinute=tempNotifyMinute;
 				tempRerunMinute=='' ? rerunMinute = 0 : rerunMinute=tempRerunMinute;
 				tempMcMinute=='' ? markCompleteMinute = 0 : markCompleteMinute=tempMcMinute;
 				tempLongRunningMinute=='' ? longRunningMinute = 0 : longRunningMinute=tempLongRunningMinute;
+				tempHoldReleaseMinute=='' ? holdReleaseMinute = 0 : holdReleaseMinute=tempHoldReleaseMinute;
+				tempMissedDueOutMinute=='' ? missedDueOutMinute = 0 : missedDueOutMinute=tempMissedDueOutMinute;
 				
 			//myBody.indexOf("advise")>0 ||myBody.indexOf("check and advise")>0 || myBody.indexOf("Updating abends")>0 || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 )|| myBody.indexOf("Updating")>0
 			var newAbendNotifyKeywordsExpression ="";
@@ -139,10 +153,23 @@ progress[value]  {
 			for( var l=0; l < longRunningKeywords.split(";").length; l++ ){
 				newLongRunningKeywordsExpression += "myBody.indexOf('"+ longRunningKeywords.split(";")[l]+"')>0";
 				l != longRunningKeywords.split(";").length-1 ? newLongRunningKeywordsExpression += " || " : "";
+			}			
+			
+			var newHoldReleaseKeywordsExpression ="";
+			for( var h=0; h < holdReleaseKeywords.split(";").length; h++ ){
+				newHoldReleaseKeywordsExpression += "myBody.indexOf('"+ holdReleaseKeywords.split(";")[h]+"')>0";
+				h != holdReleaseKeywords.split(";").length-1 ? newHoldReleaseKeywordsExpression += " || " : "";
+			}			
+			
+			var newMissedDueOutKeywordsExpression ="";
+			for( var d=0; d < missedDueOutKeywords.split(";").length; d++ ){
+				newMissedDueOutKeywordsExpression += "myBody.indexOf('"+ missedDueOutKeywords.split(";")[d]+"')>0";
+				d != missedDueOutKeywords.split(";").length-1 ? newMissedDueOutKeywordsExpression += " || " : "";
 			}
+			
 			//start
 			document.getElementById("fakeProgress").style.display = "block";
-			startEmailsManipulation(newAbendNotifyKeywordsExpression,newRerunKeywordsExpression,newMcKeywordsExpression,newLongRunningKeywordsExpression  );
+			startEmailsManipulation(newAbendNotifyKeywordsExpression,newRerunKeywordsExpression,newMcKeywordsExpression,newLongRunningKeywordsExpression,newHoldReleaseKeywordsExpression,newMissedDueOutKeywordsExpression  );
 		}
 		
 		var zjobs = [];
@@ -154,7 +181,7 @@ progress[value]  {
 		var globalEmailSubject;
 		var i = 1;
 		
-		function startEmailsManipulation(abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression){
+		function startEmailsManipulation(abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression){
 			var outlookApp = new ActiveXObject("Outlook.Application");
 			var nameSpace = outlookApp.getNameSpace("MAPI");
 			//nameSpace.logon("ja20076062@wipro.com","jjgm@WL6062",false,false);
@@ -166,12 +193,12 @@ progress[value]  {
 			document.getElementById("myBar").setAttribute("max",emails.count);
 					console.log(emails)
 			i = 1;
-			myLoop( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression);
+			myLoop( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression);
   			
 			
 		}
 		
-		function myLoop ( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression ) { 
+		function myLoop ( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression ) { 
 
 		   setTimeout(function () { 
 			  //////////////////////////////////////////////////////////////////
@@ -192,7 +219,7 @@ progress[value]  {
 				globalEmailSubject = theEmail.ConversationTopic;
 				if( emailSubject.toUpperCase().indexOf("TURNOVER ") >=0 ){
 				     i++;                    
-					myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression);     
+					myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression);     
  
 				}
 	
@@ -287,11 +314,22 @@ progress[value]  {
 						
 					}
 
+				  //-> Hold & release expression=> myBody.indexOf("HELD") >0 || myBody.indexOf("RELEASED") >0
+					if( eval(holdReleaseExpression) ){
+						var logType = "holdRelease";
+						var action = "Hold and Release of jobs";
+						var where = "holdRelease";			
+						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - holdReleaseMinute )).toTimeString().split(" ")[0];
+						extractJobs(emailSubject,myBody,where,fullEmail);				
+						console.log("email["+i +","+emailSubject+"]-> hold & release-" +zjobs.length+" found")
+						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+						
+					}
 			  
 			  //////////////////////////////////////////////////////////////////
 			  i++;                    
 			  if (i <= emailCount) {
-				 myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression);     
+				 myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression);     
 			  }               
 		   }, 500)
 		}
@@ -366,7 +404,16 @@ progress[value]  {
 						zjobsTemp.push(temp);
 						zjobs.push( temp )
 					}
-				}else{ //abend
+				}else if( where == "holdRelease"){
+					if( lineN.trim().indexOf("Z") >= 0 && (lineN.trim().indexOf("HELD") > 0 || lineN.trim().indexOf("RELEASED") > 0) ){
+						//var temp = lineN.trim().substring(0,8);
+						var temp = lineN.trim().split(",")[2].split("-")[0].trim()
+						zjobsTemp.push(temp);
+						zjobs.push( temp )
+					}
+
+				}
+				else{ //abend
 					//get all zjobs first and then compare it to full email thread-if there is duplicate-then someone already report it
 					if( lineN.trim().indexOf("Z") >= 0 && lineN.trim().indexOf("Z") <3 && lineN.indexOf(where) >= 0 ){
 						if( where == "RECOVERY" ){ //RECOVERY ACTIVE || RECOVERY FAILED => job has been rerun || RR as ps25
@@ -398,7 +445,7 @@ progress[value]  {
 				//}
 			}
 								
-			//console.log(zjobs) 
+			console.log(zjobs) 
 			if( where == "RECOVERY" ){ //rerun
 				var splitFrom = fullEmail.split("From");
 				if( zjobsRecoveryActive.length > 0 ){
@@ -602,7 +649,28 @@ progress[value]  {
 					}
 				}
 			}
-
+	
+			if( where == "holdRelease" ){ //hold and release
+				var mySecondArray = fullEmail.split("\n");
+				// search job duplication in thread->don't notify
+				for( var g = myArray.length; g < mySecondArray.length; g++){ 
+					var lineN = mySecondArray[g];
+					if( lineN.indexOf( "Z" ) >= 0 ){ 
+						for( var h=0; h < zjobsTemp.length; h++ ){
+							if( lineN.indexOf( zjobsTemp[h] ) >= 0 ){//there is already job in threads that has been held | released
+								zjobs.splice( zjobsTemp.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
+							}
+						}
+					}
+				}
+				if( zjobs.length > 0 ){
+					var tempZjobs = [];
+					for( var i = 0; i < zjobs.length;i++){
+						tempZjobs.push( zjobs[i].substring(0, zjobs[i].indexOf(' ')).trim() )
+					}
+					zjobs = tempZjobs;
+				}
+			}
 
 			//zjobs = result;
 			//return result;
@@ -635,32 +703,47 @@ progress[value]  {
 						newRow.appendChild(cell);
 					//newRow.insertCell(-1).innerHTML = globalEmailSubject;
 				}
-				if( logType == "longRunning" ) { //team
-						if( recipients.indexOf("data_mart") > 0 ){
+				if( logType == "longRunning" || logType == "holdRelease") { //team
+						if( recipients.indexOf("data_mart") >= 0 ){
 							var team = "Datamart";
-						}else if ( recipients.indexOf("scssupport") > 0 ){
+						}else if ( recipients.indexOf("scssupport") >= 0 ){
 							var team = "SCS";
-						}else if ( recipients.indexOf("dcit") > 0 ){
-							var team = "Dcit";
-						}else if ( recipients.indexOf("debatch") > 0 ){
-							var team = "Debatch";
-						}else if ( recipients.indexOf("logistic") > 0 ){
-							var team = "Logistic";
-						}else if ( recipients.indexOf("hrsprodsup") > 0 ){
-							var team = "Hrsprodsup";
-						}else if ( recipients.indexOf("firm") > 0 ){
+						}else if ( recipients.indexOf("firm") >= 0 ){
 							var team = "Firm";
-						}else if ( recipients.indexOf("emk-dba") > 0 ){
-							var team = "Emk-Dba";
-						}else if ( recipients.indexOf("ap-mmpp") > 0 ){
+						}else if ( recipients.indexOf("logistics") >= 0 ){
+							var team = "Logistics";
+						}else if ( recipients.indexOf("ap-mmpp") >= 0 ){
 							var team = "Ap-mmpp";
-						}else if ( recipients.indexOf("sapbw") > 0 ){
-							var team = "Sapbw";
-						}else if ( recipients.indexOf("wwmit_qms") > 0 ){
+						}else if ( recipients.indexOf("obsresv") >= 0 ){
+							var team = "Obsersv";
+						}else if ( recipients.indexOf("dcit") >= 0 ){
+							var team = "Dcit";
+						}else if ( recipients.indexOf("emk-dba") >=0 ){
+							var team = "Emk-Dba";
+						}else if ( recipients.indexOf("hrsprodsup") >= 0 ){
+							var team = "Hrsprodsup";
+						}else if ( recipients.indexOf("busit") >= 0 ){
+							var team = "Tt-ops/Bizzaps";
+						}else if ( recipients.indexOf("bizapps") >= 0 ){
+							var team = "Tt-ops/Bizzaps";
+						}else if ( recipients.indexOf("vendavo") >= 0 ){
+							var team = "Vendavo";
+						}else if ( recipients.indexOf("wwmit_qms") >= 0 ){
 							var team = "wwmit_qms";
+						}else if ( recipients.indexOf("fs_oncall") >= 0 ){
+							var team = "Fs_oncall";
+						}else if ( recipients.indexOf("debatch") >= 0 ){
+							var team = "Debatch";
+						}else if ( recipients.indexOf("mpder") >= 0 ){
+							var team = "Mpder";
+						}else if ( recipients.indexOf("sapbw") >= 0 ){
+							var team = "Sapbw";
+						}else if( recipients.indexOf("sap_yr") >= 0 ){
+							var team = "SAP";
 						}else{
-							var team = "SAP";//sap_yr
+							var team = recipients.split("@")[0];
 						}
+						
 						newRow.insertCell(-1).innerHTML = team;
 						newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
 						var cell = document.createElement("td");
@@ -669,7 +752,7 @@ progress[value]  {
 							cell.appendChild(cellText);
 							newRow.appendChild(cell);
 						//newRow.insertCell(-1).innerHTML = globalEmailSubject;
-					}
+				}
 					console.log("SUCCESS")
 			}else{ //multiple zjobs
 				for(var i=0; i< zjobs.length; i++ ){
@@ -687,31 +770,45 @@ progress[value]  {
 							newRow.appendChild(cell);
 						//newRow.insertCell(-1).innerHTML = globalEmailSubject;
 					}
-					if( logType == "longRunning" ) { //team
-						if( recipients.indexOf("data_mart") > 0 ){
+					if( logType == "longRunning" || logType == "holdRelease" ) { //team
+						if( recipients.indexOf("data_mart") >= 0 ){
 							var team = "Datamart";
-						}else if ( recipients.indexOf("scssupport") > 0 ){
+						}else if ( recipients.indexOf("scssupport") >= 0 ){
 							var team = "SCS";
-						}else if ( recipients.indexOf("dcit") > 0 ){
-							var team = "Dcit";
-						}else if ( recipients.indexOf("debatch") > 0 ){
-							var team = "Debatch";
-						}else if ( recipients.indexOf("logistic") > 0 ){
-							var team = "Logistic";
-						}else if ( recipients.indexOf("hrsprodsup") > 0 ){
-							var team = "Hrsprodsup";
-						}else if ( recipients.indexOf("firm") > 0 ){
+						}else if ( recipients.indexOf("firm") >= 0 ){
 							var team = "Firm";
-						}else if ( recipients.indexOf("emk-dba") > 0 ){
-							var team = "Emk-Dba";
-						}else if ( recipients.indexOf("ap-mmpp") > 0 ){
+						}else if ( recipients.indexOf("logistics") >= 0 ){
+							var team = "Logistics";
+						}else if ( recipients.indexOf("ap-mmpp") >= 0 ){
 							var team = "Ap-mmpp";
-						}else if ( recipients.indexOf("sapbw") > 0 ){
-							var team = "Sapbw";
-						}else if ( recipients.indexOf("wwmit_qms") > 0 ){
+						}else if ( recipients.indexOf("obsresv") >= 0 ){
+							var team = "Obsersv";
+						}else if ( recipients.indexOf("dcit") >= 0 ){
+							var team = "Dcit";
+						}else if ( recipients.indexOf("emk-dba") >=0 ){
+							var team = "Emk-Dba";
+						}else if ( recipients.indexOf("hrsprodsup") >= 0 ){
+							var team = "Hrsprodsup";
+						}else if ( recipients.indexOf("busit") >= 0 ){
+							var team = "Tt-ops/Bizzaps";
+						}else if ( recipients.indexOf("bizapps") >= 0 ){
+							var team = "Tt-ops/Bizzaps";
+						}else if ( recipients.indexOf("vendavo") >= 0 ){
+							var team = "Vendavo";
+						}else if ( recipients.indexOf("wwmit_qms") >= 0 ){
 							var team = "wwmit_qms";
+						}else if ( recipients.indexOf("fs_oncall") >= 0 ){
+							var team = "Fs_oncall";
+						}else if ( recipients.indexOf("debatch") >= 0 ){
+							var team = "Debatch";
+						}else if ( recipients.indexOf("mpder") >= 0 ){
+							var team = "Mpder";
+						}else if ( recipients.indexOf("sapbw") >= 0 ){
+							var team = "Sapbw";
+						}else if( recipients.indexOf("sap") >= 0 ){
+							var team = "SAP";
 						}else{
-							var team = "SAP";//sap_yr
+							var team = "";
 						}
 						newRow.insertCell(-1).innerHTML = team;
 						newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
