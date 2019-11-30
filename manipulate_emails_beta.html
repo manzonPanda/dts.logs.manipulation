@@ -35,13 +35,13 @@ progress[value]  {
 
 
 </div>
-		<table id="abendsTable">
+		<table id="abendsTable" style="width:100%">
             <thead>
                 <th >Jobname</th>
                 <th >Site</th>
                 <th >Date</th>
                 <th >Time</th>
-                <th>Action</th>
+                <th style="width:30%" >Action</th>
                 <th >Time of action</th>
                 <th style="color:red">DebugMe</th>
             </thead>
@@ -49,16 +49,15 @@ progress[value]  {
 			<tbody>
         </table>
 		<br>
-		<table id="longRunningTable" >
+		<table id="longRunningTable" style="width:100%">
             <thead >
                 <th >Jobname</th>
-                <th >Site</th>
 				<th >Date</th>
                 <th >Time</th>
-                <th >Action</th>
+                <th style="width:30%">Action</th>
                 <th>Team</th>
                 <th >Time of action</th>
-                <th style="color:red">DebugMe</th>
+                <th style="color:red;">DebugMe</th>
             </thead>
 			<tbody id="longRunningTbody" >
 			<tbody>
@@ -254,7 +253,7 @@ progress[value]  {
 				tempDate.setMinutes( timeColumnConvertedDate.getMinutes() );
 				tempDate.setSeconds( timeColumnConvertedDate.getSeconds() );
 				
-				if( emailSubject.toUpperCase().indexOf("TURNOVER ") >=0 ){
+				if( emailSubject.toUpperCase().indexOf("TURNOVER") >=0 ){
 					var title = [emailSubject]
 					var site = "";
 					var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 0 )).toTimeString().split(" ")[0];;
@@ -300,7 +299,7 @@ progress[value]  {
 						var where = "RECOVERY";
 						//singleOrMultipleJobs(emailSubject,myBody,where);
 						//var emailSubject = "";
-						extractJobs(emailSubject,myBody,where,fullEmail,tempDate);
+						extractJobs(emailSubject,myBody,where,fullEmail,tempDate,site);
 						//console.log("email("+i +")-> rerun-"+zjobs.length+" found")
 						//var action = "rerun as per programmer";
 						//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
@@ -327,7 +326,7 @@ progress[value]  {
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					}
 			  //-> Abend Notify expression=> myBody.indexOf("advise")>0 ||myBody.indexOf("check and advise")>0 || myBody.indexOf("Updating abends")>0 || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 )|| myBody.indexOf("Updating")>0
-					if(  eval(abendNotifyExpression) || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 ) ){ // notify
+					if(  eval(abendNotifyExpression) && emailSubject.toUpperCase().indexOf("ABEND") >=0 || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 ) ){ // notify
 						var action = "notify programmer";
 						var where = "WAITING T/S"; //some email forgot the whole status
 						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - notifyMinute )).toTimeString().split(" ")[0];
@@ -411,7 +410,7 @@ progress[value]  {
 			  if (i <= emailCount) {
 				 myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression);     
 			  }               
-		   }, 500)
+		   }, 100)
 		}
 
 
@@ -459,7 +458,7 @@ progress[value]  {
 				zjobs.push(jobname);
 			}
 		}
-		function extractJobs(emailSubject,myBody,where,fullEmail,tempDate){
+		function extractJobs(emailSubject,myBody,where,fullEmail,tempDate,site){
 			var zjobsTemp = [];
 			var zjobsRecoveryActive = [];
 			var zjobsRecoveryFailed = [];
@@ -782,16 +781,17 @@ progress[value]  {
 			//(logType == "abend") ? (var newRow = abendsTbody.insertRow(-1)):(var newRow = longRunningTbody.insertRow(-1));
 			console.log(zjobs)
 			if( logType === "abend" ) {
-				var newRow = abendsTbody.insertRow(-1)
+				var newRow = abendsTbody.insertRow(0)
 			}else{
-				var newRow = longRunningTbody.insertRow(-1)
+				var newRow = longRunningTbody.insertRow(0)
 			}
 
 			if( zjobs.length == 1){ //single zjob
 
-				//var newRow = abendsTbody.insertRow(-1)
 				newRow.insertCell(-1).innerHTML = zjobs[0];
-				newRow.insertCell(-1).innerHTML = site;
+				if( logType === "abend" ) {
+					newRow.insertCell(-1).innerHTML = site;
+				}
 				newRow.insertCell(-1).innerHTML = convertedDate.toJSON().split("T")[0];
 				newRow.insertCell(-1).innerHTML = timeResult;
 				newRow.insertCell(-1).innerHTML = action;
@@ -806,12 +806,11 @@ progress[value]  {
 				}
 				if(logType === "abend"){
 					newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
-					var cell = document.createElement("td");
-						cell.setAttribute("style","color:#e57373");
-					var cellText = document.createTextNode(globalEmailSubject);
-						cell.appendChild(cellText);
-						newRow.appendChild(cell);
-					//newRow.insertCell(-1).innerHTML = globalEmailSubject;
+					//var cell = document.createElement("td");
+						//cell.setAttribute("style","color:#e57373");
+					//var cellText = document.createTextNode(globalEmailSubject);
+						//cell.appendChild(cellText);
+						//newRow.appendChild(cell);
 				}
 				if( logType == "longRunning" || logType == "holdRelease" || logType == "missedDue") { //team
 						if( recipients.indexOf("data_mart") >= 0 ){
@@ -856,29 +855,30 @@ progress[value]  {
 						
 						newRow.insertCell(-1).innerHTML = team;
 						newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
-						var cell = document.createElement("td");
-							cell.setAttribute("style","color:#e57373");
-						var cellText = document.createTextNode(globalEmailSubject);
-							cell.appendChild(cellText);
-							newRow.appendChild(cell);
-						//newRow.insertCell(-1).innerHTML = globalEmailSubject;
+						//var cell = document.createElement("td");
+							//cell.setAttribute("style","color:#e57373");
+						//var cellText = document.createTextNode(globalEmailSubject);
+							//cell.appendChild(cellText);
+							//newRow.appendChild(cell);
+
 				}
 					console.log("SUCCESS")
 			}else{ //multiple zjobs
 				for(var i=0; i< zjobs.length; i++ ){
 					newRow.insertCell(-1).innerHTML = zjobs[i];
-					newRow.insertCell(-1).innerHTML = site;
+					if( logType === "abend" ) {
+						newRow.insertCell(-1).innerHTML = site;
+					}
 					newRow.insertCell(-1).innerHTML = convertedDate.toJSON().split("T")[0];
 					newRow.insertCell(-1).innerHTML = timeResult;
 					newRow.insertCell(-1).innerHTML = action;
 					if(logType === "abend"){
 						newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
-						var cell = document.createElement("td");
-							cell.setAttribute("style","color:#e57373");
-						var cellText = document.createTextNode(globalEmailSubject);
-							cell.appendChild(cellText);
-							newRow.appendChild(cell);
-						//newRow.insertCell(-1).innerHTML = globalEmailSubject;
+						//var cell = document.createElement("td");
+							//cell.setAttribute("style","color:#e57373");
+						//var cellText = document.createTextNode(globalEmailSubject);
+							//cell.appendChild(cellText);
+							//newRow.appendChild(cell);
 					}
 					if( logType == "longRunning" || logType == "holdRelease" || logType == "missedDue") { //team
 						if( recipients.indexOf("data_mart") >= 0 ){
@@ -923,20 +923,20 @@ progress[value]  {
 						newRow.insertCell(-1).innerHTML = team;
 						newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
 
-						var cell = document.createElement("td");
-							cell.setAttribute("style","color:#e57373");
-						var cellText = document.createTextNode(globalEmailSubject);
-							cell.appendChild(cellText);
-							newRow.appendChild(cell);
+						//var cell = document.createElement("td");
+							//cell.setAttribute("style","color:#e57373");
+						//var cellText = document.createTextNode(globalEmailSubject);
+							//cell.appendChild(cellText);
+							//newRow.appendChild(cell);
 
 					}
 					
 					
 					if( i < zjobs.length-1){
 						if( logType === "abend" ) {
-							var newRow = abendsTbody.insertRow(-1)
+							var newRow = abendsTbody.insertRow(0)
 						}else{
-							var newRow = longRunningTbody.insertRow(-1)
+							var newRow = longRunningTbody.insertRow(0)
 						}
 					}
 				}
