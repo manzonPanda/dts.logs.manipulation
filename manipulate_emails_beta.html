@@ -87,11 +87,11 @@ progress[value]  {
 		
 		<button type="button" onclick="inputValidation()"> CREATE LOGS</button>
 		<br><br>
-		<div>
+		<div >
 			Reminder: <br>
 			*For Zjob/s to be called Mark as Complete as per ps25/ps22, pd34 or MARS record of Zjob must be included (NO RECOVERY REQUIRED). <br>
-			*For Zjob/s to be called RR as per ps25, pd34 or MARS record of Zjob must be included (RECOVERY FAILED). So thus RR as per programmer (RECOVERY ACTIVE).1
-
+			*For Zjob/s to be called RR as per ps25, pd34 or MARS record of Zjob must be included (RECOVERY FAILED). So thus RR as per programmer (RECOVERY ACTIVE). <br>
+			--add reminder--
 		</div>
 
 
@@ -249,7 +249,22 @@ progress[value]  {
 				var emailSubject = theEmail.ConversationTopic;
 				globalEmailSubject = theEmail.ConversationTopic;
 				
-				site = theEmail.ConversationTopic.split("|")[0].split(" ")[0];
+				//site = theEmail.ConversationTopic.split("|")[0].split(" ")[0];
+				if( theEmail.ConversationTopic.toUpperCase().indexOf("LE") >= 0 ){
+					site = "LE"
+				}else if ( theEmail.ConversationTopic.toUpperCase().indexOf("YR") >= 0 ){
+					site = "YR"
+				}else if ( theEmail.ConversationTopic.toUpperCase().indexOf("Y2") >= 0 ){
+					site = "Y2"
+				}else if ( theEmail.ConversationTopic.toUpperCase().indexOf("UM") >= 0 ){
+					site = "UM"
+				}else if ( theEmail.ConversationTopic.toUpperCase().indexOf("MM") >= 0 ){
+					site = "MM"
+				}else{
+					site ="Undefined"
+				}
+				
+				
 				var myDate = theEmail.SentOn;
 				convertedDate = new Date(myDate);
 				recipients = theEmail.cc + theEmail.to; //to,cc,bcc
@@ -301,19 +316,7 @@ progress[value]  {
 				//find Action
 				//if( emailSubject.indexOf("ABEND") > 0){ //abends
 					var logType = "abend";
-			  //-> RR expression=> myBody.indexOf("been rerun")>0 || myBody.indexOf("RECOVERY FAILED") > 0
-					if( eval(rerunExpression) ){ //rerun || RR as per ps25
-						// || myBody.indexOf("RECOVERY FAILED") > 0
-						var where = "RECOVERY";
-						//singleOrMultipleJobs(emailSubject,myBody,where);
-						//var emailSubject = "";
-						extractJobs(emailSubject,myBody,where,fullEmail,tempDate,site);
-						//console.log("email("+i +")-> rerun-"+zjobs.length+" found")
-						//var action = "rerun as per programmer";
-						//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
-						//displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
-					}
-			  //-> MC expression=> myBody.indexOf("NO RECOVERY REQUIRED")>0 || myBody.indexOf("marked") >0
+								  //-> MC expression=> myBody.indexOf("NO RECOVERY REQUIRED")>0 || myBody.indexOf("marked") >0
 					if( eval(mcExpression) ){ //mark complete
 						var action = "";
 						var timeResult;
@@ -333,6 +336,7 @@ progress[value]  {
 						}
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					}
+
 			  //-> Abend Notify expression=> myBody.indexOf("advise")>0 ||myBody.indexOf("check and advise")>0 || myBody.indexOf("Updating abends")>0 || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 )|| myBody.indexOf("Updating")>0
 					if(  eval(abendNotifyExpression) && emailSubject.toUpperCase().indexOf("ABEND") >=0 || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 ) ){ // notify
 						var action = "notify programmer";
@@ -348,6 +352,18 @@ progress[value]  {
 					//displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
 				
 				//}else{ // long running
+							  //-> RR expression=> myBody.indexOf("been rerun")>0 || myBody.indexOf("RECOVERY FAILED") > 0
+					if( eval(rerunExpression) ){ //rerun || RR as per ps25
+						// || myBody.indexOf("RECOVERY FAILED") > 0
+						var where = "RECOVERY";
+						//singleOrMultipleJobs(emailSubject,myBody,where);
+						//var emailSubject = "";
+						extractJobs(emailSubject,myBody,where,fullEmail,tempDate,site);
+						//console.log("email("+i +")-> rerun-"+zjobs.length+" found")
+						//var action = "rerun as per programmer";
+						//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
+						//displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
+					}
 			  //-> LR expression=> myBody.indexOf("running ") >0
 					if( eval(longRunningExpression) ){
 						var logType = "longRunning";
@@ -656,7 +672,7 @@ progress[value]  {
 							var logType = "abend";
 							var action = "rerun as per ps25";
 							var ps25TempDate = new Date(tempDate);
-							var timeResult = new Date(ps25TempDate.setMinutes( ps25TempDate.getMinutes() - 0 )).toTimeString().split(" ")[0];
+							var timeResult = new Date(ps25TempDate.setMinutes( ps25TempDate.getMinutes() - 2 )).toTimeString().split(" ")[0];
 							//var timeResult = "fix";
 							var oneAtATime = [];
 							oneAtATime.push(zjobsRRps25[h])
@@ -801,11 +817,11 @@ progress[value]  {
 					newRow.insertCell(-1).innerHTML = site;
 				}
 				newRow.insertCell(-1).innerHTML = convertedDate.toJSON().split("T")[0];
-				newRow.insertCell(-1).innerHTML = timeResult;
+				newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
 				newRow.insertCell(-1).innerHTML = action;
 				if( logType === "turnover" ||  logType === "capping"){
 					newRow.insertCell(-1).innerHTML = "";//team
-					newRow.insertCell(-1).innerHTML = timeResult;//time of action
+					newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];//time of action
 					var cell = document.createElement("td"); //Debug me column
 						cell.setAttribute("style","color:#e57373");
 					var cellText = document.createTextNode(globalEmailSubject +"(" + recipients + ")");
@@ -813,7 +829,12 @@ progress[value]  {
 						newRow.appendChild(cell);
 				}
 				if(logType === "abend"){
-					newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
+					if( action == "rerun as per ps25"  ){ //if rr as per ps25, same time
+						newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+					}else{
+						newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
+					}
+					
 					//var cell = document.createElement("td");
 						//cell.setAttribute("style","color:#e57373");
 					//var cellText = document.createTextNode(globalEmailSubject);
@@ -858,11 +879,11 @@ progress[value]  {
 						}else if( recipients.indexOf("sap_yr") >= 0 ){
 							var team = "SAP";
 						}else{
-							var team = recipients.split("@")[0];
+							var team = "undefined";
 						}
 						
 						newRow.insertCell(-1).innerHTML = team;
-						newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
+						newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
 						//var cell = document.createElement("td");
 							//cell.setAttribute("style","color:#e57373");
 						//var cellText = document.createTextNode(globalEmailSubject);
@@ -878,10 +899,14 @@ progress[value]  {
 						newRow.insertCell(-1).innerHTML = site;
 					}
 					newRow.insertCell(-1).innerHTML = convertedDate.toJSON().split("T")[0];
-					newRow.insertCell(-1).innerHTML = timeResult;
+					newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
 					newRow.insertCell(-1).innerHTML = action;
 					if(logType === "abend"){
-						newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
+						if( action == "rerun as per ps25"  ){ //if rr as per ps25, same time
+							newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+						}else{
+							newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
+						}
 						//var cell = document.createElement("td");
 							//cell.setAttribute("style","color:#e57373");
 						//var cellText = document.createTextNode(globalEmailSubject);
@@ -926,10 +951,10 @@ progress[value]  {
 						}else if( recipients.indexOf("sap") >= 0 ){
 							var team = "SAP";
 						}else{
-							var team = "";
+							var team = "undefined";
 						}
 						newRow.insertCell(-1).innerHTML = team;
-						newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0];
+						newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
 
 						//var cell = document.createElement("td");
 							//cell.setAttribute("style","color:#e57373");
