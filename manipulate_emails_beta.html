@@ -75,6 +75,7 @@ progress[value]  {
 		Capping-Keywords: <input type="text" id="cappingKeywords" value="capping;quick view"><br>
 		Tpipe-Keywords: <input type="text" id="tpipeKeywords" value="TPIPE;L$"><br>
 		Stuck-Keywords: <input type="text" id="stuckKeywords" value="stuck in submit"><br>
+		CleanUp-Keywords: <input type="text" id="cleanUpKeywords" value="clear off;clean job"><br>
 		<br>
 		Notify-Minutes: <input type="number"id="notifyMinute"  min="1" value="3"><br>
 		Rerun-Minutes: <input type="number" id="rerunMinute" min="1" value="5"><br>
@@ -129,6 +130,7 @@ progress[value]  {
 			var cappingKeywords = document.getElementById("cappingKeywords").value;
 			var tpipeKeywords = document.getElementById("tpipeKeywords").value;
 			var stuckKeywords = document.getElementById("stuckKeywords").value;
+			var cleanUpKeywords = document.getElementById("cleanUpKeywords").value;
 				folderName=='' ? folderName = 'tempNovember' : ''
 				signatureName=='' ? signatureName = 'Jake James Manzon' : ''
 				abendNotifyKeywords=='' ? abendNotifyKeywords = 'advise;check and advise;Updating abends;Updating' : ''
@@ -140,6 +142,7 @@ progress[value]  {
 				cappingKeywords=='' ? cappingKeywords = 'capping;quick view' : ''
 				tpipeKeywords=='' ? tpipeKeywords = 'TPIPE;L$' : ''
 				stuckKeywords=='' ? stuckKeywords = 'stuck in submit' : ''
+				cleanUpKeywords=='' ? cleanUpKeywords = 'clear off;clean job' : ''
 			var tempNotifyMinute = document.getElementById("notifyMinute").value;
 			var tempRerunMinute = document.getElementById("rerunMinute").value;
 			var tempMcMinute = document.getElementById("mcMinute").value;
@@ -212,11 +215,17 @@ progress[value]  {
 			for( var s=0; s < stuckKeywords.split(";").length; s++ ){
 				newStuckKeywordsExpression += "myBody.indexOf('"+ stuckKeywords.split(";")[s]+"')>0";
 				s != stuckKeywords.split(";").length-1 ? newStuckKeywordsExpression += " || " : "";
+			}			
+			
+			var newCleanUpKeywordsExpression ="";
+			for( var u=0; u < cleanUpKeywords.split(";").length; u++ ){
+				newCleanUpKeywordsExpression += "myBody.indexOf('"+ cleanUpKeywords.split(";")[u]+"')>0";
+				u != cleanUpKeywords.split(";").length-1 ? newCleanUpKeywordsExpression += " || " : "";
 			}
 			
 			//start
 			document.getElementById("fakeProgress").style.display = "block";
-			startEmailsManipulation(newAbendNotifyKeywordsExpression,newRerunKeywordsExpression,newMcKeywordsExpression,newLongRunningKeywordsExpression,newHoldReleaseKeywordsExpression,newMissedDueOutKeywordsExpression,newCappingKeywordsExpression,newTpipeKeywordsExpression,newStuckKeywordsExpression);
+			startEmailsManipulation(newAbendNotifyKeywordsExpression,newRerunKeywordsExpression,newMcKeywordsExpression,newLongRunningKeywordsExpression,newHoldReleaseKeywordsExpression,newMissedDueOutKeywordsExpression,newCappingKeywordsExpression,newTpipeKeywordsExpression,newStuckKeywordsExpression,newCleanUpKeywordsExpression);
 		}
 		
 		var zjobs = [];
@@ -228,7 +237,7 @@ progress[value]  {
 		var globalEmailSubject;
 		var i = 1;
 		
-		function startEmailsManipulation(abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression){
+		function startEmailsManipulation(abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression){
 			var outlookApp = new ActiveXObject("Outlook.Application");
 			var nameSpace = outlookApp.getNameSpace("MAPI");
 			//nameSpace.logon("ja20076062@wipro.com","jjgm@WL6062",false,false);
@@ -240,12 +249,12 @@ progress[value]  {
 			document.getElementById("myBar").setAttribute("max",emails.count);
 			console.log(emailCount)
 			i = 1;
-			myLoop( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression);
+			myLoop( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression);
   			
 			
 		}
 		
-		function myLoop ( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression ) { 
+		function myLoop ( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression) { 
 
 		   setTimeout(function () { 
 			  //////////////////////////////////////////////////////////////////
@@ -290,23 +299,41 @@ progress[value]  {
 				tempDate.setHours( timeColumnConvertedDate.getHours() );
 				tempDate.setMinutes( timeColumnConvertedDate.getMinutes() );
 				tempDate.setSeconds( timeColumnConvertedDate.getSeconds() );
-				
+				//Turn over expression
 				if( emailSubject.toUpperCase().indexOf("TURNOVER") >=0 ){
 					var title = [emailSubject]
-					var site = "";
+					//var site = "";
 					var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 0 )).toTimeString().split(" ")[0];;
 				    var action = "DTS Shift Turnover (turnover)";
 					var logType = "turnover";
 					var recipient = "";
-					console.log("email["+i +","+emailSubject+"]-> Turnover-"+zjobs.length+" found")
+					console.log("email["+i +","+emailSubject+"]-> Turnover- 1 found")
 					displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					 
 					i++;  
 					if( i <= emailCount ){
-						myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression);     
+						myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression);     
 					}
 					return
-				}	
+				}
+				//PCN expression
+				if( emailSubject.toUpperCase().indexOf("PCN") >=0 ){
+					var title = [emailSubject.split(" ")[2]]
+					//var title = [emailSubject.substring( emailSubject.indexOf("PCN"),emailSubject.indexOf(" ",emailSubject.indexOf(" ") + 1  ) )]
+					var site = emailSubject.split(" ")[0];
+					var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 0 )).toTimeString().split(" ")[0];;
+				    var action = "PCN";
+					var logType = "pcn";
+					var recipient = theEmail.cc;
+					console.log("email["+i +","+emailSubject+"]-> PCN-"+zjobs.length+" found")
+					displayRow(title,site,convertedDate,timeResult,action,logType,recipient,globalEmailSubject);
+					
+					i++;  
+					if( i <= emailCount ){
+						myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression);     
+					}
+					return
+				}				
 					
 				//if( emailSubject.indexOf("ABEND") > 0 ){
 				//	if( emailSubject.indexOf("*")>0 || emailSubject.indexOf("MULTIPLE")>0 || emailSubject.indexOf("&") > 0){ //multiple job
@@ -320,9 +347,7 @@ progress[value]  {
 				//	zjobs.push(jobname);
 				//}
 				
-
-
-
+				
 				//var rerunMinute = 5; 
 				//var notifyMinute = 3; 
 				//var markCompleteMinute = 2; 
@@ -380,7 +405,7 @@ progress[value]  {
 						//displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients);
 					}
 			  //-> LR expression=> myBody.indexOf("running ") >0
-					if( eval(longRunningExpression) ){
+					if( eval(longRunningExpression) && emailSubject.toUpperCase().indexOf("RUNNING") >=0 ){
 						var logType = "longRunning";
 						var action = "long running";
 						var where = "longRunning";			
@@ -415,7 +440,7 @@ progress[value]  {
 					if( eval(cappingExpression) && myBody.indexOf("%") >=0){
 						var title = [emailSubject];
 						var site = "Undefined";
-						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 0 )).toTimeString().split(" ")[0];;
+						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - cappingMinute )).toTimeString().split(" ")[0];;
 						var action = "Capping";
 						var logType = "capping";
 						var recipient = "";
@@ -431,10 +456,9 @@ progress[value]  {
 					}					
 					//-> Tpipe expression=> myBody.indexOf("TPIPE") >0 || myBody.indexOf("L$") >=0
 					if( fullEmail.indexOf("TPIPE") >0 || fullEmail.indexOf("L$") >=0 ){
-						console.log("Tpipe found")
 						var myArray = myBody.split("\n");
 						var mySecondArray = fullEmail.split("\n");
-						console.log(limitUntilLine +":"+ fullEmail.split("\n").length)
+						//console.log(limitUntilLine +":"+ fullEmail.split("\n").length)
 						
 						if( fullEmail.split("From").length == 2 ){
 							
@@ -450,7 +474,7 @@ progress[value]  {
 							}
 							
 							var site = "Undefined";
-							var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 0 )).toTimeString().split(" ")[0];;
+							var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - tpipeMinute )).toTimeString().split(" ")[0];;
 							var action = "Tpipe";
 							var logType = "tpipe";
 							var recipient = "";
@@ -462,19 +486,30 @@ progress[value]  {
 					//-> Stuck in Submit expression=> myBody.indexOf("stuck in submit") >0 
 					if( eval(stuckExpression) ){
 						var logType = "stuckInSubmit";
-						var action = "stuck";
+						var action = "Stuck";
 						var where = "stuck";			
-						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - missedDueOutMinute )).toTimeString().split(" ")[0];
+						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - stuckMinute )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> stuck-" +zjobs.length+" found")
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					}
 					
-					
+					//-> CleanUp expression=> myBody.indexOf("clean job") >0
+					if( eval(cleanUpExpression) ){
+						var logType = "cleanUp";
+						var action = "PPC05 CLEAN UP";
+						var where = "cleanUp";			
+						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 0 )).toTimeString().split(" ")[0];
+						extractJobs(emailSubject,myBody,where,fullEmail);
+						console.log("email["+i +","+emailSubject+"]-> cleanUp-" +zjobs.length+" found")
+						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+					}
+
+	
 			  //////////////////////////////////////////////////////////////////
 			  i++;                    
 			  if (i <= emailCount) {
-				 myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression);     
+				 myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression);     
 			  }               
 		   }, 100)
 		}
@@ -543,9 +578,11 @@ progress[value]  {
 				//	}
 				//}
 				if( where == "longRunning" ){//long running
+					console.log("LR")
 					if( lineN.trim().indexOf("Z") >= 0 && lineN.trim().indexOf("Z") < 3){
 						//var temp = lineN.trim().split(" ")[0];
-						var temp = lineN.trim().substring(0,8);
+						//var temp = lineN.trim().substring(0,8);
+						var temp = lineN.trim().replace(/\s+/g, "-").split("-")[0];
 						zjobsTemp.push(temp);
 						zjobs.push( temp )
 					}
@@ -560,6 +597,15 @@ progress[value]  {
 				}else if( where == "stuck" ){
 				
 					if( lineN.trim().indexOf("Z") >= 0 && lineN.trim().replace(/\s+/g, "-").split("-")[3] == 'S'){
+						//console.log( lineN.trim().replace(/\s+/g, "-").split("-")[3] )
+						var temp = lineN.trim().replace(/\s+/g, "-").split("-")[0];
+						zjobsTemp.push(temp);
+						zjobs.push( temp )
+					}
+					
+				}else if( where == "cleanUp" ){
+					console.log("in")
+					if( lineN.trim().indexOf("Z") >= 0 && lineN.indexOf("ACTIVE") >= 0 ){
 						//console.log( lineN.trim().replace(/\s+/g, "-").split("-")[3] )
 						var temp = lineN.trim().replace(/\s+/g, "-").split("-")[0];
 						zjobsTemp.push(temp);
@@ -845,6 +891,7 @@ progress[value]  {
 			}			
 			
 			if( where == "stuck" ){ //stuck in submit
+				zjobs = zjobsTemp;
 				var mySecondArray = fullEmail.split("\n");
 				// search job duplication in thread->don't notify
 				for( var g = myArray.length; g <= mySecondArray.length; g++){ 
@@ -866,9 +913,32 @@ progress[value]  {
 					}
 					
 				}
+				
+				if( zjobs.length == 0 ){ //single job; found 0 in searching zjobs for loop() above;
+					var jobname =  emailSubject.substring( emailSubject.indexOf("Z")  )  
+					//var jobname =  emailSubject.split("|")[1].split(" ")[2];
+						zjobsTemp.push(jobname)
+						console.log(zjobsTemp)
+				}
 
 			}
 
+			if( where == "cleanUp" ){ //clean up
+				//zjobs = zjobsTemp;
+				var mySecondArray = fullEmail.split("\n");
+				// search job duplication in thread->don't notify
+				for( var g = myArray.length; g <= mySecondArray.length-1; g++){ 
+					var lineN = mySecondArray[g];
+					if( lineN.indexOf( "Z" ) >= 0 ){ 
+						for( var h=0; h < zjobsTemp.length; h++ ){
+							if( lineN.indexOf( zjobsTemp[h] ) >= 0  ){//there is already job in threads
+								zjobs.splice( zjobsTemp.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
+							}
+						}
+					}
+				}	
+
+			}
 			//zjobs = result;
 			//return result;
 			
@@ -903,7 +973,7 @@ progress[value]  {
 				newRow.insertCell(-1).innerHTML = convertedDate.toJSON().split("T")[0];
 				newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
 				newRow.insertCell(-1).innerHTML = action;
-				if( logType === "turnover" ||  logType === "capping" || logType === "tpipe"){
+				if( logType === "turnover" ||  logType === "capping" || logType === "tpipe" || logType === "pcn" || logType === "cleanUp"){
 					//newRow.insertCell(-1).innerHTML = "Undefined";//team
 					var cell2 = document.createElement("td"); //team
 						cell2.setAttribute("style","color:#e57373");
@@ -931,7 +1001,7 @@ progress[value]  {
 						//cell.appendChild(cellText);
 						//newRow.appendChild(cell);
 				}
-				if( logType == "longRunning" || logType == "holdRelease" || logType == "missedDue") { //team
+				if( logType == "longRunning" || logType == "holdRelease" || logType == "missedDue" || logType == "stuckInSubmit") { //team
 						if( recipients.indexOf("data_mart") >= 0 ){
 							var team = "Datamart";
 						}else if ( recipients.indexOf("scssupport") >= 0 ){
@@ -1021,7 +1091,7 @@ progress[value]  {
 							//cell.appendChild(cellText);
 							//newRow.appendChild(cell);
 					}
-					if( logType == "longRunning" || logType == "holdRelease" || logType == "missedDue") { //team
+					if( logType == "longRunning" || logType == "holdRelease" || logType == "missedDue" || logType == "stuckInSubmit"|| logType == "cleanUp") { //team
 						if( recipients.indexOf("data_mart") >= 0 ){
 							var team = "Datamart";
 						}else if ( recipients.indexOf("scssupport") >= 0 ){
