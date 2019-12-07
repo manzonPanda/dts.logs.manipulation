@@ -27,12 +27,23 @@ progress[value]  {
 </head>
 <body>
 
-<progress style="display:block" max="100" value="0" id="myBar" data-label="50%">
+<progress style="display:none" max="100" value="0" id="myBar" data-label="50%"></progress>
+<div class="progress">
+    <div id="myBar2" class="progress-bar bg-danger progress-bar-striped progress-bar-animated" style="width:0%">
+        0% 
+    </div>
+</div>
 
-</progress>
-<div id="fakeProgress" style="display:block">
-	<span class="badge badge-pill badge-danger"> <span id="emailsCountStartDisplay" class="badge badge-light">0</span></span><progress></progress><span class="badge badge-pill badge-danger"> <span id="emailsCountDisplay" class="badge badge-light">0</span> Emails</span>
+<div class="row">
+	<div class="col-sm">
+		<div id="fakeProgress" style="display:none">
+			<span class="badge badge-pill badge-danger"> <span id="emailsCountStartDisplay" class="badge badge-light">0</span></span><progress></progress><span class="badge badge-pill badge-danger"> <span id="emailsCountDisplay" class="badge badge-light">0</span> Emails</span>
+		</div>
+	</div>
 	
+	<div class="col-sm">
+		<span class="badge badge-pill badge-danger" style="width:100%;display:none" id="resultOfManipulation"> ???</span>
+	</div>
 </div>
 <br>
 
@@ -40,28 +51,28 @@ progress[value]  {
 		<div class="container">
 		  <div class="row">
 			<div class="col-sm">
-				 <span class="badge badge-pill badge-primary">Notify <span id="notifyDisplay" class="badge badge-light">0</span></span>
-				 <span class="badge badge-pill badge-primary">Rerun <span id="rerunDisplay" class="badge badge-light">0</span></span>
-				 <span class="badge badge-pill badge-primary">RR ps25 <span id="rrPsDisplay" class="badge badge-light">0</span></span>
-				 <span class="badge badge-pill badge-primary">MC <span id="mcDisplay" class="badge badge-light">0</span></span>
-				 <span class="badge badge-pill badge-primary">MC ps25 <span id="mcPsDisplay" class="badge badge-light">0</span></span>
+				 <span class="badge badge-pill badge-primary">Notify <span id="notifyDisplay" class="badge badge-dark ">0</span></span>
+				 <span class="badge badge-pill badge-primary">Rerun <span id="rerunDisplay" class="badge badge-dark">0</span></span>
+				 <span class="badge badge-pill badge-primary">RR ps25 <span id="rrPsDisplay" class="badge badge-dark">0</span></span>
+				 <span class="badge badge-pill badge-primary">MC <span id="mcDisplay" class="badge badge-dark">0</span></span>
+				 <span class="badge badge-pill badge-primary">MC ps25 <span id="mcPsDisplay" class="badge badge-dark">0</span></span>
 			</div>
 			<div class="col-sm">
-			    <span class="badge badge-pill badge-primary">Long Running <span id="longRunDisplay" class="badge badge-light">0</span></span>
-				<span class="badge badge-pill badge-primary">Due-out <span id="dueOutDisplay" class="badge badge-light">0</span></span>
-				<span class="badge badge-pill badge-primary">Stuck <span id="stuckDisplay" class="badge badge-light">0</span></span>
-				<span class="badge badge-pill badge-primary">PCN <span id="pcnDisplay" class="badge badge-light">0</span></span>
-			    <span class="badge badge-pill badge-primary">Capping <span id="cappingDisplay" class="badge badge-light">0</span></span>
-				<span class="badge badge-pill badge-primary">Hold & Release <span id="holdReleaseDisplay" class="badge badge-light">0</span></span>
-				<span class="badge badge-pill badge-primary">Cancelling <span id="cancellingDisplay"class="badge badge-light">0</span></span>
-				<span class="badge badge-pill badge-primary">Force <span id="forceDisplay" class="badge badge-light">0</span></span>
-				<span class="badge badge-pill badge-primary">Tpipe <span id="tpipeDisplay" class="badge badge-light">0</span></span>
-				<span class="badge badge-pill badge-primary">CleanUp <span id="cleanUpDisplay" class="badge badge-light">0</span></span>
-				<span class="badge badge-pill badge-primary">Turnover <span id="turnoverDisplay" class="badge badge-light">0</span></span>
+			    <span class="badge badge-pill badge-primary">Long Running <span id="longRunDisplay" class="badge badge-dark">0</span></span>
+				<span class="badge badge-pill badge-primary">Due-out <span id="dueOutDisplay" class="badge badge-dark">0</span></span>
+				<span class="badge badge-pill badge-primary">Stuck <span id="stuckDisplay" class="badge badge-dark">0</span></span>
+				<span class="badge badge-pill badge-primary">PCN <span id="pcnDisplay" class="badge badge-dark">0</span></span>
+			    <span class="badge badge-pill badge-primary">Capping <span id="cappingDisplay" class="badge badge-dark">0</span></span>
+				<span class="badge badge-pill badge-primary">Hold & Release <span id="holdReleaseDisplay" class="badge badge-dark">0</span></span>
+				<span class="badge badge-pill badge-primary">Cancelling <span id="cancellingDisplay"class="badge badge-dark">0</span></span>
+				<span class="badge badge-pill badge-primary">Force <span id="forceDisplay" class="badge badge-dark">0</span></span>
+				<span class="badge badge-pill badge-primary">Tpipe <span id="tpipeDisplay" class="badge badge-dark">0</span></span>
+				<span class="badge badge-pill badge-primary">CleanUp <span id="cleanUpDisplay" class="badge badge-dark">0</span></span>
+				<span class="badge badge-pill badge-primary">Turnover <span id="turnoverDisplay" class="badge badge-dark">0</span></span>
 			</div>
 			
 		  </div>
-		</div>
+		</div><br><br>
 		<table id="abendsTable" style="width:100%">
             <thead>
                 <th >Jobname</th>
@@ -91,36 +102,48 @@ progress[value]  {
         </table>
 		<br><br><br>
 		
-		<br><br><br>
-		FolderName: <input type="text" id="folderName" value="tempNovember"><br>
-		SignatureName: <input type="text" id="signatureName"value="Jake James Manzon"><br>
-		Abend-Notify-Keywords: <input type="text" id="abendNotifyKeywords" value="advise;check and advise;Updating abends;Updating"><br>
-		Abend-RR-Keywords: <input type="text" id="rerunKeywords" value="been rerun;RECOVERY FAILED"><br>
-		Abend-MC-Keywords: <input type="text" id="mcKeywords" value="NO RECOVERY REQUIRED;marked"><br>
-		LongRunning-Keywords: <input type="text" id="longRunningKeywords" value="running"><br>
-		Hold & Release-Keywords: <input type="text" id="holdReleaseKeywords" value="HELD;RELEASED"><br>
-		Missed-Dueout-Keywords: <input type="text" id="missedDueOutKeywords" value="missed;LATE"><br>
-		Capping-Keywords: <input type="text" id="cappingKeywords" value="capping;quick view"><br>
-		Tpipe-Keywords: <input type="text" id="tpipeKeywords" value="TPIPE;L$"><br>
-		Stuck-Keywords: <input type="text" id="stuckKeywords" value="stuck in submit"><br>
-		CleanUp-Keywords: <input type="text" id="cleanUpKeywords" value="clear off;clean job"><br>
-		Force-Keywords: <input type="text" id="forceKeywords" value="force;force release"><br>
-		Cancelled-Keywords: <input type="text" id="cancelledKeywords" value="cancelled"><br>
-		<br>
-		Notify-Minutes: <input type="number"id="notifyMinute"  min="1" value="3"><br>
-		Rerun-Minutes: <input type="number" id="rerunMinute" min="1" value="5"><br>
-		MC-Minutes: <input type="number" id="mcMinute" min="1"  value="2"><br>
-		LongRunning-Minutes: <input type="number" id="longRunningMinute" min="1" value="4"><br>
-		Hold & Release-Minutes: <input type="number" id="holdReleaseMinute" min="1" value="2"><br>
-		Missed-Dueout-Minutes: <input type="number" id="missedDueOutMinute" min="1" value="3"><br>
-		Capping-Minutes: <input type="number" id="cappingMinute" min="1" value="3"><br>
-		Tpipe-Minutes: <input type="number" id="tpipeMinute" min="1" value="3"><br>
-		Stuck-Minutes: <input type="number" id="stuckMinute" min="1" value="3"><br>
-		force-Minutes: <input type="number" id="stuckMinute" min="1" value="3"><br>
-		<br>
+		<br><br>
 		
-		<button class="btn btn-secondary" type="button" onclick="inputValidation()"> CREATE LOGS</button>
-		<button class="btn btn-danger" type="button" data-status="expose" onclick="showDebug(this)"> SHOW DEBUG</button>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm">
+				FolderName: <input type="text" id="folderName" value="tempNovember"><br>
+				SignatureName: <input type="text" id="signatureName"value="Jake James Manzon"><br>
+				Abend-Notify-Keywords: <input type="text" id="abendNotifyKeywords" value="advise;check and advise;Updating abends;Updating"><br>
+				Abend-RR-Keywords: <input type="text" id="rerunKeywords" value="been rerun;RECOVERY FAILED"><br>
+				Abend-MC-Keywords: <input type="text" id="mcKeywords" value="NO RECOVERY REQUIRED;marked"><br>
+				LongRunning-Keywords: <input type="text" id="longRunningKeywords" value="running"><br>
+				Hold & Release-Keywords: <input type="text" id="holdReleaseKeywords" value="HELD;RELEASED"><br>
+				Missed-Dueout-Keywords: <input type="text" id="missedDueOutKeywords" value="missed;LATE"><br>
+				Capping-Keywords: <input type="text" id="cappingKeywords" value="capping;quick view"><br>
+				Tpipe-Keywords: <input type="text" id="tpipeKeywords" value="TPIPE;L$"><br>
+				Stuck-Keywords: <input type="text" id="stuckKeywords" value="stuck in submit"><br>
+				CleanUp-Keywords: <input type="text" id="cleanUpKeywords" value="clear off;clean job"><br>
+				Force-Keywords: <input type="text" id="forceKeywords" value="force;force release"><br>
+				Cancelled-Keywords: <input type="text" id="cancelledKeywords" value="cancelled"><br>
+			</div>
+			<div class="col-sm">
+				Notify-Minutes: <input type="number"id="notifyMinute"  min="1" value="3"><br>
+				Rerun-Minutes: <input type="number" id="rerunMinute" min="1" value="5"><br>
+				MC-Minutes: <input type="number" id="mcMinute" min="1"  value="2"><br>
+				LongRunning-Minutes: <input type="number" id="longRunningMinute" min="1" value="4"><br>
+				Hold & Release-Minutes: <input type="number" id="holdReleaseMinute" min="1" value="2"><br>
+				Missed-Dueout-Minutes: <input type="number" id="missedDueOutMinute" min="1" value="3"><br>
+				Capping-Minutes: <input type="number" id="cappingMinute" min="1" value="3"><br>
+				Tpipe-Minutes: <input type="number" id="tpipeMinute" min="1" value="3"><br>
+				Stuck-Minutes: <input type="number" id="stuckMinute" min="1" value="3"><br>
+				force-Minutes: <input type="number" id="stuckMinute" min="1" value="3"><br>
+			</div>
+		</div>
+		<div class="row">
+			<div class="btn-group col-sm" role="group" aria-label="Basic example">
+				<button class="btn btn-secondary" type="button" onclick="inputValidation()"> CREATE LOGS</button>
+				<button id="showDebugButton" style="display:none" class="btn btn-danger" type="button" data-status="hidden" onclick="showDebug(this)"> HIDE DEBUG</button>
+			</div>
+		</div>
+	</div>
+		
+		
 		<br><br>
 		<div >
 			Reminder: <br>
@@ -167,19 +190,37 @@ progress[value]  {
 		function showDebug(button){
 			var col = 6;
 			var tbl = document.getElementById("longRunningTable");
-	console.log(button.dataset.status)
+			var tbl2 = document.getElementById("abendsTable");
+			
 			for (var i = 0; i < tbl.rows.length; i++) {
-				//tbl.rows[i].cells[j].style.display = "";
-				button.dataset.status=='expose' ?  tbl.rows[i].cells[6].style.display = 'none': ''
-				
+				if(tbl.rows[i].cells[6] != null){
+					button.dataset.status=='expose' ? tbl.rows[i].cells[6].style.display = 'block' : tbl.rows[i].cells[6].style.display = 'none'
+				}
 			}
 			
+			for (var i = 0; i < tbl2.rows.length; i++) {
+				if(tbl2.rows[i].cells[6] != null){
+					button.dataset.status=='expose' ? tbl2.rows[i].cells[6].style.display = 'block' : tbl2.rows[i].cells[6].style.display = 'none'
+				}			
+			}
+			
+			//<button class="btn btn-danger" type="button" data-status="expose" onclick="showDebug(this)"> SHOW DEBUG</button>
+			if( button.dataset.status == 'expose' ){
+				button.setAttribute("class","btn btn-danger")
+				button.innerHTML = "HIDE DEBUG"
+				button.dataset.status='hidden'
+			}else{
+				button.setAttribute("class","btn btn-success")
+				button.innerHTML = "SHOW DEBUG"
+				button.dataset.status='expose'
+			}
+						
 		}
 		
 		
 		function createSummary(action){
 			switch( action ){
-				case "mark complete as per PS25":
+				case "mark complete as per ps25":
 					mcPsCount++;
 					document.getElementById("mcPsDisplay").textContent = mcPsCount;
 					break;
@@ -252,7 +293,27 @@ progress[value]  {
 		function inputValidation(){
 			document.getElementById("abendsTbody").innerHTML = "";
 			document.getElementById("longRunningTbody").innerHTML = "";
+			document.getElementById("showDebugButton").style.display = "none";
+			document.getElementById("showDebugButton").setAttribute("class","btn btn-danger")
+			document.getElementById("showDebugButton").innerHTML = "HIDE DEBUG"
 			
+			document.getElementById("mcPsDisplay").textContent = mcPsCount;
+			document.getElementById("mcDisplay").textContent = mcCount;
+			document.getElementById("notifyDisplay").textContent = abendCount;
+			document.getElementById("rrPsDisplay").textContent = rrPsCount;
+			document.getElementById("rerunDisplay").textContent = rrCount;
+			document.getElementById("dueOutDisplay").textContent = dueOutCount;
+			document.getElementById("longRunDisplay").textContent = longRunCount;
+			document.getElementById("stuckDisplay").textContent = stuckCount;
+			document.getElementById("pcnDisplay").textContent = pcnCount;
+			document.getElementById("cappingDisplay").textContent = cappingCount;
+			document.getElementById("holdReleaseDisplay").textContent = holdReleaseCount;
+			document.getElementById("cancellingDisplay").textContent = cancelledCount;
+			document.getElementById("forceDisplay").textContent = forceCount;
+			document.getElementById("tpipeDisplay").textContent = tpipeCount;
+			document.getElementById("cleanUpDisplay").textContent = cleanUpCount;
+			document.getElementById("turnoverDisplay").textContent = turnOverCount;
+				
 			var folderName = document.getElementById("folderName").value;
 			var signatureName = document.getElementById("signatureName").value;
 			var abendNotifyKeywords = document.getElementById("abendNotifyKeywords").value;
@@ -375,6 +436,7 @@ progress[value]  {
 			
 			//start
 			document.getElementById("fakeProgress").style.display = "block";
+			document.getElementById("resultOfManipulation").style.display = "block";
 			startEmailsManipulation(newAbendNotifyKeywordsExpression,newRerunKeywordsExpression,newMcKeywordsExpression,newLongRunningKeywordsExpression,newHoldReleaseKeywordsExpression,newMissedDueOutKeywordsExpression,newCappingKeywordsExpression,newTpipeKeywordsExpression,newStuckKeywordsExpression,newCleanUpKeywordsExpression,newForceKeywordsExpression,newCancelledKeywordsExpression);
 		}
 		
@@ -407,14 +469,22 @@ progress[value]  {
 		function myLoop ( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression) { 
 
 		   setTimeout(function () { 
-			  //////////////////////////////////////////////////////////////////
 			  var elem = document.getElementById("myBar");
+			  var elem2 = document.getElementById("myBar2");
+			  //////////////////////////////////////////////////////////////////
 					elem.value = i;
+					elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
+					elem2.innerHTML = parseInt( (i/emailCount)*100)+"%";
 					document.getElementById("emailsCountStartDisplay").textContent = i;
 				//finished manipulating emails
-				if( i == emailCount-1 ){ 
+				if( i == emailCount ){ 
 					document.getElementById("myBar").style.display = "none";
-					document.getElementById("fakeProgress").innerHTML = "<span style='width:100%' class='badge badge-pill badge-success'>100% COMPLETE </span>";
+					document.getElementById("myBar2").setAttribute("class","progress-bar bg-success progress-bar-striped progress-bar-animated")
+					document.getElementById("myBar2").innerHTML = "100% COMPLETE";
+					//document.getElementById("fakeProgress").innerHTML = "<span style='width:100%' class='badge badge-pill badge-success'>100% COMPLETE </span>";
+					document.getElementById("fakeProgress").style.display = "none";
+					document.getElementById("resultOfManipulation").style.display = "none";
+					document.getElementById("showDebugButton").style.display = "block";
 				}
  
 				//console.log( emails )
@@ -441,7 +511,6 @@ progress[value]  {
 					site ="Undefined"
 				}
 				
-				
 				var myDate = theEmail.SentOn;
 				convertedDate = new Date(myDate);
 				recipients = theEmail.cc + theEmail.to; //to,cc,bcc
@@ -452,6 +521,7 @@ progress[value]  {
 				tempDate.setHours( timeColumnConvertedDate.getHours() );
 				tempDate.setMinutes( timeColumnConvertedDate.getMinutes() );
 				tempDate.setSeconds( timeColumnConvertedDate.getSeconds() );
+				
 				//Turn over expression
 				if( emailSubject.toUpperCase().indexOf("TURNOVER") >=0 ){
 					var title = [emailSubject]
@@ -461,11 +531,14 @@ progress[value]  {
 					var logType = "turnover";
 					var recipient = "";
 					console.log("email["+i +","+emailSubject+"]-> Turnover- 1 found")
+					document.getElementById("resultOfManipulation").textContent = zjobs.length+" turnover found"
 					displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					 
 					i++;  
 					if( i <= emailCount ){
 						elem.value = i;
+						elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
+						elem2.innerHTML = parseInt( (i/emailCount)*100)+"%";
 						myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression);     
 						document.getElementById("emailsCountStartDisplay").textContent = i;
 					}
@@ -481,11 +554,14 @@ progress[value]  {
 					var logType = "pcn";
 					var recipient = theEmail.cc;
 					console.log("email["+i +","+emailSubject+"]-> PCN-"+zjobs.length+" found")
+					document.getElementById("resultOfManipulation").textContent = zjobs.length+" PCN found"
 					displayRow(title,site,convertedDate,timeResult,action,logType,recipient,globalEmailSubject);
 					
 					i++;  
 					if( i <= emailCount ){
 						elem.value = i;
+						elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
+						elem2.innerHTML = parseInt( (i/emailCount)*100)+"%";
 						myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression);     
 					document.getElementById("emailsCountStartDisplay").textContent = i;
 					}
@@ -522,6 +598,7 @@ progress[value]  {
 						//singleOrMultipleJobs(emailSubject,myBody,where);
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email("+i +")-> mc-"+zjobs.length+" found")
+						
 						if( myBody.indexOf("ps25")>0 || myBody.indexOf("ps22")>0){ //as per?ps25
 							console.log(theEmail.Body.indexOf("ps25"))
 							action = "mark complete as per ps25";
@@ -531,6 +608,7 @@ progress[value]  {
 							action = "mark complete as per programmer";
 							timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - markCompleteMinute )).toTimeString().split(" ")[0];
 						}
+						document.getElementById("resultOfManipulation").textContent = zjobs.length+" " + action+" found"
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					}
 
@@ -542,6 +620,7 @@ progress[value]  {
 						//singleOrMultipleJobs(emailSubject,myBody);
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> notify-"+zjobs.length+" found")
+						document.getElementById("resultOfManipulation").textContent = zjobs.length+" notify found"
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					}
 					
@@ -569,8 +648,8 @@ progress[value]  {
 						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - longRunningMinute )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);				
 						console.log("email["+i +","+emailSubject+"]-> longRun-" +zjobs.length+" found")
+						document.getElementById("resultOfManipulation").textContent = zjobs.length+" long Running found"
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
-						
 					}
 				  //-> Hold & release expression=> myBody.indexOf("HELD") >0 || myBody.indexOf("RELEASED") >0
 					if( eval(holdReleaseExpression) ){
@@ -590,6 +669,7 @@ progress[value]  {
 						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - missedDueOutMinute )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);				
 						console.log("email["+i +","+emailSubject+"]-> missedDueout-" +zjobs.length+" found")
+						document.getElementById("resultOfManipulation").textContent = zjobs.length+" missedDueout found"
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					}					
 					//-> Capping expression=> myBody.indexOf("quick view") >0 || myBody.indexOf("%") >=0
@@ -601,6 +681,7 @@ progress[value]  {
 						var logType = "capping";
 						var recipient = "";
 						console.log("email["+i +","+emailSubject+"]-> Capping-"+zjobs.length+" found")
+						document.getElementById("resultOfManipulation").textContent = zjobs.length+" capping found"
 						displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 						 
 						//i++;  
@@ -635,6 +716,7 @@ progress[value]  {
 							var logType = "tpipe";
 							var recipient = "";
 							console.log("email["+i +","+emailSubject+"]-> Turnover-"+zjobs.length+" found")
+							document.getElementById("resultOfManipulation").textContent = zjobs.length+" tpipe found"
 							displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 						}
 					}
@@ -646,6 +728,7 @@ progress[value]  {
 						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - stuckMinute )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> stuck-" +zjobs.length+" found")
+						document.getElementById("resultOfManipulation").textContent = zjobs.length+" stuck found"
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					}
 					//-> CleanUp expression=> myBody.indexOf("clean job") >0 || myBody.indexOf("clear off") >0
@@ -656,6 +739,7 @@ progress[value]  {
 						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 0 )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> cleanUp-" +zjobs.length+" found")
+						document.getElementById("resultOfManipulation").textContent = zjobs.length+" clean up found"
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					}
 					//-> Force expression=> myBody.indexOf("force") >0 
@@ -666,6 +750,7 @@ progress[value]  {
 						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> force-" +zjobs.length+" found")
+						document.getElementById("resultOfManipulation").textContent = zjobs.length+" force found"
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					}	
 					//-> Cancelled expression=> myBody.indexOf("cancelled") >0 
@@ -676,6 +761,7 @@ progress[value]  {
 						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> cancelled-" +zjobs.length+" found")
+						document.getElementById("resultOfManipulation").textContent = zjobs.length+" cancelling of jobs found"
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					}
 					
@@ -685,11 +771,13 @@ progress[value]  {
 			  i++;                    
 			  if (i <= emailCount) {
 				elem.value = i;
-				 myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression);     
+				elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
+				elem2.innerHTML = parseInt( (i/emailCount)*100)+"%";
+				myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression);     
 				document.getElementById("emailsCountStartDisplay").textContent = i;
 			  }
 				
-		   }, 200)
+		   }, 1000)
 		   
 		   
 		}
@@ -758,8 +846,8 @@ progress[value]  {
 				//	}
 				//}
 				if( where == "longRunning" ){//long running
-					console.log("LR")
-					if( lineN.trim().indexOf("Z") >= 0 && lineN.trim().indexOf("Z") < 3){
+					//correct->> //lineN.trim().indexOf("Z") >= 0 && lineN.trim().indexOf("Z") < 3
+					if( (lineN.trim().indexOf("Z") >= 0 && lineN.trim().indexOf("Z") < 3) && (lineN.trim().indexOf("ACTIVE") >= 0 || lineN.trim().indexOf(":") >= 0) ){
 						//var temp = lineN.trim().split(" ")[0];
 						//var temp = lineN.trim().substring(0,8);
 						var temp = lineN.trim().replace(/\s+/g, "-").split("-")[0];
@@ -867,6 +955,7 @@ progress[value]  {
 								
 					//}
 						console.log("email("+emailSubject +")-> rerun-"+zjobsRecoveryActive.length+" found")
+						
 				}
 				console.log( "urMail:"+myArray.length + " : wholeMail"+mySecondArray.length)
 				if( zjobsRecoveryFailed.length > 0 ){ //RR as programmer || RR as ps25
@@ -940,6 +1029,7 @@ progress[value]  {
 									oneAtATime.push(zjobsRRprogrammer[h])
 									displayRow(oneAtATime,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 									console.log("email("+emailSubject +")-> rerunAsProgrammer- 1 found")
+									document.getElementById("resultOfManipulation").textContent = zjobs.length+" rerun as per programmer found"
 									zjobsRRprogrammer.splice( zjobsRRprogrammer.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
 									//console.log(zjobsTemp)
 								}
@@ -960,6 +1050,7 @@ progress[value]  {
 							oneAtATime.push(zjobsRRps25[h])
 							displayRow(oneAtATime,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 							console.log("email("+emailSubject +")-> rerunAsPs25- 1 found")
+							document.getElementById("resultOfManipulation").textContent = zjobs.length+" rerun as per ps25 found"
 							//zjobsTemp.splice( zjobsRecoveryFailed.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
 							//console.log(zjobsTemp)
 						}	
@@ -1157,7 +1248,7 @@ progress[value]  {
 							newRow.insertCell(-1).innerHTML = site;
 						}else{
 							var cell = document.createElement("td");
-								cell.setAttribute("style","color:#e57373");
+								cell.setAttribute("style","color:#e57373;display:block");
 							var cellText = document.createTextNode("Undefined");
 								cell.appendChild(cellText);
 								newRow.appendChild(cell);
@@ -1169,14 +1260,14 @@ progress[value]  {
 				if( logType === "turnover" ||  logType === "capping" || logType === "tpipe" || logType === "pcn" || logType === "cleanUp" ){
 					//newRow.insertCell(-1).innerHTML = "Undefined";//team
 					var cell2 = document.createElement("td"); //team
-						cell2.setAttribute("style","color:#e57373");
+						cell2.setAttribute("style","color:#e57373;display:block");
 					var cellText2 = document.createTextNode("Undefined");
 						cell2.appendChild(cellText2);
 						newRow.appendChild(cell2);
 						
 					newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];//time of action
 					var cell = document.createElement("td"); //Debug me column
-						cell.setAttribute("style","color:#e57373");
+						cell.setAttribute("style","color:#e57373;display:block");
 					var cellText = document.createTextNode(globalEmailSubject +"(" + recipients + ")");
 						cell.appendChild(cellText);
 						newRow.appendChild(cell);
@@ -1189,7 +1280,7 @@ progress[value]  {
 					}
 					
 					var cell = document.createElement("td");
-						cell.setAttribute("style","color:#e57373");
+						cell.setAttribute("style","color:#e57373;display:block");
 					var cellText = document.createTextNode(globalEmailSubject);
 						cell.appendChild(cellText);
 						newRow.appendChild(cell);
@@ -1279,11 +1370,11 @@ progress[value]  {
 						}else{
 							newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
 						}
-						//var cell = document.createElement("td");
-							//cell.setAttribute("style","color:#e57373");
-						//var cellText = document.createTextNode(globalEmailSubject);
-							//cell.appendChild(cellText);
-							//newRow.appendChild(cell);
+						var cell = document.createElement("td");
+							cell.setAttribute("style","color:#e57373;display:block");
+						var cellText = document.createTextNode(globalEmailSubject);
+							cell.appendChild(cellText);
+							newRow.appendChild(cell);
 					}
 					if( logType == "longRunning" || logType == "holdRelease" || logType == "missedDue" || logType == "stuckInSubmit"|| logType == "cleanUp" || logType == "force") { //team
 						if( recipients.indexOf("data_mart") >= 0 ){
@@ -1330,7 +1421,7 @@ progress[value]  {
 							newRow.insertCell(-1).innerHTML = team;
 						}else{
 							var cell = document.createElement("td");
-								cell.setAttribute("style","color:#e57373");
+								cell.setAttribute("style","color:#e57373;display:block");
 							var cellText = document.createTextNode("Undefined");
 								cell.appendChild(cellText);
 								newRow.appendChild(cell);
@@ -1338,7 +1429,7 @@ progress[value]  {
 						newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
 						//print DebugMe
 						var cell = document.createElement("td");
-							cell.setAttribute("style","color:#e57373");
+							cell.setAttribute("style","color:#e57373;display:block");
 						var cellText = document.createTextNode(globalEmailSubject);
 							cell.appendChild(cellText);
 							newRow.appendChild(cell);
