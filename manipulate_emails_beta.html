@@ -73,15 +73,17 @@ progress[value]  {
 			
 		  </div>
 		</div><br><br>
+
 		<table id="abendsTable" style="width:100%">
             <thead>
-                <th >Jobname</th>
-                <th >Site</th>
-                <th >Date</th>
-                <th >Time</th>
-                <th style="width:30%" >Action</th>
-                <th >Time of action</th>
+                <th style="color:black;">Jobname</th>
+                <th style="color:black;">Site</th>
+                <th style="color:black;">Date</th>
+                <th style="color:black;">Time</th>
+                <th style="width:30%;color:black" >Action</th>
+                <th style="color:black;">Time of action</th>
                 <th style="color:red">DebugMe</th>
+				<th style="color:white;display:none">Response Time</th>
             </thead>
 			<tbody id="abendsTbody">
 			<tbody>
@@ -89,13 +91,14 @@ progress[value]  {
 		<br>
 		<table id="longRunningTable" style="width:100%">
             <thead >
-                <th >Jobname</th>
-				<th >Date</th>
-                <th >Time</th>
-                <th style="width:30%">Action</th>
-                <th>Team</th>
-                <th >Time of action</th>
+                <th style="color:black;">Jobname</th>
+				<th style="color:black;">Date</th>
+                <th style="color:black;">Time</th>
+                <th style="width:30%;color:black">Action</th>
+                <th style="color:black;">Team</th>
+                <th style="color:black;">Time of action</th>
                 <th style="color:red;">DebugMe</th>
+                <th style="color:white;display:none">Response Time</th>
             </thead>
 			<tbody id="longRunningTbody" >
 			<tbody>
@@ -135,15 +138,18 @@ progress[value]  {
 				force-Minutes: <input type="number" id="stuckMinute" min="1" value="3"><br>
 			</div>
 		</div>
-		<div class="row">
+				<div class="row">
 			<div class="btn-group col-sm" role="group" aria-label="Basic example">
 				<button class="btn btn-secondary" type="button" onclick="inputValidation()"> CREATE LOGS</button>
 				<button id="showDebugButton" style="display:none" class="btn btn-danger" type="button" data-status="hidden" onclick="showDebug(this)"> HIDE DEBUG</button>
 			</div>
 		</div>
+
 	</div>
 		
-		
+		<button id="btnExport" onclick="exportLogs('abends');"> EXPORT ABENDS </button>
+		<button id="btnExport" onclick="exportLogs('nonAbends');"> EXPORT NON-ABENDS </button>
+		<iframe id="txtArea1" style="display:none"></iframe>
 		<br><br>
 		<div >
 			Reminder: <br>
@@ -187,6 +193,55 @@ progress[value]  {
 		var turnOverCount = 0;
 		var pcnCount = 0;
 		
+	function exportLogs(name){
+	var table;
+	name =='abends' ? table = document.getElementById('abendsTable') : table = document.getElementById('longRunningTable')
+    var tab_text="<table border='2px'><tr bgcolor='#595959' color='white'>";
+    var textRange; var j=0;
+    //tab = document.getElementById('longRunningTable'); // id of table
+	var latestRow = 1;
+    for(j = 0 ; j < table.rows.length ; j++) {     
+		if(j>=1 && table.rows[j].cells.length > 4){
+			if( name == "abends"){
+				//var cellText = document.createTextNode( "=IF(D"+(latestRow+1)+"=\"\",\"-\",F"+(latestRow+1)+"-D"+(latestRow+1)+")" );
+					//table.rows[j].insertCell(-1).appendChild(cellText);
+			}else{
+				//var cellText = document.createTextNode( "=IF(C"+(latestRow+1)+"=\"\",\"-\",F"+(latestRow+1)+"-C"+(latestRow+1)+")" );
+				//table.rows[j].insertCell(-1).appendChild(cellText);			
+			}
+			
+			latestRow++;
+			//tab_text = tab_text + (table.rows[j].cells[0] + table.rows[j].cells[1] + table.rows[j].cells[2] + table.rows[j].cells[3] + table.rows[j].cells[4] + table.rows[j].cells[5]) + "</tr>";
+			//console.log(table.rows[j].cells.item(3).innerHTML )
+		 }	
+        tab_text = tab_text + table.rows[j].innerHTML + "</tr>";
+		//console.log(table.rows[j].innerHTML )
+		//tab_text=tab_text+"</tr>";
+    }
+
+    tab_text=tab_text+"</table>";
+    tab_text= tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+    tab_text= tab_text.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
+    tab_text= tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE "); 
+
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+    {
+        txtArea1.document.open("xls","replace");
+        txtArea1.document.write(tab_text);
+        txtArea1.document.close();
+        txtArea1.focus(); 
+        //sa=txtArea1.document.execCommand("SaveAs",true,"My MONTH logs.xls");
+		name =='abends' ? sa=txtArea1.document.execCommand("SaveAs",true,"My MONTH Abends logs.xls") : sa=txtArea1.document.execCommand("SaveAs",true,"My MONTH Non-Abends logs.xls")
+    }  
+    else                 //other browser not tested on IE 11
+        sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));  
+	
+    return (sa);
+}
+		
 		function showDebug(button){
 			var col = 6;
 			var tbl = document.getElementById("longRunningTable");
@@ -195,13 +250,39 @@ progress[value]  {
 			for (var i = 0; i < tbl.rows.length; i++) {
 				if(tbl.rows[i].cells[6] != null){
 					button.dataset.status=='expose' ? tbl.rows[i].cells[6].style.display = 'block' : tbl.rows[i].cells[6].style.display = 'none'
+					//var tds  = tbl.rows[i].innerHTML.slice(0);    
+					//var itemObject = {
+                           // item: tds[0].innerHTML,
+                            //retailPrice: tds[1].childNodes[0].outerHTML + tds[1].childNodes[1].outerHTML,
+                           // quantityPurchase: tds[2].firstChild.outerHTML,
+                            //salesPrice: tds[3].childNodes[0].outerHTML + tds[3].childNodes[1].outerHTML,
+                            //removeButton: tds[4].childNodes[0].outerHTML + tds[4].childNodes[1].outerHTML ,
+                            //itemId: data.getAttribute("data-product_id"),
+                            //action: data.outerHTML};
+				
+					 //var jsonObject = JSON.stringify(itemObject);
+                     //localStorage.setItem("abend"+i,jsonObject);
 				}
 			}
 			
 			for (var i = 0; i < tbl2.rows.length; i++) {
 				if(tbl2.rows[i].cells[6] != null){
 					button.dataset.status=='expose' ? tbl2.rows[i].cells[6].style.display = 'block' : tbl2.rows[i].cells[6].style.display = 'none'
-				}			
+					var tds  = tbl2.rows[i]; 
+					//var itemObject = {
+                           // item: tds[0].innerHTML,
+                           // retailPrice: tds[1].childNodes[0].outerHTML + tds[1].childNodes[1].outerHTML,
+                           // quantityPurchase: tds[2].firstChild.outerHTML,
+                           //salesPrice: tds[3].childNodes[0].outerHTML + tds[3].childNodes[1].outerHTML,
+                           // removeButton: tds[4].childNodes[0].outerHTML + tds[4].childNodes[1].outerHTML ,
+                            //itemId: data.getAttribute("data-product_id"),
+                           // action: data.outerHTML};
+				
+					 //var jsonObject = JSON.stringify(itemObject);
+                     //localStorage.setItem("nonAbend"+i,jsonObject);
+					console.log(tds)
+				}	
+				
 			}
 			
 			//<button class="btn btn-danger" type="button" data-status="expose" onclick="showDebug(this)"> SHOW DEBUG</button>
@@ -777,7 +858,7 @@ progress[value]  {
 				document.getElementById("emailsCountStartDisplay").textContent = i;
 			  }
 				
-		   }, 1000)
+		   }, 100)
 		   
 		   
 		}
