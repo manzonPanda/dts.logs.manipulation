@@ -28,23 +28,26 @@ progress[value]  {
 </head>
 <body>
 
-<progress style="display:none" max="100" value="0" id="myBar" data-label="50%"></progress>
-<div class="progress">
-    <div id="myBar2" class="progress-bar bg-danger progress-bar-striped progress-bar-animated" style="width:0%">
-        0% 
-    </div>
-</div>
-
-<div class="row">
-	<div class="col-sm">
-		<div id="fakeProgress" style="display:none">
-			<span class="badge badge-pill badge-danger"> <span id="emailsCountStartDisplay" class="badge badge-light">0</span></span><progress></progress><span class="badge badge-pill badge-danger"> <span id="emailsCountDisplay" class="badge badge-light">0</span> Emails</span>
+<div class="container">
+	<progress style="display:none" max="100" value="0" id="myBar" data-label="50%"></progress>
+	<div class="progress">
+		<div id="myBar2" class="progress-bar bg-danger progress-bar-striped progress-bar-animated" style="width:0%">
+			0% 
 		</div>
 	</div>
-	
-	<div class="col-sm">
-		<span class="badge badge-pill badge-danger" style="width:100%;display:none" id="resultOfManipulation"> ???</span>
+
+	<div class="row">
+		<div class="col-sm">
+			<div id="fakeProgress" style="display:none">
+				<span class="badge badge-pill badge-danger"> <span id="emailsCountStartDisplay" class="badge badge-light">0</span></span><progress></progress><span class="badge badge-pill badge-danger"> <span id="emailsCountDisplay" class="badge badge-light">0</span> Emails</span>
+			</div>
+		</div>
+		
+		<div class="col-sm">
+			<span class="badge badge-pill badge-danger" style="width:100%;display:none" id="resultOfManipulation"> ???</span>
+		</div>
 	</div>
+
 </div>
 <br>
 
@@ -67,6 +70,7 @@ progress[value]  {
 				<span class="badge badge-pill badge-primary">Hold & Release <span id="holdReleaseDisplay" class="badge badge-dark">0</span></span>
 				<span class="badge badge-pill badge-primary">Cancelling <span id="cancellingDisplay"class="badge badge-dark">0</span></span>
 				<span class="badge badge-pill badge-primary">Force <span id="forceDisplay" class="badge badge-dark">0</span></span>
+				<span class="badge badge-pill badge-primary">Insert <span id="insertDisplay" class="badge badge-dark">0</span></span>
 				<span class="badge badge-pill badge-primary">Tpipe <span id="tpipeDisplay" class="badge badge-dark">0</span></span>
 				<span class="badge badge-pill badge-primary">CleanUp <span id="cleanUpDisplay" class="badge badge-dark">0</span></span>
 				<span class="badge badge-pill badge-primary">Turnover <span id="turnoverDisplay" class="badge badge-dark">0</span></span>
@@ -118,67 +122,144 @@ progress[value]  {
 	<div class="container">
 		<div class="row">
 			<div class="col-sm">
-				FolderName: <input type="text" id="folderName" value="tempNovember"><br>
-				SignatureName: <input type="text" id="signatureName"value="Jake James Manzon"><br>
-				Abend-Notify-Keywords: <input type="text" id="abendNotifyKeywords" value="advise;check and advise;Updating abends;Updating"><br>
-				Abend-RR-Keywords: <input type="text" id="rerunKeywords" value="been rerun;RECOVERY FAILED"><br>
-				Abend-MC-Keywords: <input type="text" id="mcKeywords" value="NO RECOVERY REQUIRED;marked"><br>
-				LongRunning-Keywords: <input type="text" id="longRunningKeywords" value="running"><br>
-				Hold & Release-Keywords: <input type="text" id="holdReleaseKeywords" value="HELD;RELEASED"><br>
-				Missed-Dueout-Keywords: <input type="text" id="missedDueOutKeywords" value="missed;LATE"><br>
-				Capping-Keywords: <input type="text" id="cappingKeywords" value="capping;quick view"><br>
-				Tpipe-Keywords: <input type="text" id="tpipeKeywords" value="TPIPE;L$"><br>
-				Stuck-Keywords: <input type="text" id="stuckKeywords" value="stuck in submit"><br>
-				CleanUp-Keywords: <input type="text" id="cleanUpKeywords" value="clear off;clean job"><br>
-				Force-Keywords: <input type="text" id="forceKeywords" value="force;force release"><br>
-				Cancelled-Keywords: <input type="text" id="cancelledKeywords" value="cancelled"><br>
+			
+			<div class="input-group input-group-lg">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Folder Name</span>
+			  </div>
+			  <input type="text" value="tempNovember" id="folderName" class="form-control">
+			   <div class="input-group-append">
+				<button class="btn btn-success" type="button" onclick="inputValidation()"> CREATE LOGS</button>
+				<button id="showDebugButton" style="display:none" class="btn btn-danger" type="button" data-status="hidden" onclick="showDebug(this)"> HIDE DEBUG</button>
+				<button class="btn btn-success" id="btnExportAbends" style="display:none" onclick="exportLogs('abends');"> EXPORT ABENDS </button>
+				<button class="btn btn-success" id="btnExportNonAbends" style="display:none" onclick="exportLogs('nonAbends');"> EXPORT NON-ABENDS </button>
+				 
+			  </div>
 			</div>
-			<div class="col-sm">
-				Notify-Minutes: <input type="number"id="notifyMinute"  min="1" value="3"><br>
-				Rerun-Minutes: <input type="number" id="rerunMinute" min="1" value="5"><br>
-				MC-Minutes: <input type="number" id="mcMinute" min="1"  value="2"><br>
-				LongRunning-Minutes: <input type="number" id="longRunningMinute" min="1" value="4"><br>
-				Hold & Release-Minutes: <input type="number" id="holdReleaseMinute" min="1" value="2"><br>
-				Missed-Dueout-Minutes: <input type="number" id="missedDueOutMinute" min="1" value="3"><br>
-				Capping-Minutes: <input type="number" id="cappingMinute" min="1" value="3"><br>
-				Tpipe-Minutes: <input type="number" id="tpipeMinute" min="1" value="3"><br>
-				Stuck-Minutes: <input type="number" id="stuckMinute" min="1" value="3"><br>
-				force-Minutes: <input type="number" id="stuckMinute" min="1" value="3"><br>
+			
+			<div class="input-group input-group-lg">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Signature</span>
+			  </div>
+			  <input type="text" value="Jake James Manzon" id="signatureName" class="form-control">
+			</div>			
+			
+			<div class="input-group" >
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Abend-Notify-Keywords and minutes</span>
+			  </div>
+
+				<input type="text" value="advise;check and advise;Updating abends;Updating" id="abendNotifyKeywords" class="form-control">
+				<input type="number" id="rerunMinute" min="1" value="3" class="form-control">
+
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >RR-Keywords: and minutes</span>
+			  </div>
+			  <input type="text" value="been rerun;RECOVERY FAILED" id="rerunKeywords" class="form-control">
+			  <input type="number" id="notifyMinute" min="1" value="3" class="form-control">
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >MC-Keywords and minutes</span>
+			  </div>
+			  <input type="text" value="NO RECOVERY REQUIRED;marked" id="mcKeywords" class="form-control">
+			  <input type="number" id="mcMinute" min="1" value="2" class="form-control">
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >LongRunning-Keywords and minutes</span>
+			  </div>
+			  <input type="text" value="running" id="longRunningKeywords" class="form-control">
+			  <input type="number" id="longRunningMinute" min="1" value="4" class="form-control">
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Hold & Release-Keywords and minutes</span>
+			  </div>
+			  <input type="text" value="HELD;RELEASED" id="holdReleaseKeywords" class="form-control">
+			  <input type="number" id="holdReleaseMinute" min="1" value="2" class="form-control">
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Missed-Dueout-Keywords and minutes</span>
+			  </div>
+			  <input type="text" value="missed;LATE" id="missedDueOutKeywords" class="form-control">
+			  <input type="number" id="missedDueOutMinute" min="1" value="3" class="form-control">
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Capping-Keywords and minutes</span>
+			  </div>
+			  <input type="text" value="capping;quick view" id="cappingKeywords" class="form-control">
+			  <input type="number" id="cappingMinute" min="1" value="3" class="form-control">
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Tpipe-Keywords and minutes</span>
+			  </div>
+			  <input type="text" value="TPIPE;L$" id="tpipeKeywords" class="form-control">
+			  <input type="number" id="tpipeMinute" min="1" value="3" class="form-control">
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Stuck-Keywords and minutes</span>
+			  </div>
+			  <input type="text" value="stuck in submit" id="stuckKeywords" class="form-control">
+			  <input type="number" id="stuckMinute" min="1" value="3" class="form-control">
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >CleanUp-Keywords and minutes</span>
+			  </div>
+			  <input type="text" value="clear off;clean job" id="cleanUpKeywords" class="form-control">
+			  <input type="number" id="stuckMinute" min="1" value="3" class="form-control">
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Force-Keywords and minutes</span>
+			  </div>
+			  <input type="text" value="force;force release" id="forceKeywords" class="form-control">
+			  <input type="number" id="forceMinute" min="1" value="3" class="form-control">
+			</div>			
+
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Insert-Keywords and minutes</span>
+			  </div>
+			  <input type="text" value="inserted;ADDED BY RUSH" id="insertKeywords" class="form-control">
+			  <input type="number" id="insertMinute" min="1" value="3" class="form-control">
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Cancelled-Keywords and minutes</span>
+			  </div>
+			  <input type="text" value="cancelled" id="cancelledKeywords" class="form-control">
+			  <input type="number" min="1" value="3" class="form-control">
+			</div> 
 			</div>
 		</div>
 		<br>
 		
-		<div class="row">
-			<div class="col-sm">
-				<div class="btn-toolbar" role="toolbar" >
-				  <div class="btn-group mr-2" role="group">
-					<button class="btn btn-success" type="button" onclick="inputValidation()"> CREATE LOGS</button>
-				  </div>			  
-				  <div class="btn-group mr-2" role="group">
-					<button id="showDebugButton" style="display:none" class="btn btn-danger" type="button" data-status="hidden" onclick="showDebug(this)"> HIDE DEBUG</button>
-				  </div>
-				  <div class="btn-group mr-2" role="group" >
-					<button class="btn btn-success" id="btnExportAbends" style="display:none" onclick="exportLogs('abends');"> EXPORT ABENDS </button>
-				  </div>			 
-				  <div class="btn-group mr-2" role="group" >
-					<button class="btn btn-success" id="btnExportNonAbends" style="display:none" onclick="exportLogs('nonAbends');"> EXPORT NON-ABENDS </button>
-				  </div>
-				</div>
-			</div>
-		</div>
-		
-
-		
-		
-		
-		
-
 	</div>
 		
 		<iframe id="txtArea1" style="display:none"></iframe>
 		<br><br>
 		<div >
 			Reminder: <br>
+			*Folder Name, Signature and kewords are case sensitive.<br>
 			*For Zjob/s to be called Mark as Complete as per ps25/ps22, pd34 or MARS record of Zjob must be included (NO RECOVERY REQUIRED). <br>
 			*For Zjob/s to be called RR as per ps25, pd34 or MARS record of Zjob must be included (RECOVERY FAILED). So thus RR as per programmer (RECOVERY ACTIVE). <br>
 			--add reminder--
@@ -201,6 +282,8 @@ progress[value]  {
 		var cappingMinute = 0;
 		var tpipeMinute = 0;
 		var stuckMinute = 0;
+		var forceMinute = 0;
+		var insertMinute = 0;
 		
 		var abendCount = 0;
 		var rrCount = 0;
@@ -215,6 +298,7 @@ progress[value]  {
 		var stuckCount = 0;
 		var cleanUpCount = 0;
 		var forceCount = 0;
+		var insertCount = 0;
 		var cancelledCount = 0;
 		var turnOverCount = 0;
 		var pcnCount = 0;
@@ -359,6 +443,7 @@ progress[value]  {
 			 stuckCount = 0;
 			 cleanUpCount = 0;
 			 forceCount = 0;
+			 insertCount = 0;
 			 cancelledCount = 0;
 			 turnOverCount = 0;
 			 pcnCount = 0;
@@ -417,6 +502,10 @@ progress[value]  {
 				case "Force running":
 					forceCount++;
 					document.getElementById("forceDisplay").textContent = forceCount;
+					break;				
+				case "Inserting of jobs":
+					insertCount++;
+					document.getElementById("insertDisplay").textContent = insertCount;
 					break;
 				case "Tpipe":
 					tpipeCount++;
@@ -459,6 +548,7 @@ progress[value]  {
 			document.getElementById("tpipeDisplay").textContent = tpipeCount;
 			document.getElementById("cleanUpDisplay").textContent = cleanUpCount;
 			document.getElementById("turnoverDisplay").textContent = turnOverCount;
+			document.getElementById("insertDisplay").textContent = insertCount;
 				
 			var folderName = document.getElementById("folderName").value;
 			var signatureName = document.getElementById("signatureName").value;
@@ -474,6 +564,7 @@ progress[value]  {
 			var cleanUpKeywords = document.getElementById("cleanUpKeywords").value;
 			var forceKeywords = document.getElementById("forceKeywords").value;
 			var cancelledKeywords = document.getElementById("cancelledKeywords").value;
+			var insertKeywords = document.getElementById("insertKeywords").value;
 				folderName=='' ? folderName = 'tempNovember' : ''
 				signatureName=='' ? signatureName = 'Jake James Manzon' : ''
 				abendNotifyKeywords=='' ? abendNotifyKeywords = 'advise;check and advise;Updating abends;Updating' : ''
@@ -488,6 +579,7 @@ progress[value]  {
 				cleanUpKeywords=='' ? cleanUpKeywords = 'clear off;clean job' : ''
 				forceKeywords=='' ? forceKeywords = 'force started;force release' : ''
 				cancelledKeywords=='' ? cancelledKeywords = 'cancelled' : ''
+				insertKeywords=='' ? insertKeywords = 'inserted;ADDED BY RUSH' : ''
 			var tempNotifyMinute = document.getElementById("notifyMinute").value;
 			var tempRerunMinute = document.getElementById("rerunMinute").value;
 			var tempMcMinute = document.getElementById("mcMinute").value;
@@ -497,6 +589,8 @@ progress[value]  {
 			var tempCappingMinute = document.getElementById("cappingMinute").value;
 			var tempTpipeMinuteMinute = document.getElementById("tpipeMinute").value;
 			var tempStuckMinuteMinute = document.getElementById("stuckMinute").value;
+			var tempForceMinute = document.getElementById("forceMinute").value;
+			var insertMinute = document.getElementById("insertMinute").value;
 				tempNotifyMinute=='' ? notifyMinute = 0 : notifyMinute=tempNotifyMinute;
 				tempRerunMinute=='' ? rerunMinute = 0 : rerunMinute=tempRerunMinute;
 				tempMcMinute=='' ? markCompleteMinute = 0 : markCompleteMinute=tempMcMinute;
@@ -506,6 +600,8 @@ progress[value]  {
 				tempCappingMinute=='' ? cappingMinute = 0 : cappingMinute=tempCappingMinute;
 				tempTpipeMinuteMinute=='' ? tpipeMinute = 0 : tpipeMinute=tempTpipeMinuteMinute;
 				tempStuckMinuteMinute=='' ? stuckMinute = 0 : stuckMinute=tempStuckMinuteMinute;
+				tempForceMinute=='' ? forceMinute = 0 : forceMinute=tempForceMinute;
+				insertMinute=='' ? insertMinute = 0 : insertMinute=insertMinute;
 				
 			//myBody.indexOf("advise")>0 ||myBody.indexOf("check and advise")>0 || myBody.indexOf("Updating abends")>0 || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 )|| myBody.indexOf("Updating")>0
 			var newAbendNotifyKeywordsExpression ="";
@@ -578,12 +674,18 @@ progress[value]  {
 			for( var x=0; x < cancelledKeywords.split(";").length; x++ ){
 				newCancelledKeywordsExpression += "myBody.indexOf('"+ cancelledKeywords.split(";")[x]+"')>0";
 				x != cancelledKeywords.split(";").length-1 ? newCancelledKeywordsExpression += " || " : "";
+			}			
+			
+			var newInsertKeywordsExpression ="";
+			for( var i=0; i< insertKeywords.split(";").length; i++ ){
+				newInsertKeywordsExpression += "myBody.indexOf('"+ insertKeywords.split(";")[i]+"')>0";
+				i != insertKeywords.split(";").length-1 ? newInsertKeywordsExpression += " || " : "";
 			}
 			
 			//start
 			document.getElementById("fakeProgress").style.display = "block";
 			document.getElementById("resultOfManipulation").style.display = "block";
-			startEmailsManipulation(newAbendNotifyKeywordsExpression,newRerunKeywordsExpression,newMcKeywordsExpression,newLongRunningKeywordsExpression,newHoldReleaseKeywordsExpression,newMissedDueOutKeywordsExpression,newCappingKeywordsExpression,newTpipeKeywordsExpression,newStuckKeywordsExpression,newCleanUpKeywordsExpression,newForceKeywordsExpression,newCancelledKeywordsExpression);
+			startEmailsManipulation(newAbendNotifyKeywordsExpression,newRerunKeywordsExpression,newMcKeywordsExpression,newLongRunningKeywordsExpression,newHoldReleaseKeywordsExpression,newMissedDueOutKeywordsExpression,newCappingKeywordsExpression,newTpipeKeywordsExpression,newStuckKeywordsExpression,newCleanUpKeywordsExpression,newForceKeywordsExpression,newCancelledKeywordsExpression,newInsertKeywordsExpression);
 		}
 		
 		var zjobs = [];
@@ -595,7 +697,7 @@ progress[value]  {
 		var globalEmailSubject;
 		var i = 1;
 		
-		function startEmailsManipulation(abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression){
+		function startEmailsManipulation(abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression){
 			var outlookApp = new ActiveXObject("Outlook.Application");
 			var nameSpace = outlookApp.getNameSpace("MAPI");
 			//nameSpace.logon("ja20076062@wipro.com","jjgm@WL6062",false,false);
@@ -609,33 +711,23 @@ progress[value]  {
 			i = 1;
 			resetCounter();
 			document.getElementById("emailsCountDisplay").textContent = emailCount;
-			myLoop( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression);
+			myLoop( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression);
 			
 		}
 		
-		function myLoop ( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression) { 
+		function myLoop ( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression) { 
 
 		   setTimeout(function () { 
 			  var elem = document.getElementById("myBar");
 			  var elem2 = document.getElementById("myBar2");
 			  //////////////////////////////////////////////////////////////////
+
 					elem.value = i;
 					elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
+					console.log( parseInt( (i/emailCount)*100 ))
 					elem2.innerHTML = parseInt( (i/emailCount)*100)+"%";
 					document.getElementById("emailsCountStartDisplay").textContent = i;
-				//finished manipulating emails
-				if( i == emailCount ){ 
-					document.getElementById("myBar").style.display = "none";
-					document.getElementById("myBar2").setAttribute("class","progress-bar bg-success progress-bar-striped progress-bar-animated")
-					document.getElementById("myBar2").innerHTML = "100% COMPLETE";
-					//document.getElementById("fakeProgress").innerHTML = "<span style='width:100%' class='badge badge-pill badge-success'>100% COMPLETE </span>";
-					document.getElementById("fakeProgress").style.display = "none";
-					document.getElementById("resultOfManipulation").style.display = "none";
-					document.getElementById("showDebugButton").style.display = "block";
-					document.getElementById("btnExportAbends").style.display = "block";
-					document.getElementById("btnExportNonAbends").style.display = "block";
-					
-				}
+
  
 				//console.log( emails )
 				var theEmail = emails.Item(i);
@@ -684,13 +776,14 @@ progress[value]  {
 					document.getElementById("resultOfManipulation").textContent = zjobs.length+" turnover found"
 					displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					 
-					i++;  
+					 
 					if( i <= emailCount ){
 						elem.value = i;
 						elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
 						elem2.innerHTML = parseInt( (i/emailCount)*100)+"%";
-						myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression);     
+						myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression);     
 						document.getElementById("emailsCountStartDisplay").textContent = i;
+						i++; 
 					}
 					return
 				}
@@ -707,13 +800,13 @@ progress[value]  {
 					document.getElementById("resultOfManipulation").textContent = zjobs.length+" PCN found"
 					displayRow(title,site,convertedDate,timeResult,action,logType,recipient,globalEmailSubject);
 					
-					i++;  
 					if( i <= emailCount ){
 						elem.value = i;
 						elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
 						elem2.innerHTML = parseInt( (i/emailCount)*100)+"%";
-						myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression);     
+						myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression);     
 					document.getElementById("emailsCountStartDisplay").textContent = i;
+					i++;  
 					}
 					return
 				}				
@@ -897,10 +990,21 @@ progress[value]  {
 						var logType = "force";
 						var action = "Force running";
 						var where = "force";			
-						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0];
+						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - forceMinute )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> force-" +zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" force found"
+						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+					}					
+					//-> Insert expression=> myBody.indexOf("inserted") >0 
+					if( eval(insertExpression) ){
+						var logType = "inserted";
+						var action = "Inserting of jobs";
+						var where = "insert";			
+						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0];
+						extractJobs(emailSubject,myBody,where,fullEmail);
+						console.log("email["+i +","+emailSubject+"]-> Insert-" +zjobs.length+" found")
+						document.getElementById("resultOfManipulation").textContent = zjobs.length+" inserted found"
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					}	
 					//-> Cancelled expression=> myBody.indexOf("cancelled") >0 
@@ -915,19 +1019,33 @@ progress[value]  {
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					}
 					
-					
+									//finished manipulating emails
+				if( i == emailCount ){ 
+					document.getElementById("myBar").style.display = "none";
+					document.getElementById("myBar2").setAttribute("class","progress-bar bg-success progress-bar-striped progress-bar-animated")
+					document.getElementById("myBar2").innerHTML = "100% COMPLETE";
+					//document.getElementById("fakeProgress").innerHTML = "<span style='width:100%' class='badge badge-pill badge-success'>100% COMPLETE </span>";
+					document.getElementById("fakeProgress").style.display = "none";
+					document.getElementById("resultOfManipulation").style.display = "none";
+					document.getElementById("showDebugButton").style.display = "block";
+					document.getElementById("btnExportAbends").style.display = "block";
+					document.getElementById("btnExportNonAbends").style.display = "block";
+					elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
+					return;
+				}
+				
 					
 			  //////////////////////////////////////////////////////////////////
-			  i++;                    
 			  if (i <= emailCount) {
 				elem.value = i;
 				elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
 				elem2.innerHTML = parseInt( (i/emailCount)*100)+"%";
-				myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression);     
+				myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression);     
 				document.getElementById("emailsCountStartDisplay").textContent = i;
+			  i++;                    
 			  }
 				
-		   }, 100)
+		   }, 500)
 		   
 		   
 		}
@@ -1020,6 +1138,13 @@ progress[value]  {
 						zjobs.push( temp )
 					}
 	
+				}else if( where == "insert"){
+					if( lineN.trim().indexOf("Z") >= 0 && lineN.trim().replace(/\s+/g, "-").split("-")[3] == 'R'){
+						//console.log( lineN.trim().replace(/\s+/g, "-").split("-")[3] )
+						var temp = lineN.trim().replace(/\s+/g, "-").split("-")[0];
+						zjobsTemp.push(temp);
+						zjobs.push( temp )
+					}
 				}else if( where == "cancelled"){
 					if( lineN.trim().indexOf("Z") >= 0 && lineN.trim().replace(/\s+/g, "-").split("-")[3] == 'X'){
 						//console.log( lineN.trim().replace(/\s+/g, "-").split("-")[3] )
@@ -1027,8 +1152,7 @@ progress[value]  {
 						zjobsTemp.push(temp);
 						zjobs.push( temp )
 					}
-				}
-				else if( where == "cleanUp" ){
+				}else if( where == "cleanUp" ){
 					if( lineN.trim().indexOf("Z") >= 0 && lineN.indexOf("ACTIVE") >= 0 ){
 						//console.log( lineN.trim().replace(/\s+/g, "-").split("-")[3] )
 						var temp = lineN.trim().replace(/\s+/g, "-").split("-")[0];
@@ -1192,7 +1316,7 @@ progress[value]  {
 					if( zjobsRRps25.length > 0){
 						for( var h=0; h < zjobsRRps25.length; h++ ){//RR as Ps25
 							var logType = "abend";
-							var action = "rerun as per ps25";
+							var action = "rerun as per PS25";
 							var ps25TempDate = new Date(tempDate);
 							var timeResult = new Date(ps25TempDate.setMinutes( ps25TempDate.getMinutes() - 2 )).toTimeString().split(" ")[0];
 							//var timeResult = "fix";
@@ -1435,7 +1559,7 @@ progress[value]  {
 						cell.appendChild(cellText);
 						newRow.appendChild(cell);
 				}
-				if( logType == "longRunning" || logType == "holdRelease" || logType == "missedDue" || logType == "stuckInSubmit" || logType == "force" || logType === "cancelled" || logType === "tpipe") { //team
+				if( logType == "longRunning" || logType == "holdRelease" || logType == "missedDue" || logType == "stuckInSubmit" || logType == "force" || logType == "inserted" || logType === "cancelled" || logType === "tpipe") { //team
 						if( recipients.indexOf("data_mart") >= 0 ){
 							var team = "Datamart";
 						}else if ( recipients.indexOf("scssupport") >= 0 ){
