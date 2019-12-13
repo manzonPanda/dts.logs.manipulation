@@ -3,6 +3,10 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+ <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jqc-1.12.4/dt-1.10.20/b-1.6.1/b-colvis-1.6.1/b-flash-1.6.1/b-html5-1.6.1/cr-1.5.2/fh-3.1.6/r-2.2.3/rr-1.2.6/sl-1.3.1/datatables.min.css"/>
+ 
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jqc-1.12.4/dt-1.10.20/b-1.6.1/b-colvis-1.6.1/b-flash-1.6.1/b-html5-1.6.1/cr-1.5.2/fh-3.1.6/r-2.2.3/rr-1.2.6/sl-1.3.1/datatables.min.js"></script>
 <style>
 	.footer{
 		position:fixed;
@@ -24,8 +28,11 @@ progress[value]  {
    border-radius: 9px;
    content: attr('80%');
 }
+
+
 </style>
 </head>
+
 <body>
 
 <div class="container">
@@ -87,7 +94,7 @@ progress[value]  {
 						<th class="text-center" style="color:black;">Site</th>
 						<th class="text-center" style="color:black;">Date</th>
 						<th class="text-center" style="color:black;">Time</th>
-						<th class="text-center" style="width:30%;color:black" >Action</th>
+						<th class="text-center" style="width:25%;color:black" >Action</th>
 						<th class="text-center" style="color:black;">Time of action</th>
 						<th class="text-center" style="color:red">DebugMe</th>
 					</thead>
@@ -106,7 +113,7 @@ progress[value]  {
 						<th class="text-center" style="color:black;">Jobname</th>
 						<th class="text-center" style="color:black;">Date</th>
 						<th class="text-center" style="color:black;">Time</th>
-						<th class="text-center" style="width:30%;color:black">Action</th>
+						<th class="text-center" style="width:25%;color:black">Action</th>
 						<th class="text-center" style="color:black;">Team</th>
 						<th class="text-center" style="color:black;">Time of action</th>
 						<th class="text-center" style="color:red;">DebugMe</th>
@@ -273,6 +280,17 @@ progress[value]  {
       
 </body>
 <script>
+		$(document).ready(function() {
+			var t1 = $('#abendsTable').DataTable({
+				 "paging": false
+			});			
+			
+			var t2 = $('#longRunningTable').DataTable({
+				 "paging": false
+			});
+
+		} );
+
 		var rerunMinute = 0; 
 		var notifyMinute = 0; 
 		var markCompleteMinute = 0; 
@@ -708,7 +726,7 @@ progress[value]  {
 			var emailCount = emails.count;
 			document.getElementById("myBar").setAttribute("max",emails.count);
 			console.log(emailCount)
-			i = 1;
+			i = 0;
 			resetCounter();
 			document.getElementById("emailsCountDisplay").textContent = emailCount;
 			myLoop( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression);
@@ -720,8 +738,24 @@ progress[value]  {
 		   setTimeout(function () { 
 			  var elem = document.getElementById("myBar");
 			  var elem2 = document.getElementById("myBar2");
+			  
+			  
+				//finished manipulating emails
+				if( i == emailCount ){ 
+					console.log("finish")
+					document.getElementById("myBar").style.display = "none";
+					document.getElementById("myBar2").setAttribute("class","progress-bar bg-success progress-bar-striped progress-bar-animated")
+					document.getElementById("myBar2").innerHTML = "100% COMPLETE";
+					//document.getElementById("fakeProgress").innerHTML = "<span style='width:100%' class='badge badge-pill badge-success'>100% COMPLETE </span>";
+					document.getElementById("fakeProgress").style.display = "none";
+					document.getElementById("resultOfManipulation").style.display = "none";
+					document.getElementById("showDebugButton").style.display = "block";
+					document.getElementById("btnExportAbends").style.display = "block";
+					document.getElementById("btnExportNonAbends").style.display = "block";
+					elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
+					return;
+				}
 			  //////////////////////////////////////////////////////////////////
-
 					elem.value = i;
 					elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
 					console.log( parseInt( (i/emailCount)*100 ))
@@ -730,7 +764,7 @@ progress[value]  {
 
  
 				//console.log( emails )
-				var theEmail = emails.Item(i);
+				var theEmail = emails.Item(i+1);
 				var myBody = theEmail.Body;
 				var fullEmail = theEmail.Body; 
 				var limitUntilLine = theEmail.Body.indexOf(document.getElementById("signatureName").value); //limit the search area
@@ -739,15 +773,15 @@ progress[value]  {
 				globalEmailSubject = theEmail.ConversationTopic;
 				
 				//site = theEmail.ConversationTopic.split("|")[0].split(" ")[0];
-				if( theEmail.ConversationTopic.toUpperCase().indexOf("LE") >= 0 ){
+				if( theEmail.ConversationTopic.toUpperCase().indexOf("LE") <= 5 ){
 					site = "LE"
-				}else if ( theEmail.ConversationTopic.toUpperCase().indexOf("YR") >= 0 ){
+				}else if ( theEmail.ConversationTopic.toUpperCase().indexOf("YR") <= 5 ){
 					site = "YR"
-				}else if ( theEmail.ConversationTopic.toUpperCase().indexOf("Y2") >= 0 ){
+				}else if ( theEmail.ConversationTopic.toUpperCase().indexOf("Y2") <= 5 ){
 					site = "Y2"
-				}else if ( theEmail.ConversationTopic.toUpperCase().indexOf("UM") >= 0 ){
+				}else if ( theEmail.ConversationTopic.toUpperCase().indexOf("UM") <= 5 ){
 					site = "UM"
-				}else if ( theEmail.ConversationTopic.toUpperCase().indexOf("MM") >= 0 ){
+				}else if ( theEmail.ConversationTopic.toUpperCase().indexOf("MM") <= 5 ){
 					site = "MM"
 				}else{
 					site ="Undefined"
@@ -777,14 +811,14 @@ progress[value]  {
 					displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					 
 					 
-					if( i <= emailCount ){
+					//if( i <= emailCount ){
 						elem.value = i;
 						elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
 						elem2.innerHTML = parseInt( (i/emailCount)*100)+"%";
 						myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression);     
 						document.getElementById("emailsCountStartDisplay").textContent = i;
 						i++; 
-					}
+					//}
 					return
 				}
 				//PCN expression
@@ -800,14 +834,14 @@ progress[value]  {
 					document.getElementById("resultOfManipulation").textContent = zjobs.length+" PCN found"
 					displayRow(title,site,convertedDate,timeResult,action,logType,recipient,globalEmailSubject);
 					
-					if( i <= emailCount ){
-						elem.value = i;
-						elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
-						elem2.innerHTML = parseInt( (i/emailCount)*100)+"%";
-						myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression);     
-					document.getElementById("emailsCountStartDisplay").textContent = i;
-					i++;  
-					}
+					//if( i <= emailCount ){
+					//	elem.value = i;
+					//	elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
+					//	elem2.innerHTML = parseInt( (i/emailCount)*100)+"%";
+					//	myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression);     
+					//document.getElementById("emailsCountStartDisplay").textContent = i;
+					//i++;  
+					//}
 					return
 				}				
 					
@@ -1019,21 +1053,7 @@ progress[value]  {
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					}
 					
-									//finished manipulating emails
-				if( i == emailCount ){ 
-					document.getElementById("myBar").style.display = "none";
-					document.getElementById("myBar2").setAttribute("class","progress-bar bg-success progress-bar-striped progress-bar-animated")
-					document.getElementById("myBar2").innerHTML = "100% COMPLETE";
-					//document.getElementById("fakeProgress").innerHTML = "<span style='width:100%' class='badge badge-pill badge-success'>100% COMPLETE </span>";
-					document.getElementById("fakeProgress").style.display = "none";
-					document.getElementById("resultOfManipulation").style.display = "none";
-					document.getElementById("showDebugButton").style.display = "block";
-					document.getElementById("btnExportAbends").style.display = "block";
-					document.getElementById("btnExportNonAbends").style.display = "block";
-					elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
-					return;
-				}
-				
+
 					
 			  //////////////////////////////////////////////////////////////////
 			  if (i <= emailCount) {
@@ -1045,7 +1065,7 @@ progress[value]  {
 			  i++;                    
 			  }
 				
-		   }, 500)
+		   }, 200)
 		   
 		   
 		}
@@ -1507,57 +1527,83 @@ progress[value]  {
 		}
 		function displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject){
 			//(logType == "abend") ? (var newRow = abendsTbody.insertRow(-1)):(var newRow = longRunningTbody.insertRow(-1));
+			var t1 = $('#abendsTable').DataTable();
+			var t2 = $('#longRunningTable').DataTable();
+			var cellOne;
+			var cellTwo;
+			var cellTwoAbend
+			var cellThree;
+			var cellFour;
+			var cellFive;
+			var cellFiveLongRun;
+			var cellSix;
+			var cellSixAbend;
+			var cellSeven;
+			
 			console.log(zjobs)
-			if( logType === "abend" ) {
-				var newRow = abendsTbody.insertRow(0)
-			}else{
-				var newRow = longRunningTbody.insertRow(0)
-			}
+			//if( logType === "abend" ) {
+				//var newRow = abendsTbody.insertRow(0)
+			//}else{
+				//var newRow = longRunningTbody.insertRow(0)
+			//}
 
 			if( zjobs.length == 1){ //single zjob
-				newRow.insertCell(-1).innerHTML = zjobs[0];
+				//newRow.insertCell(-1).innerHTML = zjobs[0];
+				//cellOne = zjobs[0];
 				if( logType === "abend" ) {
-					//newRow.insertCell(-1).innerHTML = site;
 						if( site != "Undefined"){
-							newRow.insertCell(-1).innerHTML = site;
+							//newRow.insertCell(-1).innerHTML = site;
+							cellTwoAbend = site;
 						}else{
-							var cell = document.createElement("td");
-								cell.setAttribute("style","color:#e57373;display:block");
-							var cellText = document.createTextNode("Undefined");
-								cell.appendChild(cellText);
-								newRow.appendChild(cell);
+							//var cell = document.createElement("td");
+								//cell.setAttribute("style","color:#e57373;display:block");
+							//var cellText = document.createTextNode("Undefined");
+								//cell.appendChild(cellText);
+								//newRow.appendChild(cell);
+								cellTwoAbend = "Undefined"
 						}
 				}
-				newRow.insertCell(-1).innerHTML = convertedDate.toJSON().split("T")[0];
-				newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
-				newRow.insertCell(-1).innerHTML = action;
+				//newRow.insertCell(-1).innerHTML = convertedDate.toJSON().split("T")[0];
+				cellTwo = convertedDate.toJSON().split("T")[0];
+				//newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+				cellThree = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+				//newRow.insertCell(-1).innerHTML = action;
+				cellFour = action;
+				
 				if( logType === "turnover" ||  logType === "capping" || logType === "pcn" || logType === "cleanUp" ){
-					//newRow.insertCell(-1).innerHTML = "Undefined";//team
-					var cell2 = document.createElement("td"); //team
-						cell2.setAttribute("style","color:#e57373;");
-					var cellText2 = document.createTextNode("Undefined");
-						cell2.appendChild(cellText2);
-						newRow.appendChild(cell2);
+					//var cell2 = document.createElement("td"); //team
+						//cell2.setAttribute("style","color:#e57373;");
+					//var cellText2 = document.createTextNode("Undefined");
+						//cell2.appendChild(cellText2);
+						//newRow.appendChild(cell2);
+					cellFiveLongRun = "Undefined";
+					
+					//newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];//time of action
+					cellSix = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+					
+					//var cell = document.createElement("td"); //Debug me column
+						//cell.setAttribute("style","color:#e57373;display:block");
+					//var cellText = document.createTextNode(globalEmailSubject +"(" + recipients + ")");
+						//cell.appendChild(cellText);
+						//newRow.appendChild(cell);
 						
-					newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];//time of action
-					var cell = document.createElement("td"); //Debug me column
-						cell.setAttribute("style","color:#e57373;display:block");
-					var cellText = document.createTextNode(globalEmailSubject +"(" + recipients + ")");
-						cell.appendChild(cellText);
-						newRow.appendChild(cell);
+						cellSeven = globalEmailSubject +"(" + recipients + ")";
 				}
 				if(logType === "abend"){
 					if( action == "rerun as per ps25"  ){ //if rr as per ps25, same time
-						newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+						//newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+						cellSixAbend = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
 					}else{
-						newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
+						//newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
+						cellSixAbend = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];;
 					}
 					
-					var cell = document.createElement("td");
-						cell.setAttribute("style","color:#e57373;display:block");
-					var cellText = document.createTextNode(globalEmailSubject);
-						cell.appendChild(cellText);
-						newRow.appendChild(cell);
+					//var cell = document.createElement("td");
+						//cell.setAttribute("style","color:#e57373;display:block");
+					//var cellText = document.createTextNode(globalEmailSubject);
+						//cell.appendChild(cellText);
+						//newRow.appendChild(cell);
+						cellSeven = globalEmailSubject;
 				}
 				if( logType == "longRunning" || logType == "holdRelease" || logType == "missedDue" || logType == "stuckInSubmit" || logType == "force" || logType == "inserted" || logType === "cancelled" || logType === "tpipe") { //team
 						if( recipients.indexOf("data_mart") >= 0 ){
@@ -1601,54 +1647,91 @@ progress[value]  {
 						}
 						
 						if( team != "undefined"){
-							newRow.insertCell(-1).innerHTML = team;
+							//newRow.insertCell(-1).innerHTML = team;
+							cellFiveLongRun = team;
 						}else{
-							var cell = document.createElement("td");
-								cell.setAttribute("style","color:#e57373");
-							var cellText = document.createTextNode("Undefined");
-								cell.appendChild(cellText);
-								newRow.appendChild(cell);
+							//var cell = document.createElement("td");
+								//cell.setAttribute("style","color:#e57373");
+							//var cellText = document.createTextNode("Undefined");
+								//cell.appendChild(cellText);
+								//newRow.appendChild(cell);
+							cellFiveLongRun = 	"Undefined";
 						}
 						
-						newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
-						var cell = document.createElement("td");
-							cell.setAttribute("style","color:#e57373;display:block");
-						var cellText = document.createTextNode(globalEmailSubject);
-							cell.appendChild(cellText);
-							newRow.appendChild(cell);
-
+						//newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
+						cellSix = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
+						//var cell = document.createElement("td");
+							//cell.setAttribute("style","color:#e57373;display:block");
+						//var cellText = document.createTextNode(globalEmailSubject);
+							//cell.appendChild(cellText);
+							//newRow.appendChild(cell);
+						cellSeven = globalEmailSubject;
+				}
+				
+				//add row in ? table
+				if( logType === "abend" ) {
+					t1.row.add( [
+						zjobs[0],
+						cellTwoAbend,
+						convertedDate.toJSON().split("T")[0],
+						timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
+						action,
+						cellSixAbend,
+						globalEmailSubject
+					] ).draw( false );
+				}else{
+					t2.row.add( [
+						zjobs[0],
+						convertedDate.toJSON().split("T")[0],
+						timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
+						action,
+						cellFiveLongRun,
+						convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1],
+						globalEmailSubject
+					] ).draw( false );
 				}
 					console.log("SUCCESS")
 					createSummary(action);
+			
 			}else{ //multiple zjobs
+			
 				for(var i=0; i< zjobs.length; i++ ){
-					newRow.insertCell(-1).innerHTML = zjobs[i];
+					//newRow.insertCell(-1).innerHTML = zjobs[i];
+					cellOne = zjobs[i];
 					if( logType === "abend" ) {
-						//newRow.insertCell(-1).innerHTML = site;
 						if( site != "Undefined"){
-							newRow.insertCell(-1).innerHTML = site;
+							//newRow.insertCell(-1).innerHTML = site;
+							cellTwoAbend = site;
 						}else{
-							var cell = document.createElement("td");
-								cell.setAttribute("style","color:#e57373");
-							var cellText = document.createTextNode("Undefined");
-								cell.appendChild(cellText);
-								newRow.appendChild(cell);
+							//var cell = document.createElement("td");
+								//cell.setAttribute("style","color:#e57373");
+							//var cellText = document.createTextNode("Undefined");
+								//cell.appendChild(cellText);
+								//newRow.appendChild(cell);
+							cellTwoAbend = "Undefined";	
 						}
 					}
-					newRow.insertCell(-1).innerHTML = convertedDate.toJSON().split("T")[0];
-					newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
-					newRow.insertCell(-1).innerHTML = action;
+					//newRow.insertCell(-1).innerHTML = convertedDate.toJSON().split("T")[0];
+					cellTwo = convertedDate.toJSON().split("T")[0];
+					//newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+					cellThree = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+					//newRow.insertCell(-1).innerHTML = action;
+					cellFour = action;
+					
 					if(logType === "abend"){
 						if( action == "rerun as per ps25"  ){ //if rr as per ps25, same time
-							newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+							//newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+							cellSixAbend = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
 						}else{
-							newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
+							//newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
+							cellSixAbend = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
 						}
-						var cell = document.createElement("td");
-							cell.setAttribute("style","color:#e57373;display:block");
-						var cellText = document.createTextNode(globalEmailSubject);
-							cell.appendChild(cellText);
-							newRow.appendChild(cell);
+						//var cell = document.createElement("td");
+							//cell.setAttribute("style","color:#e57373;display:block");
+						//var cellText = document.createTextNode(globalEmailSubject);
+							//cell.appendChild(cellText);
+							//newRow.appendChild(cell);
+						cellSeven = globalEmailSubject;
 					}
 					if( logType == "longRunning" || logType == "holdRelease" || logType == "missedDue" || logType == "stuckInSubmit"|| logType == "cleanUp" || logType == "force") { //team
 						if( recipients.indexOf("data_mart") >= 0 ){
@@ -1692,35 +1775,65 @@ progress[value]  {
 						}
 						
 						if( team != "undefined"){
-							newRow.insertCell(-1).innerHTML = team;
+							//newRow.insertCell(-1).innerHTML = team;
+							cellFive = team;
 						}else{
-							var cell = document.createElement("td");
-								cell.setAttribute("style","color:#e57373");
-							var cellText = document.createTextNode("Undefined");
-								cell.appendChild(cellText);
-								newRow.appendChild(cell);
+							//var cell = document.createElement("td");
+								//cell.setAttribute("style","color:#e57373");
+							//var cellText = document.createTextNode("Undefined");
+								//cell.appendChild(cellText);
+								//newRow.appendChild(cell);
+							cellFive = "Undefined";
 						}
-						newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
+						//newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
+						cellSix = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
+						
 						//print DebugMe
-						var cell = document.createElement("td");
-							cell.setAttribute("style","color:#e57373;display:block");
-						var cellText = document.createTextNode(globalEmailSubject);
-							cell.appendChild(cellText);
-							newRow.appendChild(cell);
+						//var cell = document.createElement("td");
+							//cell.setAttribute("style","color:#e57373;display:block");
+						//var cellText = document.createTextNode(globalEmailSubject);
+							//cell.appendChild(cellText);
+							//newRow.appendChild(cell);
+						cellSeven = globalEmailSubject;	
 
 					}
 					
 					
-					if( i < zjobs.length-1){
-						if( logType === "abend" ) {
-							var newRow = abendsTbody.insertRow(0)
-						}else{
-							var newRow = longRunningTbody.insertRow(0)
-						}
-					}
+					//if( i < zjobs.length-1){
+					//if( logType === "abend" ) {
+						//	var newRow = abendsTbody.insertRow(0)
+						//}else{
+						//	var newRow = longRunningTbody.insertRow(0)
+						//}
+					//}
 					
+					
+				//add row in ? table
+				if( logType === "abend" ) {
+					t1.row.add( [
+						zjobs[i],
+						cellTwoAbend,
+						convertedDate.toJSON().split("T")[0],
+						timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
+						action,
+						cellSixAbend,
+						globalEmailSubject
+					] ).draw( false );
+				}else{
+					t2.row.add( [
+						zjobs[i],
+						convertedDate.toJSON().split("T")[0],
+						timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
+						action,
+						cellFive,
+						convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1],
+						globalEmailSubject
+					] ).draw( false );
+				}
+					console.log("SUCCESS")
 					createSummary(action);
 				}
+				
 			}
 		
 			
