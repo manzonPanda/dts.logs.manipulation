@@ -4,10 +4,21 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jqc-1.12.4/dt-1.10.20/b-1.6.1/b-colvis-1.6.1/b-flash-1.6.1/b-html5-1.6.1/cr-1.5.2/fh-3.1.6/r-2.2.3/rr-1.2.6/sl-1.3.1/datatables.min.css"/>
- 
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jqc-1.12.4/jszip-2.5.0/dt-1.10.20/b-1.6.1/b-colvis-1.6.1/b-flash-1.6.1/b-html5-1.6.1/b-print-1.6.1/cr-1.5.2/fh-3.1.6/r-2.2.3/rr-1.2.6/sl-1.3.1/datatables.min.css"/> 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jqc-1.12.4/jszip-2.5.0/dt-1.10.20/b-1.6.1/b-colvis-1.6.1/b-flash-1.6.1/b-html5-1.6.1/b-print-1.6.1/cr-1.5.2/fh-3.1.6/r-2.2.3/rr-1.2.6/sl-1.3.1/datatables.min.js"></script>
+
+<!--
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jqc-1.12.4/dt-1.10.20/b-1.6.1/b-colvis-1.6.1/b-flash-1.6.1/b-html5-1.6.1/cr-1.5.2/fh-3.1.6/r-2.2.3/rr-1.2.6/sl-1.3.1/datatables.min.css"/>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jqc-1.12.4/dt-1.10.20/b-1.6.1/b-colvis-1.6.1/b-flash-1.6.1/b-html5-1.6.1/cr-1.5.2/fh-3.1.6/r-2.2.3/rr-1.2.6/sl-1.3.1/datatables.min.js"></script>
+-->
+
 <style>
+.label-warning{
+
+	background-color:#ff4d4d
+}
 	.footer{
 		position:fixed;
 		left:0;
@@ -137,9 +148,9 @@ progress[value]  {
 			  <input type="text" value="tempNovember" id="folderName" class="form-control">
 			   <div class="input-group-append">
 				<button class="btn btn-success" type="button" onclick="inputValidation()"> CREATE LOGS</button>
-				<button id="showDebugButton" style="display:none" class="btn btn-danger" type="button" data-status="hidden" onclick="showDebug(this)"> HIDE DEBUG</button>
-				<button class="btn btn-success" id="btnExportAbends" style="display:none" onclick="exportLogs('abends');"> EXPORT ABENDS </button>
-				<button class="btn btn-success" id="btnExportNonAbends" style="display:none" onclick="exportLogs('nonAbends');"> EXPORT NON-ABENDS </button>
+				<!--<button id="showDebugButton" style="display:none" class="btn btn-danger" type="button" data-status="hidden" onclick="showDebug(this)"> HIDE DEBUG</button> -->
+				<!--<button class="btn btn-success" id="btnExportAbends" style="display:none" onclick="exportLogs('abends');"> EXPORT ABENDS </button> -->
+				<!--<button class="btn btn-success" id="btnExportNonAbends" style="display:none" onclick="exportLogs('nonAbends');"> EXPORT NON-ABENDS </button> -->
 				 
 			  </div>
 			</div>
@@ -255,7 +266,17 @@ progress[value]  {
 			  </div>
 			  <input type="text" value="cancelled" id="cancelledKeywords" class="form-control">
 			  <input type="number" min="1" value="3" class="form-control">
+			</div> 			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >PCN-Keywords and minutes</span>
+			  </div>
+			  <input type="text" value="signed off" id="pcnKeywords" class="form-control">
+			  <input type="number" min="1" value="3" id="pcnMinute" class="form-control">
 			</div> 
+			
+			
 			</div>
 		</div>
 		<br>
@@ -282,12 +303,79 @@ progress[value]  {
 <script>
 		$(document).ready(function() {
 			var t1 = $('#abendsTable').DataTable({
-				 "paging": false
+				destroy: true,
+				 dom: 'Bfrtip',
+				 "paging": false,
+				 "scrollY": "250px",
+				 "scrollCollapse": true,
+				  				buttons: [
+					{
+						extend: 'copyHtml5',
+						exportOptions: {
+							columns: [ 0, ':visible' ]
+						}
+					},
+					{
+						title: document.getElementById("signatureName").value.split(" ")[0] +' Abends logs',
+						extend: 'excelHtml5',
+						exportOptions: {
+							columns: ':visible'
+						}
+					},
+					{
+						title: document.getElementById("signatureName").value.split(" ")[0] +' Abends logs',
+						extend: 'pdfHtml5',
+						exportOptions: {
+							columns: [ 0, 1, 2, 5 ]
+						}
+					},
+					'colvis'
+				],
+				 responsive: true,
+				 colReorder: true,
 			});			
 			
 			var t2 = $('#longRunningTable').DataTable({
-				 "paging": false
+				destroy: true,
+				 dom: 'Bfrtip',
+				 "paging": false,
+				 "scrollY": "250px",
+				  "scrollCollapse": true,
+				buttons: [
+					{
+						extend: 'copyHtml5',
+						exportOptions: {
+							columns: [ 0, ':visible' ]
+						}
+					},
+					{
+						title: document.getElementById("signatureName").value.split(" ")[0] +' Non-abends logs',
+						extend: 'excelHtml5',
+						exportOptions: {
+							columns: ':visible'
+						}
+					},
+					{
+						title: document.getElementById("signatureName").value.split(" ")[0] + ' Non-abends logs',
+						extend: 'pdfHtml5',
+						exportOptions: {
+							columns: [ 0, 1, 2, 5 ]
+						}
+					},
+					'colvis'
+				],
+				responsive: true,
+				colReorder: true,
 			});
+			
+			$('#showDebugButton').on( 'click', function (e) {
+				e.preventDefault();
+				//hide column
+				var column = t2.column( 6 );
+				column.visible( ! column.visible() );
+				
+
+			} );
 
 		} );
 
@@ -302,6 +390,7 @@ progress[value]  {
 		var stuckMinute = 0;
 		var forceMinute = 0;
 		var insertMinute = 0;
+		var pcnMinute = 0;
 		
 		var abendCount = 0;
 		var rrCount = 0;
@@ -374,78 +463,6 @@ progress[value]  {
 		var abendsDebugColumn = [];
 		var nonAbendsDebugColumn = [];
 
-		
-		function showDebug(button){
-			var col = 6;
-			var tbl = document.getElementById("abendsTable");
-			var tbl2 = document.getElementById("longRunningTable");
-			
-			//<button class="btn btn-danger" type="button" data-status="expose" onclick="showDebug(this)"> SHOW DEBUG</button>
-			if( button.dataset.status == 'expose' ){
-				button.setAttribute("class","btn btn-danger")
-				button.innerHTML = "HIDE DEBUG"
-				button.dataset.status='hidden'
-				
-				//insert td (debugMe)
-				for (var i = 0; i < tbl.rows.length; i++) {
-					if(tbl.rows[i].cells.length > 0){
-						if( i == 0){
-							var cell = document.createElement("th");
-								cell.setAttribute("style","color:red");
-								cell.setAttribute("class","text-center");
-							var cellText = document.createTextNode("DebugMe");
-								cell.appendChild(cellText);
-								tbl.rows[i].appendChild(cell);
-								abendsDebugColumn.shift(); 
-						}else{
-							var temp = tbl.rows[i].insertCell(-1)
-								temp.innerHTML = abendsDebugColumn.shift(); 
-								temp.setAttribute( "style","color:#e57373" )
-						}
-					}
-				}
-				
-				//insert td (debugMe)
-				for (var i = 0; i< tbl2.rows.length; i++) {
-					if(tbl2.rows[i].cells.length > 0){
-						if( i == 0){
-							var cell = document.createElement("th");
-								cell.setAttribute("style","color:red")
-								cell.setAttribute("class","text-center");;
-							var cellText = document.createTextNode("DebugMe");
-								cell.appendChild(cellText);
-								tbl2.rows[i].appendChild(cell);
-								nonAbendsDebugColumn.shift(); 
-						}else{
-							var temp = tbl2.rows[i].insertCell(-1)
-								temp.innerHTML = nonAbendsDebugColumn.shift(); 
-								temp.setAttribute( "style","color:#e57373" )
-						}
-					}
-				}
-				
-			}else{
-				button.setAttribute("class","btn btn-success")
-				button.innerHTML = "SHOW DEBUG"
-				button.dataset.status='expose'
-				
-				//remove td (debugMe)
-				for (var i = 0; i < tbl.rows.length; i++) {
-					if(tbl.rows[i].cells[6] != null){
-						abendsDebugColumn.push( tbl.rows[i].cells[6].innerHTML);
-						tbl.rows[i].deleteCell(-1);
-					}
-				}
-				//remove td (debugMe)
-				for (var i = 0; i < tbl2.rows.length; i++) {
-					if(tbl2.rows[i].cells[6] != null){
-						nonAbendsDebugColumn.push( tbl2.rows[i].cells[6].innerHTML);
-						tbl2.rows[i].deleteCell(-1);
-					}	
-				}
-			}
-						
-		}
 		
 		function resetCounter(){
 			 abendCount = 0;
@@ -546,9 +563,9 @@ progress[value]  {
 		function inputValidation(){
 			document.getElementById("abendsTbody").innerHTML = "";
 			document.getElementById("longRunningTbody").innerHTML = "";
-			document.getElementById("showDebugButton").style.display = "none";
-			document.getElementById("showDebugButton").setAttribute("class","btn btn-danger")
-			document.getElementById("showDebugButton").innerHTML = "HIDE DEBUG"
+			//document.getElementById("showDebugButton").style.display = "none";
+			//document.getElementById("showDebugButton").setAttribute("class","btn btn-danger")
+			//document.getElementById("showDebugButton").innerHTML = "HIDE DEBUG"
 			
 			document.getElementById("mcPsDisplay").textContent = mcPsCount;
 			document.getElementById("mcDisplay").textContent = mcCount;
@@ -583,6 +600,7 @@ progress[value]  {
 			var forceKeywords = document.getElementById("forceKeywords").value;
 			var cancelledKeywords = document.getElementById("cancelledKeywords").value;
 			var insertKeywords = document.getElementById("insertKeywords").value;
+			var pcnKeywords = document.getElementById("pcnKeywords").value;
 				folderName=='' ? folderName = 'tempNovember' : ''
 				signatureName=='' ? signatureName = 'Jake James Manzon' : ''
 				abendNotifyKeywords=='' ? abendNotifyKeywords = 'advise;check and advise;Updating abends;Updating' : ''
@@ -598,6 +616,8 @@ progress[value]  {
 				forceKeywords=='' ? forceKeywords = 'force started;force release' : ''
 				cancelledKeywords=='' ? cancelledKeywords = 'cancelled' : ''
 				insertKeywords=='' ? insertKeywords = 'inserted;ADDED BY RUSH' : ''
+				pcnKeywords=='' ? pcnKeywords = 'signed off' : ''
+				
 			var tempNotifyMinute = document.getElementById("notifyMinute").value;
 			var tempRerunMinute = document.getElementById("rerunMinute").value;
 			var tempMcMinute = document.getElementById("mcMinute").value;
@@ -608,7 +628,8 @@ progress[value]  {
 			var tempTpipeMinuteMinute = document.getElementById("tpipeMinute").value;
 			var tempStuckMinuteMinute = document.getElementById("stuckMinute").value;
 			var tempForceMinute = document.getElementById("forceMinute").value;
-			var insertMinute = document.getElementById("insertMinute").value;
+			var tempInsertMinute = document.getElementById("insertMinute").value;
+			var tempPcnMinute = document.getElementById("pcnMinute").value;
 				tempNotifyMinute=='' ? notifyMinute = 0 : notifyMinute=tempNotifyMinute;
 				tempRerunMinute=='' ? rerunMinute = 0 : rerunMinute=tempRerunMinute;
 				tempMcMinute=='' ? markCompleteMinute = 0 : markCompleteMinute=tempMcMinute;
@@ -619,7 +640,8 @@ progress[value]  {
 				tempTpipeMinuteMinute=='' ? tpipeMinute = 0 : tpipeMinute=tempTpipeMinuteMinute;
 				tempStuckMinuteMinute=='' ? stuckMinute = 0 : stuckMinute=tempStuckMinuteMinute;
 				tempForceMinute=='' ? forceMinute = 0 : forceMinute=tempForceMinute;
-				insertMinute=='' ? insertMinute = 0 : insertMinute=insertMinute;
+				tempInsertMinute=='' ? insertMinute = 0 : insertMinute=tempInsertMinute;
+				tempPcnMinute=='' ? pcnMinute = 0 : pcnMinute=tempPcnMinute;
 				
 			//myBody.indexOf("advise")>0 ||myBody.indexOf("check and advise")>0 || myBody.indexOf("Updating abends")>0 || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 )|| myBody.indexOf("Updating")>0
 			var newAbendNotifyKeywordsExpression ="";
@@ -698,12 +720,18 @@ progress[value]  {
 			for( var i=0; i< insertKeywords.split(";").length; i++ ){
 				newInsertKeywordsExpression += "myBody.indexOf('"+ insertKeywords.split(";")[i]+"')>0";
 				i != insertKeywords.split(";").length-1 ? newInsertKeywordsExpression += " || " : "";
+			}			
+			
+			var newPCNKeywordsExpression ="";
+			for( var p=0; p< pcnKeywords.split(";").length; p++ ){
+				newPCNKeywordsExpression += "myBody.indexOf('"+ pcnKeywords.split(";")[p]+"')>0";
+				p != pcnKeywords.split(";").length-1 ? newPCNKeywordsExpression += " d|| " : "";
 			}
 			
 			//start
 			document.getElementById("fakeProgress").style.display = "block";
 			document.getElementById("resultOfManipulation").style.display = "block";
-			startEmailsManipulation(newAbendNotifyKeywordsExpression,newRerunKeywordsExpression,newMcKeywordsExpression,newLongRunningKeywordsExpression,newHoldReleaseKeywordsExpression,newMissedDueOutKeywordsExpression,newCappingKeywordsExpression,newTpipeKeywordsExpression,newStuckKeywordsExpression,newCleanUpKeywordsExpression,newForceKeywordsExpression,newCancelledKeywordsExpression,newInsertKeywordsExpression);
+			startEmailsManipulation(newAbendNotifyKeywordsExpression,newRerunKeywordsExpression,newMcKeywordsExpression,newLongRunningKeywordsExpression,newHoldReleaseKeywordsExpression,newMissedDueOutKeywordsExpression,newCappingKeywordsExpression,newTpipeKeywordsExpression,newStuckKeywordsExpression,newCleanUpKeywordsExpression,newForceKeywordsExpression,newCancelledKeywordsExpression,newInsertKeywordsExpression,newPCNKeywordsExpression);
 		}
 		
 		var zjobs = [];
@@ -715,7 +743,7 @@ progress[value]  {
 		var globalEmailSubject;
 		var i = 1;
 		
-		function startEmailsManipulation(abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression){
+		function startEmailsManipulation(abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression,pcnExpression){
 			var outlookApp = new ActiveXObject("Outlook.Application");
 			var nameSpace = outlookApp.getNameSpace("MAPI");
 			//nameSpace.logon("ja20076062@wipro.com","jjgm@WL6062",false,false);
@@ -729,16 +757,15 @@ progress[value]  {
 			i = 0;
 			resetCounter();
 			document.getElementById("emailsCountDisplay").textContent = emailCount;
-			myLoop( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression);
+			myLoop( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression,pcnExpression);
 			
 		}
 		
-		function myLoop ( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression) { 
+		function myLoop ( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression,pcnExpression) { 
 
 		   setTimeout(function () { 
 			  var elem = document.getElementById("myBar");
 			  var elem2 = document.getElementById("myBar2");
-			  
 			  
 				//finished manipulating emails
 				if( i == emailCount ){ 
@@ -749,9 +776,9 @@ progress[value]  {
 					//document.getElementById("fakeProgress").innerHTML = "<span style='width:100%' class='badge badge-pill badge-success'>100% COMPLETE </span>";
 					document.getElementById("fakeProgress").style.display = "none";
 					document.getElementById("resultOfManipulation").style.display = "none";
-					document.getElementById("showDebugButton").style.display = "block";
-					document.getElementById("btnExportAbends").style.display = "block";
-					document.getElementById("btnExportNonAbends").style.display = "block";
+					//document.getElementById("showDebugButton").style.display = "block";
+					//document.getElementById("btnExportAbends").style.display = "block";
+					//document.getElementById("btnExportNonAbends").style.display = "block";
 					elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
 					return;
 				}
@@ -815,13 +842,14 @@ progress[value]  {
 						elem.value = i;
 						elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
 						elem2.innerHTML = parseInt( (i/emailCount)*100)+"%";
-						myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression);     
+						myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression,pcnExpression);     
 						document.getElementById("emailsCountStartDisplay").textContent = i;
 						i++; 
 					//}
 					return
 				}
 				//PCN expression
+				/**
 				if( emailSubject.toUpperCase().indexOf("PCN") >=0 ){
 					var title = [emailSubject.split(" ")[2]]
 					//var title = [emailSubject.substring( emailSubject.indexOf("PCN"),emailSubject.indexOf(" ",emailSubject.indexOf(" ") + 1  ) )]
@@ -834,16 +862,30 @@ progress[value]  {
 					document.getElementById("resultOfManipulation").textContent = zjobs.length+" PCN found"
 					displayRow(title,site,convertedDate,timeResult,action,logType,recipient,globalEmailSubject);
 					
-					//if( i <= emailCount ){
-					//	elem.value = i;
-					//	elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
-					//	elem2.innerHTML = parseInt( (i/emailCount)*100)+"%";
-					//	myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression);     
-					//document.getElementById("emailsCountStartDisplay").textContent = i;
-					//i++;  
-					//}
+						elem.value = i;
+						elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
+						elem2.innerHTML = parseInt( (i/emailCount)*100)+"%";
+						myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression);     
+					document.getElementById("emailsCountStartDisplay").textContent = i;
+					i++;  
 					return
 				}				
+				**/
+					
+					//-> PCN expression=> myBody.indexOf("inserted") >0 
+					if( eval(pcnExpression) ){
+						var logType = "pcn";
+						var action = "PCN";
+						var where = "pcn";	
+						var title = [emailSubject];
+						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - pcnMinute )).toTimeString().split(" ")[0];
+						//extractJobs(emailSubject,myBody,where,fullEmail);
+						console.log("email["+i +","+emailSubject+"]-> PCN-" +zjobs.length+" found")
+						document.getElementById("resultOfManipulation").textContent = zjobs.length+" pcn found"
+						console.log(timeResult)
+						displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+					}	
+					
 					
 				//if( emailSubject.indexOf("ABEND") > 0 ){
 				//	if( emailSubject.indexOf("*")>0 || emailSubject.indexOf("MULTIPLE")>0 || emailSubject.indexOf("&") > 0){ //multiple job
@@ -1060,12 +1102,12 @@ progress[value]  {
 				elem.value = i;
 				elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
 				elem2.innerHTML = parseInt( (i/emailCount)*100)+"%";
-				myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression);     
+				myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression,pcnExpression);     
 				document.getElementById("emailsCountStartDisplay").textContent = i;
 			  i++;                    
 			  }
 				
-		   }, 200)
+		   }, 300)
 		   
 		   
 		}
@@ -1547,7 +1589,11 @@ progress[value]  {
 				//var newRow = longRunningTbody.insertRow(0)
 			//}
 
-			if( zjobs.length == 1){ //single zjob
+			if( logType == "pcn"){
+			
+			}
+			
+			if( zjobs.length == 1 || logType === "pcn"){ //single zjob
 				//newRow.insertCell(-1).innerHTML = zjobs[0];
 				//cellOne = zjobs[0];
 				if( logType === "abend" ) {
@@ -1570,7 +1616,7 @@ progress[value]  {
 				//newRow.insertCell(-1).innerHTML = action;
 				cellFour = action;
 				
-				if( logType === "turnover" ||  logType === "capping" || logType === "pcn" || logType === "cleanUp" ){
+				if( logType === "turnover" ||  logType === "capping"  || logType === "cleanUp" ){
 					//var cell2 = document.createElement("td"); //team
 						//cell2.setAttribute("style","color:#e57373;");
 					//var cellText2 = document.createTextNode("Undefined");
@@ -1605,10 +1651,10 @@ progress[value]  {
 						//newRow.appendChild(cell);
 						cellSeven = globalEmailSubject;
 				}
-				if( logType == "longRunning" || logType == "holdRelease" || logType == "missedDue" || logType == "stuckInSubmit" || logType == "force" || logType == "inserted" || logType === "cancelled" || logType === "tpipe") { //team
+				if( logType == "longRunning" || logType === "pcn" || logType == "holdRelease" || logType == "missedDue" || logType == "stuckInSubmit" || logType == "force" || logType == "inserted" || logType === "cancelled" || logType === "tpipe") { //team
 						if( recipients.indexOf("data_mart") >= 0 ){
 							var team = "Datamart";
-						}else if ( recipients.indexOf("scssupport") >= 0 ){
+						}else if ( recipients.indexOf("scssupport") >= 0 || recipients.indexOf("scsops-nt") >= 0){
 							var team = "SCS";
 						}else if ( recipients.indexOf("firm") >= 0 ){
 							var team = "Firm";
@@ -1659,7 +1705,13 @@ progress[value]  {
 						}
 						
 						//newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
-						cellSix = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
+						if( logType == "pcn" ){
+							cellSix = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+							
+						}else{
+							cellSix = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
+						
+						}
 						//var cell = document.createElement("td");
 							//cell.setAttribute("style","color:#e57373;display:block");
 						//var cellText = document.createTextNode(globalEmailSubject);
@@ -1670,7 +1722,7 @@ progress[value]  {
 				
 				//add row in ? table
 				if( logType === "abend" ) {
-					t1.row.add( [
+					var temp = t1.row.add( [
 						zjobs[0],
 						cellTwoAbend,
 						convertedDate.toJSON().split("T")[0],
@@ -1678,20 +1730,34 @@ progress[value]  {
 						action,
 						cellSixAbend,
 						globalEmailSubject
-					] ).draw( false );
+					] ).draw( false ).node();
+					
+					if( site == "Undefined" ){
+						$( temp ).addClass('label-warning');
+					}
+					console.log("SUCCESS")
+					createSummary(action);
+					
 				}else{
-					t2.row.add( [
+					var temp = t2.row.add( [
 						zjobs[0],
 						convertedDate.toJSON().split("T")[0],
 						timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
 						action,
 						cellFiveLongRun,
 						convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1],
+						//cellSix,
 						globalEmailSubject
-					] ).draw( false );
-				}
+					] ).draw( false ).node();
+					
+					if( cellFiveLongRun == "Undefined" ){
+						$( temp ).addClass('label-warning');
+					}
+					
 					console.log("SUCCESS")
 					createSummary(action);
+					
+				}
 			
 			}else{ //multiple zjobs
 			
@@ -1810,7 +1876,7 @@ progress[value]  {
 					
 				//add row in ? table
 				if( logType === "abend" ) {
-					t1.row.add( [
+					var temp = t1.row.add( [
 						zjobs[i],
 						cellTwoAbend,
 						convertedDate.toJSON().split("T")[0],
@@ -1818,9 +1884,17 @@ progress[value]  {
 						action,
 						cellSixAbend,
 						globalEmailSubject
-					] ).draw( false );
+					] ).draw( false ).node();
+					
+					if( site == "Undefined" ){
+						$( temp ).addClass('label-warning');
+					}
+					
+					
+					console.log("SUCCESS")
+					createSummary(action);
 				}else{
-					t2.row.add( [
+					var temp = t2.row.add( [
 						zjobs[i],
 						convertedDate.toJSON().split("T")[0],
 						timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
@@ -1828,10 +1902,15 @@ progress[value]  {
 						cellFive,
 						convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1],
 						globalEmailSubject
-					] ).draw( false );
-				}
+					] ).draw( false ).node();
+					
+					if( cellFive == "Undefined" ){
+						$( temp ).addClass('label-warning');
+					}
+					
 					console.log("SUCCESS")
 					createSummary(action);
+				}
 				}
 				
 			}
