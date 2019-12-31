@@ -673,10 +673,15 @@ progress[value]  {
 				newHoldReleaseKeywordsExpression += "myBody.indexOf('"+ holdReleaseKeywords.split(";")[h]+"')>0";
 				h != holdReleaseKeywords.split(";").length-1 ? newHoldReleaseKeywordsExpression += " || " : "";
 			}			
-			
+			/* search for specific keywords
+				let str = "Widget";
+				if (str.search(/\bWidget\b/) >= 0) {
+				console.log( 'Found it!' );
+				}
+			*/
 			var newMissedDueOutKeywordsExpression ="";
 			for( var d=0; d < missedDueOutKeywords.split(";").length; d++ ){
-				newMissedDueOutKeywordsExpression += "myBody.indexOf('"+ missedDueOutKeywords.split(";")[d]+"')>0";
+				newMissedDueOutKeywordsExpression += "myBody.search('/\b"+ missedDueOutKeywords.split(";")[d]+"\b/')>0";
 				d != missedDueOutKeywords.split(";").length-1 ? newMissedDueOutKeywordsExpression += " || " : "";
 			}			
 			
@@ -756,6 +761,7 @@ progress[value]  {
 			console.log(emailCount)
 			i = 0;
 			resetCounter();
+			document.getElementById("myBar2").setAttribute("class","progress-bar bg-danger progress-bar-striped progress-bar-animated")
 			document.getElementById("emailsCountDisplay").textContent = emailCount;
 			myLoop( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression,pcnExpression);
 			
@@ -817,6 +823,7 @@ progress[value]  {
 				var myDate = theEmail.SentOn;
 				convertedDate = new Date(myDate);
 				recipients = theEmail.cc + theEmail.to; //to,cc,bcc
+				console.log("recipient: " +recipients);
 				//Time manipulation
 				var emailTimeSent = theEmail.SentOn;
 				var timeColumnConvertedDate = new Date(emailTimeSent);
@@ -1107,7 +1114,7 @@ progress[value]  {
 			  i++;                    
 			  }
 				
-		   }, 300)
+		   }, 200)
 		   
 		   
 		}
@@ -1267,7 +1274,8 @@ progress[value]  {
 				if( zjobs.length == 0 ){ //if no found in email body, get from the subject
 					var jobname =  emailSubject.substring( emailSubject.indexOf("Z")  )  
 						zjobsTemp.push(jobname)
-						zjobs.push( temp )
+						//zjobs.push( temp )
+						zjobs.push( jobname )
 				}
 			}
 			
@@ -1488,12 +1496,18 @@ progress[value]  {
 					var lineN = mySecondArray[g];
 					if( lineN.indexOf( "Z" ) >= 0 ){ 
 						for( var h=0; h < zjobsTemp.length; h++ ){
-							if( lineN.indexOf( zjobsTemp[h] ) >= 0 ){//there is already job in threads that has been held | released
+							//str.search(/\bWidget\b/)
+							if( lineN.indexOf(zjobsTemp[h]) >= 0 ){//there is already job in threads that has been held | released
+								console.log("before: "+zjobs)
+								console.log("remove: " +zjobsTemp[h]);
 								zjobs.splice( zjobsTemp.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
+								console.log("after: "+zjobs)
 							}
 						}
+						zjobsTemp = zjobs;
 					}
 				}
+				console.log("after trimming: " +zjobs)
 				if( zjobs.length > 0 ){
 					var tempZjobs = [];
 					for( var i = 0; i < zjobs.length;i++){
@@ -1583,30 +1597,16 @@ progress[value]  {
 			var cellSeven;
 			
 			console.log(zjobs)
-			//if( logType === "abend" ) {
-				//var newRow = abendsTbody.insertRow(0)
-			//}else{
-				//var newRow = longRunningTbody.insertRow(0)
-			//}
-
 			if( logType == "pcn"){
 			
 			}
 			
 			if( zjobs.length == 1 || logType === "pcn"){ //single zjob
-				//newRow.insertCell(-1).innerHTML = zjobs[0];
-				//cellOne = zjobs[0];
 				if( logType === "abend" ) {
 						if( site != "Undefined"){
-							//newRow.insertCell(-1).innerHTML = site;
 							cellTwoAbend = site;
 						}else{
-							//var cell = document.createElement("td");
-								//cell.setAttribute("style","color:#e57373;display:block");
-							//var cellText = document.createTextNode("Undefined");
-								//cell.appendChild(cellText);
-								//newRow.appendChild(cell);
-								cellTwoAbend = "Undefined"
+							cellTwoAbend = "Undefined"
 						}
 				}
 				//newRow.insertCell(-1).innerHTML = convertedDate.toJSON().split("T")[0];
@@ -1617,22 +1617,11 @@ progress[value]  {
 				cellFour = action;
 				
 				if( logType === "turnover" ||  logType === "capping"  || logType === "cleanUp" ){
-					//var cell2 = document.createElement("td"); //team
-						//cell2.setAttribute("style","color:#e57373;");
-					//var cellText2 = document.createTextNode("Undefined");
-						//cell2.appendChild(cellText2);
-						//newRow.appendChild(cell2);
 					cellFiveLongRun = "Undefined";
 					
 					//newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];//time of action
 					cellSix = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
-					
-					//var cell = document.createElement("td"); //Debug me column
-						//cell.setAttribute("style","color:#e57373;display:block");
-					//var cellText = document.createTextNode(globalEmailSubject +"(" + recipients + ")");
-						//cell.appendChild(cellText);
-						//newRow.appendChild(cell);
-						
+				
 						cellSeven = globalEmailSubject +"(" + recipients + ")";
 				}
 				if(logType === "abend"){
@@ -1643,16 +1632,10 @@ progress[value]  {
 						//newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
 						cellSixAbend = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];;
 					}
-					
-					//var cell = document.createElement("td");
-						//cell.setAttribute("style","color:#e57373;display:block");
-					//var cellText = document.createTextNode(globalEmailSubject);
-						//cell.appendChild(cellText);
-						//newRow.appendChild(cell);
 						cellSeven = globalEmailSubject;
 				}
-				if( logType == "longRunning" || logType === "pcn" || logType == "holdRelease" || logType == "missedDue" || logType == "stuckInSubmit" || logType == "force" || logType == "inserted" || logType === "cancelled" || logType === "tpipe") { //team
-						if( recipients.indexOf("data_mart") >= 0 ){
+				if( logType == "longRunning" || logType === "pcn" || logType == "holdRelease" || logType == "missedDue" || logType == "stuckInSubmit" || logType == "force" || logType == "inserted" || logType === "cancelled" || logType === "tpipe" || logType == "cleanUp") { //team
+						if( recipients.indexOf("data_mart") >= 0 && recipients != null){
 							var team = "Datamart";
 						}else if ( recipients.indexOf("scssupport") >= 0 || recipients.indexOf("scsops-nt") >= 0){
 							var team = "SCS";
@@ -1693,14 +1676,8 @@ progress[value]  {
 						}
 						
 						if( team != "undefined"){
-							//newRow.insertCell(-1).innerHTML = team;
 							cellFiveLongRun = team;
 						}else{
-							//var cell = document.createElement("td");
-								//cell.setAttribute("style","color:#e57373");
-							//var cellText = document.createTextNode("Undefined");
-								//cell.appendChild(cellText);
-								//newRow.appendChild(cell);
 							cellFiveLongRun = 	"Undefined";
 						}
 						
@@ -1712,11 +1689,6 @@ progress[value]  {
 							cellSix = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
 						
 						}
-						//var cell = document.createElement("td");
-							//cell.setAttribute("style","color:#e57373;display:block");
-						//var cellText = document.createTextNode(globalEmailSubject);
-							//cell.appendChild(cellText);
-							//newRow.appendChild(cell);
 						cellSeven = globalEmailSubject;
 				}
 				
@@ -1760,20 +1732,14 @@ progress[value]  {
 				}
 			
 			}else{ //multiple zjobs
-			
-				for(var i=0; i< zjobs.length; i++ ){
-					//newRow.insertCell(-1).innerHTML = zjobs[i];
+				if( zjobs.length > 1){
+					for(var i=0; i< zjobs.length; i++ ){
+
 					cellOne = zjobs[i];
 					if( logType === "abend" ) {
 						if( site != "Undefined"){
-							//newRow.insertCell(-1).innerHTML = site;
 							cellTwoAbend = site;
 						}else{
-							//var cell = document.createElement("td");
-								//cell.setAttribute("style","color:#e57373");
-							//var cellText = document.createTextNode("Undefined");
-								//cell.appendChild(cellText);
-								//newRow.appendChild(cell);
 							cellTwoAbend = "Undefined";	
 						}
 					}
@@ -1792,14 +1758,10 @@ progress[value]  {
 							//newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
 							cellSixAbend = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
 						}
-						//var cell = document.createElement("td");
-							//cell.setAttribute("style","color:#e57373;display:block");
-						//var cellText = document.createTextNode(globalEmailSubject);
-							//cell.appendChild(cellText);
-							//newRow.appendChild(cell);
 						cellSeven = globalEmailSubject;
 					}
-					if( logType == "longRunning" || logType == "holdRelease" || logType == "missedDue" || logType == "stuckInSubmit"|| logType == "cleanUp" || logType == "force") { //team
+				
+					if( logType == "longRunning" || logType == "holdRelease" || logType == "missedDue" || logType == "stuckInSubmit"|| logType == "cleanUp" || logType == "force"  || logType === "pcn" || logType == "inserted" || logType === "cancelled" || logType === "tpipe") { //team
 						if( recipients.indexOf("data_mart") >= 0 ){
 							var team = "Datamart";
 						}else if ( recipients.indexOf("scssupport") >= 0 ){
@@ -1841,81 +1803,56 @@ progress[value]  {
 						}
 						
 						if( team != "undefined"){
-							//newRow.insertCell(-1).innerHTML = team;
 							cellFive = team;
 						}else{
-							//var cell = document.createElement("td");
-								//cell.setAttribute("style","color:#e57373");
-							//var cellText = document.createTextNode("Undefined");
-								//cell.appendChild(cellText);
-								//newRow.appendChild(cell);
 							cellFive = "Undefined";
 						}
 						//newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
 						cellSix = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
-						
-						//print DebugMe
-						//var cell = document.createElement("td");
-							//cell.setAttribute("style","color:#e57373;display:block");
-						//var cellText = document.createTextNode(globalEmailSubject);
-							//cell.appendChild(cellText);
-							//newRow.appendChild(cell);
 						cellSeven = globalEmailSubject;	
 
 					}
-					
-					
-					//if( i < zjobs.length-1){
-					//if( logType === "abend" ) {
-						//	var newRow = abendsTbody.insertRow(0)
-						//}else{
-						//	var newRow = longRunningTbody.insertRow(0)
-						//}
-					//}
-					
-					
-				//add row in ? table
-				if( logType === "abend" ) {
-					var temp = t1.row.add( [
-						zjobs[i],
-						cellTwoAbend,
-						convertedDate.toJSON().split("T")[0],
-						timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
-						action,
-						cellSixAbend,
-						globalEmailSubject
-					] ).draw( false ).node();
-					
-					if( site == "Undefined" ){
-						$( temp ).addClass('label-warning');
+				
+					if( logType === "abend" ) {
+						var temp = t1.row.add( [
+							zjobs[i],
+							cellTwoAbend,
+							convertedDate.toJSON().split("T")[0],
+							timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
+							action,
+							cellSixAbend,
+							globalEmailSubject
+						] ).draw( false ).node();
+						
+						if( site == "Undefined" ){
+							$( temp ).addClass('label-warning');
+						}
+						
+						
+						console.log("SUCCESS")
+						createSummary(action);
+					}else{
+						var temp = t2.row.add( [
+							zjobs[i],
+							convertedDate.toJSON().split("T")[0],
+							timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
+							action,
+							cellFive,
+							convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1],
+							globalEmailSubject
+						] ).draw( false ).node();
+						
+						if( cellFive == "Undefined" ){
+							$( temp ).addClass('label-warning');
+						}
+						
+						console.log("SUCCESS")
+						createSummary(action);
 					}
-					
-					
-					console.log("SUCCESS")
-					createSummary(action);
-				}else{
-					var temp = t2.row.add( [
-						zjobs[i],
-						convertedDate.toJSON().split("T")[0],
-						timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
-						action,
-						cellFive,
-						convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1],
-						globalEmailSubject
-					] ).draw( false ).node();
-					
-					if( cellFive == "Undefined" ){
-						$( temp ).addClass('label-warning');
-					}
-					
-					console.log("SUCCESS")
-					createSummary(action);
 				}
 				}
 				
 			}
-		
-			
 			
 				
 
