@@ -167,7 +167,7 @@ progress[value]  {
 				<span class="input-group-text" >Abend-Notify-Keywords and minutes</span>
 			  </div>
 
-				<input type="text" value="advise;check and advise;Updating abends;Updating" id="abendNotifyKeywords" class="form-control">
+				<input type="text" value="advise;WAITING T/S INIT;check and advise;Updating abends;Updating" id="abendNotifyKeywords" class="form-control">
 				<input type="number" id="rerunMinute" min="1" value="3" class="form-control">
 
 			</div>			
@@ -308,7 +308,7 @@ progress[value]  {
 				 "paging": false,
 				 "scrollY": "250px",
 				 "scrollCollapse": true,
-				  				buttons: [
+				buttons: [
 					{
 						extend: 'copyHtml5',
 						exportOptions: {
@@ -333,6 +333,8 @@ progress[value]  {
 				],
 				 responsive: true,
 				 colReorder: true,
+				 "order": [[ 2, 'asc' ], [ 5, 'asc' ]]
+				 
 			});			
 			
 			var t2 = $('#longRunningTable').DataTable({
@@ -366,6 +368,7 @@ progress[value]  {
 				],
 				responsive: true,
 				colReorder: true,
+				"order": [[ 1, 'asc' ], [ 5, 'asc' ]]
 			});
 			
 			$('#showDebugButton').on( 'click', function (e) {
@@ -643,31 +646,32 @@ progress[value]  {
 				tempInsertMinute=='' ? insertMinute = 0 : insertMinute=tempInsertMinute;
 				tempPcnMinute=='' ? pcnMinute = 0 : pcnMinute=tempPcnMinute;
 				
+			//(str.search(/\bWidget\b/) >= 0)
 			//myBody.indexOf("advise")>0 ||myBody.indexOf("check and advise")>0 || myBody.indexOf("Updating abends")>0 || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 )|| myBody.indexOf("Updating")>0
 			var newAbendNotifyKeywordsExpression ="";
 			for( var a=0; a < abendNotifyKeywords.split(";").length; a++ ){
 				newAbendNotifyKeywordsExpression += "myBody.indexOf('"+ abendNotifyKeywords.split(";")[a]+"')>0";
 				a != abendNotifyKeywords.split(";").length-1 ? newAbendNotifyKeywordsExpression += " || " : "";
 			}
-			
+			//(str.search(/\bWidget\b/) >= 0)
 			var newRerunKeywordsExpression ="";
 			for( var r=0; r < rerunKeywords.split(";").length; r++ ){
 				newRerunKeywordsExpression += "myBody.indexOf('"+ rerunKeywords.split(";")[r]+"')>0";
 				r != rerunKeywords.split(";").length-1 ? newRerunKeywordsExpression += " || " : "";
 			}			
-			
+			//(str.search(/\bWidget\b/) >= 0)
 			var newMcKeywordsExpression ="";
 			for( var m=0; m < mcKeywords.split(";").length; m++ ){
 				newMcKeywordsExpression += "myBody.indexOf('"+ mcKeywords.split(";")[m]+"')>0";
 				m != mcKeywords.split(";").length-1 ? newMcKeywordsExpression += " || " : "";
 			}			
-			
+			//(str.search(/\bWidget\b/) >= 0)
 			var newLongRunningKeywordsExpression ="";
 			for( var l=0; l < longRunningKeywords.split(";").length; l++ ){
 				newLongRunningKeywordsExpression += "myBody.indexOf('"+ longRunningKeywords.split(";")[l]+"')>0";
 				l != longRunningKeywords.split(";").length-1 ? newLongRunningKeywordsExpression += " || " : "";
 			}			
-			
+			//(str.search(/\bWidget\b/) >= 0)
 			var newHoldReleaseKeywordsExpression ="";
 			for( var h=0; h < holdReleaseKeywords.split(";").length; h++ ){
 				newHoldReleaseKeywordsExpression += "myBody.indexOf('"+ holdReleaseKeywords.split(";")[h]+"')>0";
@@ -681,56 +685,56 @@ progress[value]  {
 			*/
 			var newMissedDueOutKeywordsExpression ="";
 			for( var d=0; d < missedDueOutKeywords.split(";").length; d++ ){
-				newMissedDueOutKeywordsExpression += "myBody.search('/\b"+ missedDueOutKeywords.split(";")[d]+"\b/')>0";
+				newMissedDueOutKeywordsExpression += "myBody.indexOf('"+ missedDueOutKeywords.split(";")[d]+"')>0";
 				d != missedDueOutKeywords.split(";").length-1 ? newMissedDueOutKeywordsExpression += " || " : "";
 			}			
-			
+			//(str.search(/\bWidget\b/) >= 0)
 			var newCappingKeywordsExpression ="";
 			for( var c=0; c < cappingKeywords.split(";").length; c++ ){
 				newCappingKeywordsExpression += "myBody.indexOf('"+ cappingKeywords.split(";")[c]+"')>0";
 				c != cappingKeywords.split(";").length-1 ? newCappingKeywordsExpression += " || " : "";
 			}			
-			
+			//(str.search(/\bWidget\b/) >= 0)			
 			var newTpipeKeywordsExpression ="";
 			for( var t=0; t < tpipeKeywords.split(";").length; t++ ){
 				newTpipeKeywordsExpression += "myBody.indexOf('"+ tpipeKeywords.split(";")[t]+"')>0";
 				t != tpipeKeywords.split(";").length-1 ? newTpipeKeywordsExpression += " || " : "";
 			}			
-			
+			//(str.search(/\bWidget\b/) >= 0)			
 			var newStuckKeywordsExpression ="";
 			for( var s=0; s < stuckKeywords.split(";").length; s++ ){
 				newStuckKeywordsExpression += "myBody.indexOf('"+ stuckKeywords.split(";")[s]+"')>0";
 				s != stuckKeywords.split(";").length-1 ? newStuckKeywordsExpression += " || " : "";
 			}			
-			
+			//(str.search(/\bWidget\b/) >= 0)			
 			var newCleanUpKeywordsExpression ="";
 			for( var u=0; u < cleanUpKeywords.split(";").length; u++ ){
 				newCleanUpKeywordsExpression += "myBody.indexOf('"+ cleanUpKeywords.split(";")[u]+"')>0";
 				u != cleanUpKeywords.split(";").length-1 ? newCleanUpKeywordsExpression += " || " : "";
 			}			
-			
+			//(str.search(/\bWidget\b/) >= 0)			
 			var newForceKeywordsExpression ="";
 			for( var f=0; f < forceKeywords.split(";").length; f++ ){
 				newForceKeywordsExpression += "myBody.indexOf('"+ forceKeywords.split(";")[f]+"')>0";
 				f != forceKeywords.split(";").length-1 ? newForceKeywordsExpression += " || " : "";
 			}			
-			
+			//(str.search(/\bWidget\b/) >= 0)			
 			var newCancelledKeywordsExpression ="";
 			for( var x=0; x < cancelledKeywords.split(";").length; x++ ){
 				newCancelledKeywordsExpression += "myBody.indexOf('"+ cancelledKeywords.split(";")[x]+"')>0";
 				x != cancelledKeywords.split(";").length-1 ? newCancelledKeywordsExpression += " || " : "";
 			}			
-			
+			//(str.search(/\bWidget\b/) >= 0)			
 			var newInsertKeywordsExpression ="";
 			for( var i=0; i< insertKeywords.split(";").length; i++ ){
 				newInsertKeywordsExpression += "myBody.indexOf('"+ insertKeywords.split(";")[i]+"')>0";
 				i != insertKeywords.split(";").length-1 ? newInsertKeywordsExpression += " || " : "";
 			}			
-			
+			//(str.search(/\bWidget\b/) >= 0)			
 			var newPCNKeywordsExpression ="";
 			for( var p=0; p< pcnKeywords.split(";").length; p++ ){
 				newPCNKeywordsExpression += "myBody.indexOf('"+ pcnKeywords.split(";")[p]+"')>0";
-				p != pcnKeywords.split(";").length-1 ? newPCNKeywordsExpression += " d|| " : "";
+				p != pcnKeywords.split(";").length-1 ? newPCNKeywordsExpression += " || " : "";
 			}
 			
 			//start
@@ -985,6 +989,7 @@ progress[value]  {
 						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - holdReleaseMinute )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);				
 						console.log("email["+i +","+emailSubject+"]-> hold & release-" +zjobs.length+" found")
+						document.getElementById("resultOfManipulation").textContent = zjobs.length+" hold & release found";
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					}				 
 					//-> missed due-out expression=> myBody.indexOf("LATE") >0 || myBody.indexOf("missed") >=0
@@ -995,7 +1000,7 @@ progress[value]  {
 						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - missedDueOutMinute )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);				
 						console.log("email["+i +","+emailSubject+"]-> missedDueout-" +zjobs.length+" found")
-						document.getElementById("resultOfManipulation").textContent = zjobs.length+" missedDueout found"
+						document.getElementById("resultOfManipulation").textContent = zjobs.length+" missed Due-out found";
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					}					
 					//-> Capping expression=> myBody.indexOf("quick view") >0 || myBody.indexOf("%") >=0
@@ -1114,7 +1119,7 @@ progress[value]  {
 			  i++;                    
 			  }
 				
-		   }, 200)
+		   }, 500)
 		   
 		   
 		}
