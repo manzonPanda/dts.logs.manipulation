@@ -241,7 +241,7 @@ progress[value]  {
 				<span class="input-group-text" >CleanUp-Keywords and minutes</span>
 			  </div>
 			  <input type="text" value="clear off;clean job" id="cleanUpKeywords" class="form-control">
-			  <input type="number" id="stuckMinute" min="1" value="3" class="form-control">
+			  <input disabled type="number" id="stuckMinute" min="1" value="0" class="form-control">
 			</div>			
 			
 			<div class="input-group">
@@ -265,7 +265,7 @@ progress[value]  {
 				<span class="input-group-text" >Cancelled-Keywords and minutes</span>
 			  </div>
 			  <input type="text" value="cancelled" id="cancelledKeywords" class="form-control">
-			  <input type="number" min="1" value="3" class="form-control">
+			  <input type="number" min="1" value="3" id="cancelMinute" class="form-control">
 			</div> 			
 			
 			<div class="input-group">
@@ -393,6 +393,7 @@ progress[value]  {
 		var stuckMinute = 0;
 		var forceMinute = 0;
 		var insertMinute = 0;
+		var cancelMinute = 0;
 		var pcnMinute = 0;
 		
 		var abendCount = 0;
@@ -604,23 +605,22 @@ progress[value]  {
 			var cancelledKeywords = document.getElementById("cancelledKeywords").value;
 			var insertKeywords = document.getElementById("insertKeywords").value;
 			var pcnKeywords = document.getElementById("pcnKeywords").value;
-				folderName=='' ? folderName = 'tempNovember' : ''
-				signatureName=='' ? signatureName = 'Jake James Manzon' : ''
-				abendNotifyKeywords=='' ? abendNotifyKeywords = 'advise;check and advise;Updating abends;Updating' : ''
-				rerunKeywords=='' ? rerunKeywords = 'been rerun;RECOVERY FAILED' : ''
-				mcKeywords=='' ? mcKeywords = 'NO RECOVERY REQUIRED;marked' : ''
-				longRunningKeywords=='' ? longRunningKeywords = 'running' : ''
-				holdReleaseKeywords=='' ? holdReleaseKeywords = 'HELD;RELEASED' : ''
-				missedDueOutKeywords=='' ? missedDueOutKeywords = 'missed;LATE' : ''
-				cappingKeywords=='' ? cappingKeywords = 'capping;quick view' : ''
-				tpipeKeywords=='' ? tpipeKeywords = 'TPIPE;L$' : ''
-				stuckKeywords=='' ? stuckKeywords = 'stuck in submit' : ''
-				cleanUpKeywords=='' ? cleanUpKeywords = 'clear off;clean job' : ''
-				forceKeywords=='' ? forceKeywords = 'force started;force release' : ''
-				cancelledKeywords=='' ? cancelledKeywords = 'cancelled' : ''
-				insertKeywords=='' ? insertKeywords = 'inserted;ADDED BY RUSH' : ''
-				pcnKeywords=='' ? pcnKeywords = 'signed off' : ''
-				
+				//folderName=='' ? folderName = 'tempNovember' : ''
+				//signatureName=='' ? signatureName = 'Jake James Manzon' : ''
+				//abendNotifyKeywords=='' ? abendNotifyKeywords = 'advise;WAITING T/S INIT;check and advise;Updating abends;Updating' : ''
+				//rerunKeywords=='' ? rerunKeywords = 'been rerun;RECOVERY FAILED' : ''
+				//mcKeywords=='' ? mcKeywords = 'NO RECOVERY REQUIRED;marked' : ''
+				//longRunningKeywords=='' ? longRunningKeywords = 'running' : ''
+				//holdReleaseKeywords=='' ? holdReleaseKeywords = 'HELD;RELEASED' : ''
+				//missedDueOutKeywords=='' ? missedDueOutKeywords = 'missed;LATE' : ''
+				//cappingKeywords=='' ? cappingKeywords = 'capping;quick view' : ''
+				//tpipeKeywords=='' ? tpipeKeywords = 'TPIPE;L$' : ''
+				//stuckKeywords=='' ? stuckKeywords = 'stuck in submit' : ''
+				//cleanUpKeywords=='' ? cleanUpKeywords = 'clear off;clean job' : ''
+				//forceKeywords=='' ? forceKeywords = 'force started;force release' : ''
+				//cancelledKeywords=='' ? cancelledKeywords = 'cancelled' : ''
+				//insertKeywords=='' ? insertKeywords = 'inserted;ADDED BY RUSH' : ''
+				//pcnKeywords=='' ? pcnKeywords = 'signed off' : ''
 			var tempNotifyMinute = document.getElementById("notifyMinute").value;
 			var tempRerunMinute = document.getElementById("rerunMinute").value;
 			var tempMcMinute = document.getElementById("mcMinute").value;
@@ -632,6 +632,7 @@ progress[value]  {
 			var tempStuckMinuteMinute = document.getElementById("stuckMinute").value;
 			var tempForceMinute = document.getElementById("forceMinute").value;
 			var tempInsertMinute = document.getElementById("insertMinute").value;
+			var tempCancelMinute = document.getElementById("cancelMinute").value;
 			var tempPcnMinute = document.getElementById("pcnMinute").value;
 				tempNotifyMinute=='' ? notifyMinute = 0 : notifyMinute=tempNotifyMinute;
 				tempRerunMinute=='' ? rerunMinute = 0 : rerunMinute=tempRerunMinute;
@@ -644,6 +645,7 @@ progress[value]  {
 				tempStuckMinuteMinute=='' ? stuckMinute = 0 : stuckMinute=tempStuckMinuteMinute;
 				tempForceMinute=='' ? forceMinute = 0 : forceMinute=tempForceMinute;
 				tempInsertMinute=='' ? insertMinute = 0 : insertMinute=tempInsertMinute;
+				tempCancelMinute=='' ? cancelMinute = 0 : cancelMinute=tempCancelMinute;
 				tempPcnMinute=='' ? pcnMinute = 0 : pcnMinute=tempPcnMinute;
 				
 			//(str.search(/\bWidget\b/) >= 0)
@@ -670,7 +672,8 @@ progress[value]  {
 			for( var l=0; l < longRunningKeywords.split(";").length; l++ ){
 				newLongRunningKeywordsExpression += "myBody.indexOf('"+ longRunningKeywords.split(";")[l]+"')>0";
 				l != longRunningKeywords.split(";").length-1 ? newLongRunningKeywordsExpression += " || " : "";
-			}			
+			}	
+				console.log("newLR: "+newLongRunningKeywordsExpression)
 			//(str.search(/\bWidget\b/) >= 0)
 			var newHoldReleaseKeywordsExpression ="";
 			for( var h=0; h < holdReleaseKeywords.split(";").length; h++ ){
@@ -746,7 +749,7 @@ progress[value]  {
 		var zjobs = [];
 		var abendsTbody;
 		var longRunningTbody;
-		var site;
+
 		var convertedDate;
 		var recipients;
 		var globalEmailSubject;
@@ -808,17 +811,18 @@ progress[value]  {
 				myBody = myBody.substring(0,limitUntilLine);
 				var emailSubject = theEmail.ConversationTopic;
 				globalEmailSubject = theEmail.ConversationTopic;
+				var site = "Jake";
 				
 				//site = theEmail.ConversationTopic.split("|")[0].split(" ")[0];
-				if( theEmail.ConversationTopic.toUpperCase().indexOf("LE") <= 5 ){
+				if( emailSubject.indexOf("LE") >= 0 && emailSubject.indexOf("LE") <= 5){
 					site = "LE"
-				}else if ( theEmail.ConversationTopic.toUpperCase().indexOf("YR") <= 5 ){
+				}else if ( emailSubject.indexOf("YR") >= 0 && emailSubject.indexOf("YR") <= 5){
 					site = "YR"
-				}else if ( theEmail.ConversationTopic.toUpperCase().indexOf("Y2") <= 5 ){
+				}else if ( emailSubject.indexOf("Y2") >= 0 && emailSubject.indexOf("Y2") <= 5){
 					site = "Y2"
-				}else if ( theEmail.ConversationTopic.toUpperCase().indexOf("UM") <= 5 ){
+				}else if ( emailSubject.indexOf("UM") >= 0 && emailSubject.indexOf("UM") <= 5){
 					site = "UM"
-				}else if ( theEmail.ConversationTopic.toUpperCase().indexOf("MM") <= 5 ){
+				}else if ( emailSubject.indexOf("MM") >= 0 && emailSubject.indexOf("MM") <= 5){
 					site = "MM"
 				}else{
 					site ="Undefined"
@@ -1089,7 +1093,7 @@ progress[value]  {
 						var logType = "inserted";
 						var action = "Inserting of jobs";
 						var where = "insert";			
-						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0];
+						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - insertMinute )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> Insert-" +zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" inserted found"
@@ -1100,14 +1104,16 @@ progress[value]  {
 						var logType = "cancelled";
 						var action = "Cancelling of jobs";
 						var where = "cancelled";			
-						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0];
+						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - cancelMinute )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> cancelled-" +zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" cancelling of jobs found"
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
 					}
-					
-
+					//Duke and I have successfully created a program that turns our manual 
+					//creation of logs(Abend & Non-abend) into an automated one. You can use it if you want to.
+					// As of now we were still detecting some minor errors but we were  
+					//able to turn it around.
 					
 			  //////////////////////////////////////////////////////////////////
 			  if (i <= emailCount) {
@@ -1119,7 +1125,7 @@ progress[value]  {
 			  i++;                    
 			  }
 				
-		   }, 500)
+		   }, 200)
 		   
 		   
 		}
@@ -1711,7 +1717,7 @@ progress[value]  {
 					
 					if( site == "Undefined" ){
 						$( temp ).addClass('label-warning');
-					}
+					} 
 					console.log("SUCCESS")
 					createSummary(action);
 					
