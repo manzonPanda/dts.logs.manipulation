@@ -924,7 +924,7 @@ progress[value]  {
 				//if( emailSubject.indexOf("ABEND") > 0){ //abends
 					var logType = "abend";
 				//-> MC expression=> myBody.indexOf("NO RECOVERY REQUIRED")>0 || myBody.indexOf("marked") >0
-					if( eval(mcExpression) ){ //mark complete
+					if( eval(mcExpression)  ){ //mark complete
 						var action = "";
 						var timeResult;
 						var where = "NO RECOVERY REQUIRED";
@@ -933,7 +933,7 @@ progress[value]  {
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email("+i +")-> mc-"+zjobs.length+" found")
 						
-						if( myBody.indexOf("ps25")>0 || myBody.indexOf("ps22")>0){ //as per?ps25
+						if( myBody.indexOf("ps25")>0 || myBody.indexOf("ps22")>0 || myBody.indexOf("recovery instruction")>0){ //as per?ps25
 							console.log(theEmail.Body.indexOf("ps25"))
 							action = "mark complete as per ps25";
 							timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - markCompleteMinute )).toTimeString().split(" ")[0];
@@ -1125,7 +1125,7 @@ progress[value]  {
 			  i++;                    
 			  }
 				
-		   }, 200)
+		   }, 300)
 		   
 		   
 		}
@@ -1254,11 +1254,14 @@ progress[value]  {
 								//zjobsTemp.push(temp);
 								zjobsRecoveryFailed.push( temp )
 							}
+							
 						}else{
+
 							var temp = lineN.substring( lineN.indexOf("Z")).replace(/\s+/g, "-").split("-")[0];
 							zjobsTemp.push(temp);
 							zjobs.push( temp )
 						}
+																
 					}
 				}
 				
