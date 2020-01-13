@@ -74,10 +74,11 @@ progress[value]  {
 		  <div class="row">
 			<div class="col-sm">
 				 <span class="badge badge-pill badge-primary">Notify <span id="notifyDisplay" class="badge badge-dark ">0</span></span>
-				 <span class="badge badge-pill badge-primary">Rerun <span id="rerunDisplay" class="badge badge-dark">0</span></span>
+				 <span class="badge badge-pill badge-primary">RR <span id="rerunDisplay" class="badge badge-dark">0</span></span>
 				 <span class="badge badge-pill badge-primary">RR ps25 <span id="rrPsDisplay" class="badge badge-dark">0</span></span>
 				 <span class="badge badge-pill badge-primary">MC <span id="mcDisplay" class="badge badge-dark">0</span></span>
 				 <span class="badge badge-pill badge-primary">MC ps25 <span id="mcPsDisplay" class="badge badge-dark">0</span></span>
+				 <div style="display:none" id="abendUndefinedDisplayDiv"><span  class="badge badge-pill badge-danger">Undefined <span id="abendUndefinedDisplay" class="badge badge-dark">0</span></span></div>
 			</div>
 			<div class="col-sm">
 			    <span class="badge badge-pill badge-primary">Long Running <span id="longRunDisplay" class="badge badge-dark">0</span></span>
@@ -92,6 +93,7 @@ progress[value]  {
 				<span class="badge badge-pill badge-primary">Tpipe <span id="tpipeDisplay" class="badge badge-dark">0</span></span>
 				<span class="badge badge-pill badge-primary">CleanUp <span id="cleanUpDisplay" class="badge badge-dark">0</span></span>
 				<span class="badge badge-pill badge-primary">Turnover <span id="turnoverDisplay" class="badge badge-dark">0</span></span>
+				<div style="display:none" id="nonAbendUndefinedDisplayDiv"><span  class="badge badge-pill badge-danger">Undefined <span id="nonAbendUndefinedDisplay" class="badge badge-dark">0</span></span></div>
 			</div>
 			
 		  </div>
@@ -284,16 +286,16 @@ progress[value]  {
 	</div>
 		
 		<iframe id="txtArea1" style="display:none"></iframe>
-		<br><br>
+	
 		<div >
 			Reminder: <br>
-			*Folder Name, Signature and kewords are case sensitive.<br>
+			*Folder Name, Signature and keywords are case sensitive.<br>
 			*For Zjob/s to be called Mark as Complete as per ps25/ps22, pd34 or MARS record of Zjob must be included (NO RECOVERY REQUIRED). <br>
 			*For Zjob/s to be called RR as per ps25, pd34 or MARS record of Zjob must be included (RECOVERY FAILED). So thus RR as per programmer (RECOVERY ACTIVE). <br>
 			--add reminder--
 		</div>
 
-
+	<br><br><br>
 		<div class="footer">
 			<p style="color:black">Nov 25th 2019 - Made by Duke and Jake :)	</p>
 		</div>
@@ -413,6 +415,9 @@ progress[value]  {
 		var cancelledCount = 0;
 		var turnOverCount = 0;
 		var pcnCount = 0;
+		var abendUndefinedCount = 0;
+		var nonAbendUndefinedCount = 0;
+		
 		
 	function exportLogs(name){
 	var table;
@@ -1239,8 +1244,13 @@ progress[value]  {
 						zjobsTemp.push(temp);
 						zjobs.push( temp )
 					}
-				}
-				else{ //abend
+				}else if( where == "NO RECOVERY REQUIRED" ){
+					if( lineN.trim().indexOf("Z") >= 0 && lineN.indexOf("NO RECOVERY REQUIRE") >= 0 ){
+						var temp = lineN.trim().replace(/\s+/g, "-").split("-")[0];
+						zjobsTemp.push(temp);
+						zjobs.push( temp )
+					}
+				}else{ //abend
 					//get all zjobs first and then compare it to full email thread-if there is duplicate-then someone already report it
 					if( lineN.trim().indexOf("Z") >= 0 && lineN.trim().indexOf("Z") <3 && lineN.indexOf(where) >= 0 ){
 						if( where == "RECOVERY" ){ //RECOVERY ACTIVE || RECOVERY FAILED => job has been rerun || RR as ps25
@@ -1425,6 +1435,19 @@ progress[value]  {
 						zjobsTemp.push(jobname)
 						zjobs = zjobsTemp;
 						console.log(zjobsTemp)
+				}else{
+					// search job duplication in thread->don't notify
+					for( var g = myArray.length; g <= mySecondArray.length-1; g++){ 
+						var lineN = mySecondArray[g];
+						if( lineN.indexOf( "Z" ) >= 0 ){ 
+							for( var h=0; h < zjobsTemp.length; h++ ){
+								if( lineN.indexOf( zjobsTemp[h] ) >= 0  ){//there is already job in threads
+									zjobs.splice( zjobsTemp.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
+								}
+							}
+						}
+					}
+					console.log("duplicate found!")
 				}
 			}
 			
@@ -1611,17 +1634,14 @@ progress[value]  {
 			var cellSeven;
 			
 			console.log(zjobs)
-			if( logType == "pcn"){
-			
-			}
 			
 			if( zjobs.length == 1 || logType === "pcn"){ //single zjob
 				if( logType === "abend" ) {
-						if( site != "Undefined"){
-							cellTwoAbend = site;
-						}else{
-							cellTwoAbend = "Undefined"
-						}
+					if( site != "Undefined"){
+						cellTwoAbend = site;
+					}else{
+						cellTwoAbend = "Undefined"
+					}
 				}
 				//newRow.insertCell(-1).innerHTML = convertedDate.toJSON().split("T")[0];
 				cellTwo = convertedDate.toJSON().split("T")[0];
@@ -1719,6 +1739,9 @@ progress[value]  {
 					] ).draw( false ).node();
 					
 					if( site == "Undefined" ){
+						abendUndefinedCount++;
+						document.getElementById("abendUndefinedDisplayDiv").style.display = "block";
+						document.getElementById("abendUndefinedDisplay").textContent = abendUndefinedCount;
 						$( temp ).addClass('label-warning');
 					} 
 					console.log("SUCCESS")
@@ -1737,6 +1760,9 @@ progress[value]  {
 					] ).draw( false ).node();
 					
 					if( cellFiveLongRun == "Undefined" ){
+						nonAbendUndefinedCount++;
+						document.getElementById("nonAbendUndefinedDisplayDiv").style.display = "block";
+						document.getElementById("nonAbendUndefinedDisplay").textContent = nonAbendUndefinedCount;
 						$( temp ).addClass('label-warning');
 					}
 					
@@ -1839,9 +1865,11 @@ progress[value]  {
 						] ).draw( false ).node();
 						
 						if( site == "Undefined" ){
+							abendUndefinedCount++;
+							document.getElementById("abendUndefinedDisplayDiv").style.display = "block";
+							document.getElementById("abendUndefinedDisplay").textContent = abendUndefinedCount;
 							$( temp ).addClass('label-warning');
 						}
-						
 						
 						console.log("SUCCESS")
 						createSummary(action);
@@ -1857,6 +1885,9 @@ progress[value]  {
 						] ).draw( false ).node();
 						
 						if( cellFive == "Undefined" ){
+							nonAbendUndefinedCount++;
+							document.getElementById("nonAbendUndefinedDisplayDiv").style.display = "block";
+							document.getElementById("nonAbendUndefinedDisplay").textContent = nonAbendUndefinedCount;
 							$( temp ).addClass('label-warning');
 						}
 						
