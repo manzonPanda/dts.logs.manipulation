@@ -2,6 +2,10 @@
 <html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jqc-1.12.4/jszip-2.5.0/dt-1.10.20/b-1.6.1/b-colvis-1.6.1/b-flash-1.6.1/b-html5-1.6.1/b-print-1.6.1/cr-1.5.2/fh-3.1.6/r-2.2.3/rr-1.2.6/sl-1.3.1/datatables.min.css"/> 
@@ -9,6 +13,8 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jqc-1.12.4/jszip-2.5.0/dt-1.10.20/b-1.6.1/b-colvis-1.6.1/b-flash-1.6.1/b-html5-1.6.1/b-print-1.6.1/cr-1.5.2/fh-3.1.6/r-2.2.3/rr-1.2.6/sl-1.3.1/datatables.min.js"></script>
 
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <!--
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jqc-1.12.4/dt-1.10.20/b-1.6.1/b-colvis-1.6.1/b-flash-1.6.1/b-html5-1.6.1/cr-1.5.2/fh-3.1.6/r-2.2.3/rr-1.2.6/sl-1.3.1/datatables.min.css"/>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jqc-1.12.4/dt-1.10.20/b-1.6.1/b-colvis-1.6.1/b-flash-1.6.1/b-html5-1.6.1/cr-1.5.2/fh-3.1.6/r-2.2.3/rr-1.2.6/sl-1.3.1/datatables.min.js"></script>
@@ -72,10 +78,11 @@ progress[value]  {
 </div>
 		<div class="container">
 		  <div class="row">
-				 <div class="card border-primary mb-3" >
-					<div class="card-header">ABEND</div>
+			<div class="col-sm">
+				 <div class="card border-dark mb-3" >
+					<div class="card-header text-center">ABEND</div>
 					  <div class="card-body text-primary">
-							<div class="col-sm">
+							<div class="col-sm text-center">
 								 <span class="badge badge-pill badge-primary">Notify <span id="notifyDisplay" class="badge badge-dark" >0</span></span>
 								 <span class="badge badge-pill badge-primary">RR <span id="rerunDisplay" class="badge badge-dark">0</span></span>
 								 <span class="badge badge-pill badge-primary">RR ps25 <span id="rrPsDisplay" class="badge badge-dark">0</span></span>
@@ -85,10 +92,12 @@ progress[value]  {
 							</div>
 					  </div>
 				</div>
-				 <div class="card border-primary mb-3">
-					  <div class="card-header">NON-ABEND</div>
+			</div>
+			<div class="col-sm">
+				 <div class="card border-dark mb-3">
+					  <div class="card-header text-center">NON-ABEND</div>
 					  <div class="card-body text-primary">
-							<div class="col-sm">
+							<div class="col-sm text-center">
 								<span class="badge badge-pill badge-primary">Long Running <span id="longRunDisplay" class="badge badge-dark">0</span></span>
 								<span class="badge badge-pill badge-primary">Due-out <span id="dueOutDisplay" class="badge badge-dark">0</span></span>
 								<span class="badge badge-pill badge-primary">Stuck <span id="stuckDisplay" class="badge badge-dark">0</span></span>
@@ -105,6 +114,7 @@ progress[value]  {
 							</div>
 					  </div>
 				  </div>
+			 </div>
 	
 		  </div>
 		</div><br><br>
@@ -296,7 +306,7 @@ progress[value]  {
 	</div>
 		
 		<iframe id="txtArea1" style="display:none"></iframe>
-	
+	<a href="#" title="Header" data-toggle="popover" data-placement="top" data-content="Content">Click</a>
 		<div >
 			Reminder: <br>
 			*Folder Name, Signature and keywords are case sensitive.<br>
@@ -314,6 +324,13 @@ progress[value]  {
 </body>
 <script>
 		$(document).ready(function() {
+			$('[data-toggle="popover"]').popover(); // enable all popovers
+		 //$('[data-toggle="popover"]').popover({}) 
+//$('[data-toggle="popover"]').popover({
+//'trigger': 'hover',
+//'placement': 'bottom',
+//'container': 'body'
+//});
 			var t1 = $('#abendsTable').DataTable({
 				destroy: true,
 				 dom: 'Bfrtip',
@@ -348,7 +365,14 @@ progress[value]  {
 				 "order": [[ 2, 'asc' ], [ 5, 'asc' ]]
 				 
 			});			
-			
+			$('#abendsTable').on('click', 'tbody tr', function() {
+			console.log("abend")
+			 console.log('value by API : ', this.getAttribute('data-email') );
+			 var email = this.getAttribute('data-email')
+				//call modal
+				console.log(emailsGlobalVar.Item(email).Body)
+			})
+
 			var t2 = $('#longRunningTable').DataTable({
 				destroy: true,
 				 dom: 'Bfrtip',
@@ -382,6 +406,17 @@ progress[value]  {
 				colReorder: true,
 				"order": [[ 1, 'asc' ], [ 5, 'asc' ]]
 			});
+			
+			$('#longRunningTable').on('click', 'tbody tr', function() {
+			console.log("non-abend")
+			 console.log('value by API : ', this.getAttribute('data-email') );
+			 var email = this.getAttribute('data-email')
+				//call modal
+				console.log(emailsGlobalVar.Item(email).Body)
+				//this.setAttribute("title","sample popver");
+				//data-placement="top" data-content="Content"
+				$("[data-toggle='popover']").popover('show');
+			})
 			
 			$('#showDebugButton').on( 'click', function (e) {
 				e.preventDefault();
@@ -769,6 +804,7 @@ progress[value]  {
 		var recipients;
 		var globalEmailSubject;
 		var i = 1;
+		var emailsGlobalVar ;
 		
 		function startEmailsManipulation(abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression,pcnExpression){
 			var outlookApp = new ActiveXObject("Outlook.Application");
@@ -776,6 +812,7 @@ progress[value]  {
 			//nameSpace.logon("ja20076062@wipro.com","jjgm@WL6062",false,false);
 			var mailFolder = nameSpace.GetDefaultFolder(6).Folders(document.getElementById("folderName").value).Items.Item(1).ConversationTopic;
 			var emails = nameSpace.GetDefaultFolder(6).Folders(document.getElementById("folderName").value).Items;
+			 emailsGlobalVar = emails;
 			 abendsTbody = document.getElementById("abendsTbody");	
 			 longRunningTbody = document.getElementById("longRunningTbody");	
 			var emailCount = emails.count;
@@ -793,6 +830,7 @@ progress[value]  {
 		function myLoop ( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression,pcnExpression) { 
 
 		   setTimeout(function () { 
+		   
 			  var elem = document.getElementById("myBar");
 			  var elem2 = document.getElementById("myBar2");
 			  
@@ -828,7 +866,7 @@ progress[value]  {
 				var emailSubject = theEmail.ConversationTopic;
 				globalEmailSubject = theEmail.ConversationTopic;
 				var site = "Jake";
-				
+				console.log(i)
 				//site = theEmail.ConversationTopic.split("|")[0].split(" ")[0];
 				if( emailSubject.indexOf("LE") >= 0 && emailSubject.indexOf("LE") <= 5){
 					site = "LE"
@@ -866,7 +904,7 @@ progress[value]  {
 					var recipient = "";
 					console.log("email["+i +","+emailSubject+"]-> Turnover- 1 found")
 					document.getElementById("resultOfManipulation").textContent = zjobs.length+" turnover found"
-					displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+					displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					 
 					 
 					//if( i <= emailCount ){
@@ -914,7 +952,7 @@ progress[value]  {
 						console.log("email["+i +","+emailSubject+"]-> PCN-" +zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" pcn found"
 						console.log(timeResult)
-						displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+						displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					}	
 					
 					
@@ -959,7 +997,7 @@ progress[value]  {
 							timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - markCompleteMinute )).toTimeString().split(" ")[0];
 						}
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" " + action+" found"
-						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					}
 
 			  //-> Abend Notify expression=> myBody.indexOf("advise")>0 ||myBody.indexOf("check and advise")>0 || myBody.indexOf("Updating abends")>0 || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 )|| myBody.indexOf("Updating")>0
@@ -971,7 +1009,7 @@ progress[value]  {
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> notify-"+zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" notify found"
-						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					}
 					
 					//var logType = "abend";
@@ -984,7 +1022,7 @@ progress[value]  {
 						var where = "RECOVERY";
 						//singleOrMultipleJobs(emailSubject,myBody,where);
 						//var emailSubject = "";
-						extractJobs(emailSubject,myBody,where,fullEmail,tempDate,site);
+						extractJobs(emailSubject,myBody,where,fullEmail,tempDate,site,i+1);
 						//console.log("email("+i +")-> rerun-"+zjobs.length+" found")
 						//var action = "rerun as per programmer";
 						//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - rerunMinute )).toTimeString().split(" ")[0];
@@ -999,7 +1037,7 @@ progress[value]  {
 						extractJobs(emailSubject,myBody,where,fullEmail);				
 						console.log("email["+i +","+emailSubject+"]-> longRun-" +zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" long Running found"
-						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					}
 				  //-> Hold & release expression=> myBody.indexOf("HELD") >0 || myBody.indexOf("RELEASED") >0
 					if( eval(holdReleaseExpression) ){
@@ -1010,7 +1048,7 @@ progress[value]  {
 						extractJobs(emailSubject,myBody,where,fullEmail);				
 						console.log("email["+i +","+emailSubject+"]-> hold & release-" +zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" hold & release found";
-						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					}				 
 					//-> missed due-out expression=> myBody.indexOf("LATE") >0 || myBody.indexOf("missed") >=0
 					if( eval(missedDueOutExpression) ){
@@ -1021,7 +1059,7 @@ progress[value]  {
 						extractJobs(emailSubject,myBody,where,fullEmail);				
 						console.log("email["+i +","+emailSubject+"]-> missedDueout-" +zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" missed Due-out found";
-						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					}					
 					//-> Capping expression=> myBody.indexOf("quick view") >0 && myBody.indexOf("%") >=0
 					if( eval(cappingExpression) && myBody.indexOf("%") >=0){
@@ -1033,7 +1071,7 @@ progress[value]  {
 						var recipient = "";
 						console.log("email["+i +","+emailSubject+"]-> Capping-"+zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" capping found"
-						displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+						displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 						 
 						//i++;  
 						//if( i <= emailCount ){
@@ -1068,7 +1106,7 @@ progress[value]  {
 							var recipient = "";
 							console.log("email["+i +","+emailSubject+"]-> Turnover-"+zjobs.length+" found")
 							document.getElementById("resultOfManipulation").textContent = zjobs.length+" tpipe found"
-							displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+							displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 						}
 					}
 					//-> Stuck in Submit expression=> myBody.indexOf("stuck in submit") >0 
@@ -1080,7 +1118,7 @@ progress[value]  {
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> stuck-" +zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" stuck found"
-						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					}
 					//-> CleanUp expression=> myBody.indexOf("clean job") >0 || myBody.indexOf("clear off") >0
 					if( eval(cleanUpExpression) ){
@@ -1091,7 +1129,7 @@ progress[value]  {
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> cleanUp-" +zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" clean up found"
-						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					}
 					//-> Force expression=> myBody.indexOf("force") >0 
 					if( eval(forceExpression) ){
@@ -1102,7 +1140,7 @@ progress[value]  {
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> force-" +zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" force found"
-						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					}					
 					//-> Insert expression=> myBody.indexOf("inserted") >0 
 					if( eval(insertExpression) ){
@@ -1113,7 +1151,7 @@ progress[value]  {
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> Insert-" +zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" inserted found"
-						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					}	
 					//-> Cancelled expression=> myBody.indexOf("cancelled") >0 
 					if( eval(cancelledExpression) ){
@@ -1124,7 +1162,7 @@ progress[value]  {
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> cancelled-" +zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" cancelling of jobs found"
-						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					}
 					//Duke and I have successfully created a program that turns our manual 
 					//creation of logs(Abend & Non-abend) into an automated one. You can use it if you want to.
@@ -1191,7 +1229,7 @@ progress[value]  {
 				zjobs.push(jobname);
 			}
 		}
-		function extractJobs(emailSubject,myBody,where,fullEmail,tempDate,site){
+		function extractJobs(emailSubject,myBody,where,fullEmail,tempDate,site,emailIndex){
 			var zjobsTemp = [];
 			var zjobsRecoveryActive = [];
 			var zjobsRecoveryFailed = [];
@@ -1244,6 +1282,7 @@ progress[value]  {
 				}else if( where == "cancelled"){
 					if( lineN.trim().indexOf("Z") >= 0 && lineN.trim().replace(/\s+/g, "-").split("-")[3] == 'X'){
 						//console.log( lineN.trim().replace(/\s+/g, "-").split("-")[3] )
+						console.log("called called")
 						var temp = lineN.trim().replace(/\s+/g, "-").split("-")[0];
 						zjobsTemp.push(temp);
 						zjobs.push( temp )
@@ -1329,7 +1368,7 @@ progress[value]  {
 						//var timeResult = "fix";
 						//var oneAtATime = [];
 						//oneAtATime.push(zjobsTemp[s])
-						displayRow(zjobsRecoveryActive,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+						displayRow(zjobsRecoveryActive,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,emailIndex);
 						//zjobs.splice( zjobs.indexOf(zjobsTemp[s]), 1) //remove job zjobs array
 								
 					//}
@@ -1406,7 +1445,7 @@ progress[value]  {
 									//var timeResult = "fix";
 									var oneAtATime = [];
 									oneAtATime.push(zjobsRRprogrammer[h])
-									displayRow(oneAtATime,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+									displayRow(oneAtATime,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,emailIndex);
 									console.log("email("+emailSubject +")-> rerunAsProgrammer- 1 found")
 									document.getElementById("resultOfManipulation").textContent = zjobs.length+" rerun as per programmer found"
 									zjobsRRprogrammer.splice( zjobsRRprogrammer.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
@@ -1427,7 +1466,7 @@ progress[value]  {
 							//var timeResult = "fix";
 							var oneAtATime = [];
 							oneAtATime.push(zjobsRRps25[h])
-							displayRow(oneAtATime,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject);
+							displayRow(oneAtATime,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,emailIndex);
 							console.log("email("+emailSubject +")-> rerunAsPs25- 1 found")
 							document.getElementById("resultOfManipulation").textContent = zjobs.length+" rerun as per ps25 found"
 							//zjobsTemp.splice( zjobsRecoveryFailed.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
@@ -1618,7 +1657,8 @@ progress[value]  {
 			if( where == "cancelled" ){ //cancelled
 				//zjobs = zjobsTemp;	
 				if( zjobs.length == 0 ){
-					zjobs = [emailSubject];
+					//zjobs = [emailSubject];
+					zjobs = ["Undefined"];
 				}
 			}
 			
@@ -1629,7 +1669,7 @@ progress[value]  {
 			//console.log(myBody.split("\n")[12].indexOf("Z")); //extract every job
 			//console.log(line12.substring(0, 11));
 		}
-		function displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject){
+		function displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,emailIndex){
 			//(logType == "abend") ? (var newRow = abendsTbody.insertRow(-1)):(var newRow = longRunningTbody.insertRow(-1));
 			var t1 = $('#abendsTable').DataTable();
 			var t2 = $('#longRunningTable').DataTable();
@@ -1748,6 +1788,7 @@ progress[value]  {
 						cellSixAbend,
 						globalEmailSubject
 					] ).draw( false ).node();
+					$(temp).attr('data-email',emailIndex);
 					
 					if( site == "Undefined" ){
 						abendUndefinedCount++;
@@ -1769,6 +1810,14 @@ progress[value]  {
 						//cellSix,
 						globalEmailSubject
 					] ).draw( false ).node();
+					$(temp).attr({
+									'data-email':emailIndex,
+									"data-toggle":"popover",
+									 "data-placement":"bottom",
+									 "data-content":"sampleee",
+									 "data-trigger":"hover"
+								 });
+								 
 					
 					if( cellFiveLongRun == "Undefined" ){
 						nonAbendUndefinedCount++;
@@ -1874,6 +1923,7 @@ progress[value]  {
 							cellSixAbend,
 							globalEmailSubject
 						] ).draw( false ).node();
+						$(temp).attr('data-email',emailIndex);
 						
 						if( site == "Undefined" ){
 							abendUndefinedCount++;
@@ -1894,6 +1944,7 @@ progress[value]  {
 							convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1],
 							globalEmailSubject
 						] ).draw( false ).node();
+						$(temp).attr('data-email',emailIndex);
 						
 						if( cellFive == "Undefined" ){
 							nonAbendUndefinedCount++;
