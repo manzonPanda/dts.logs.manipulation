@@ -27,6 +27,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
 
+<!--
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+-->
 
 <style>
 .popover{
@@ -36,9 +40,15 @@
     overflow-y: auto;
 }
 .label-warning{
-
+	
 	background-color:#ff4d4d
 }
+td.highlight {
+       text-align:center;
+        background-color: white;
+		
+    }
+
 	.footer{
 		position:fixed;
 		left:0;
@@ -65,31 +75,7 @@ progress[value]  {
 </head>
 
 <body>
-<div class="container">
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th>Month</th>
-      <th>Number of Sales</th>
-      <th>Amount</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr data-toggle="popover" data-trigger="click" title="Popover in Table Demo"  data-content="Popover in row number 1">
-      <th scope="row">Jan</th>
-      <td>105</td>
-      <td>$15,000.00</td>
-    </tr>
 
-    <tr data-toggle="popover" data-trigger="hover" title="Popover in Table Demo"  data-content="Popover in row number 3">
-      <th scope="row">Mar</th>
-      <td>150</td>
-      <td>$20,000.00</td>
-    </tr>
-            
-  </tbody>
-</table>
-</div>
 <div class="container">
 	<progress style="display:none" max="100" value="0" id="myBar" data-label="50%"></progress>
 	<div class="progress">
@@ -214,6 +200,31 @@ progress[value]  {
 				 
 			  </div>
 			</div>
+			<!-- To be continued:)  -->
+			<div class="input-group input-group-lg">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Select Month and Year (to be continued)</span>
+			  </div>
+				 <div class="dropdown">
+				  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMonth" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Month
+				  </button>
+				  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+					<a class="dropdown-item" href="#">October</a>
+					<a class="dropdown-item" href="#">November</a>
+					<a class="dropdown-item" href="#">December</a>
+				  </div>
+				</div>				
+				<div class="dropdown">
+				  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownYear" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Year
+				  </button>
+				  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+					<a class="dropdown-item" href="#">2019</a>
+					<a class="dropdown-item" href="#">2020</a>
+				  </div>
+				</div>
+			</div>	
 			
 			<div class="input-group input-group-lg">
 			  <div class="input-group-prepend">
@@ -362,21 +373,30 @@ progress[value]  {
 		</script>
 </body>
 <script>
+
+	function removeRow(button){
+		alert("working..")
+		button.parentNode.parentNode.classList.remove("label-warning");
+		//button.parentNode.parentNode.setAttribute(
+		setMultipleAttributes(button,{"class":"btn btn-success btn-xs"});
+		button.innerHTML = "Undo";
+	}
+	
+	function setMultipleAttributes(el, attrs) {
+		for(var key in attrs) {
+			el.setAttribute(key, attrs[key]);
+		}
+	}
+		
 		$(document).ready(function() {
 			//$('[data-toggle="popover"]').popover(); // enable all popovers
-					$(document).ready(function(){
+		
 			$('[data-toggle="popover"]').popover({
 				html : true,
 				container: 'html',
 				// trigger: 'focus'
 			})    
-		});
-		 //$('[data-toggle="popover"]').popover({}) 
-//$('[data-toggle="popover"]').popover({
-//'trigger': 'hover',
-//'placement': 'bottom',
-//'container': 'body'
-//});
+	
 			var t1 = $('#abendsTable').DataTable({
 				destroy: true,
 				 dom: 'Bfrtip',
@@ -394,26 +414,39 @@ progress[value]  {
 						title: document.getElementById("signatureName").value.split(" ")[0] +' Abends logs',
 						extend: 'excelHtml5',
 						exportOptions: {
-							columns: ':visible'
+							columns: [ 0, 1, 2, 3,4,5 ],
+							rows: ':not(.label-warning)', 
 						}
 					},
 					{
 						title: document.getElementById("signatureName").value.split(" ")[0] +' Abends logs',
 						extend: 'pdfHtml5',
 						exportOptions: {
-							columns: [ 0, 1, 2, 5 ]
+							columns: [ 0, 1, 2, 3,4,5 ]
 						}
 					},
 					'colvis'
 				],
 				 responsive: true,
 				 colReorder: true,
-				 "order": [[ 2, 'asc' ], [ 5, 'asc' ]]
+				 "order": [[ 2, 'asc' ], [ 5, 'asc' ]], 
+				 "createdRow": function ( row, data, index ) {
+					if ( data[0] == "Undefined" || data[1] == "Undefined" ) {
+						$('td', row).eq(6).addClass('highlight');
+						$(row).addClass('label-warning');
+						row.childNodes[6].innerHTML = "<button onclick='removeRow(this)' type='button' class='btn btn-danger btn-xs'>REMOVE</button>"
+						
+						abendUndefinedCount++;
+						document.getElementById("abendUndefinedDisplayDiv").style.display = "block";
+						document.getElementById("abendUndefinedDisplay").textContent = abendUndefinedCount;
+					}
+					
+				}
 				 
 			});	
 			
 			$('#abendsTable').on('click', 'tbody tr', function() {
-			 var email = this.getAttribute('data-email')
+				var email = this.getAttribute('data-email')
 				var temp = emailsGlobalVar.Item(email).Body;
 				var info = "Sent:"+ new Date(emailsGlobalVar.Item(email).SentOn)+ "\n To: " + emailsGlobalVar.Item(email).to + "\n Cc: " + emailsGlobalVar.Item(email).cc + "\n Subject: " +emailsGlobalVar.Item(email).ConversationTopic;
 				this.setAttribute("title",info);
@@ -439,21 +472,35 @@ progress[value]  {
 						title: document.getElementById("signatureName").value.split(" ")[0] +' Non-abends logs',
 						extend: 'excelHtml5',
 						exportOptions: {
-							columns: ':visible'
+							columns: [ 0, 1, 2, 3,4,5 ],
+							rows: ':not(.label-warning)', 
 						}
 					},
 					{
 						title: document.getElementById("signatureName").value.split(" ")[0] + ' Non-abends logs',
 						extend: 'pdfHtml5',
 						exportOptions: {
-							columns: [ 0, 1, 2, 5 ]
+							columns: [ 0, 1, 2, 3,4,5 ]
 						}
 					},
 					'colvis'
 				],
 				responsive: true,
 				colReorder: true,
-				"order": [[ 1, 'asc' ], [ 5, 'asc' ]]
+				"order": [[ 1, 'asc' ], [ 5, 'asc' ]],
+				"createdRow": function ( row, data, index ) {
+					if ( data[0] == "Undefined" || data[4] == "Undefined" ) {
+						$('td', row).eq(6).addClass('highlight');
+						$(row).addClass('label-warning');
+						row.childNodes[6].innerHTML = "<button onclick='removeRow(this)' type='button' class='btn btn-danger btn-xs'>REMOVE</button>"
+						//row.childNodes[6].innerHTML = "<input type='checkbox' data-toggle='toggle' data-on='Enabled' data-off='Disabled'>"
+						
+						nonAbendUndefinedCount++;
+						document.getElementById("nonAbendUndefinedDisplayDiv").style.display = "block";
+						document.getElementById("nonAbendUndefinedDisplay").textContent = nonAbendUndefinedCount;
+					}
+					
+				}
 			});
 			
 			$('#longRunningTable').on('click', 'tbody tr', function() {
@@ -884,7 +931,7 @@ progress[value]  {
 			  
 				//finished manipulating emails
 				if( i == emailCount ){ 
-					console.log("finish")
+					console.log("Done.")
 					document.getElementById("myBar").style.display = "none";
 					document.getElementById("myBar2").setAttribute("class","progress-bar bg-success progress-bar-striped progress-bar-animated")
 					document.getElementById("myBar2").innerHTML = "100% COMPLETE";
@@ -1827,34 +1874,17 @@ progress[value]  {
 				
 				//add row in ? table
 				if( logType === "abend" ) {
-					if( site == "Undefined" ){ //add remove button
-						var temp = t1.row.add( [
-							zjobs[0],
-							cellTwoAbend,
-							convertedDate.toJSON().split("T")[0],
-							timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
-							action,
-							cellSixAbend,
-							"<button type='button' class='btn btn-danger btn-xs'>REMOVE</button>"
-							//globalEmailSubject
-						] ).draw( false ).node();
-
-						abendUndefinedCount++;
-						document.getElementById("abendUndefinedDisplayDiv").style.display = "block";
-						document.getElementById("abendUndefinedDisplay").textContent = abendUndefinedCount;
-						$( temp ).addClass('label-warning');
-					} else{
-						var temp = t1.row.add( [
-							zjobs[0],
-							cellTwoAbend,
-							convertedDate.toJSON().split("T")[0],
-							timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
-							action,
-							cellSixAbend,
-							globalEmailSubject
-						] ).draw( false ).node();
+					var temp = t1.row.add( [
+						zjobs[0],
+						cellTwoAbend,
+						convertedDate.toJSON().split("T")[0],
+						timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
+						action,
+						cellSixAbend,
+						globalEmailSubject
+					] ).draw( false ).node();
 					
-					}
+				
 					
 					$(temp).attr({
 						'data-email':emailIndex,
@@ -1866,36 +1896,17 @@ progress[value]  {
 					console.log("SUCCESS")
 					createSummary(action);
 					
-				}else{
+				}else{ //Non-abend
 					var cellOne = zjobs[0];
-
-					if( cellFiveLongRun == "Undefined" ||  cellOne == "Undefined"){//add remove button
-						var temp = t2.row.add( [
-							zjobs[0],
-							convertedDate.toJSON().split("T")[0],
-							timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
-							action,
-							cellFiveLongRun,
-							convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1],
-							"<button type='button' class='btn btn-danger btn-xs'>REMOVE</button>"
-						] ).draw( false ).node();
-
-						nonAbendUndefinedCount++;
-						document.getElementById("nonAbendUndefinedDisplayDiv").style.display = "block";
-						document.getElementById("nonAbendUndefinedDisplay").textContent = nonAbendUndefinedCount;
-						$( temp ).addClass('label-warning');
-
-					}else{					
-						var temp = t2.row.add( [
-							zjobs[0],
-							convertedDate.toJSON().split("T")[0],
-							timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
-							action,
-							cellFiveLongRun,
-							convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1],
-							globalEmailSubject
-						] ).draw( false ).node();
-					}
+					var temp = t2.row.add( [
+						zjobs[0],
+						convertedDate.toJSON().split("T")[0],
+						timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
+						action,
+						cellFiveLongRun,
+						convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1],
+						globalEmailSubject
+					] ).draw( false ).node();
 					
 					$(temp).attr({
 						'data-email':emailIndex,
@@ -1904,7 +1915,6 @@ progress[value]  {
 						 "data-trigger":"focus"
 					 });
 								 
-					
 					console.log("SUCCESS")
 					createSummary(action);
 					
@@ -2008,17 +2018,16 @@ progress[value]  {
 							 "data-placement":"bottom",
 							 "data-trigger":"focus"
 						 });
-						
-						if( site == "Undefined" ){
+						/*if( site == "Undefined" ){
 							abendUndefinedCount++;
 							document.getElementById("abendUndefinedDisplayDiv").style.display = "block";
 							document.getElementById("abendUndefinedDisplay").textContent = abendUndefinedCount;
 							$( temp ).addClass('label-warning');
-						}
+						}*/
 						
 						console.log("SUCCESS")
 						createSummary(action);
-					}else{
+					}else{//Non-abend
 						var temp = t2.row.add( [
 							zjobs[i],
 							convertedDate.toJSON().split("T")[0],
@@ -2028,19 +2037,20 @@ progress[value]  {
 							convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1],
 							globalEmailSubject
 						] ).draw( false ).node();
-					$(temp).attr({
-						'data-email':emailIndex,
-						"data-toggle":"popover",
-						 "data-placement":"bottom",
-						 "data-trigger":"focus"
-					 });
 						
-						if( cellFive == "Undefined" ){
+						$(temp).attr({
+							'data-email':emailIndex,
+							"data-toggle":"popover",
+							 "data-placement":"bottom",
+							 "data-trigger":"focus"
+						 });
+						
+					/*	if( cellFive == "Undefined" ){
 							nonAbendUndefinedCount++;
 							document.getElementById("nonAbendUndefinedDisplayDiv").style.display = "block";
 							document.getElementById("nonAbendUndefinedDisplay").textContent = nonAbendUndefinedCount;
 							$( temp ).addClass('label-warning');
-						}
+						 }  */
 						
 						console.log("SUCCESS")
 						createSummary(action);
