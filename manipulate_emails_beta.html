@@ -145,7 +145,7 @@ progress[value]  {
 	<div class="container">
 		<div class="row">
 			<div class="col-sm">
-				<table class="table table-hover table-sm table-bordered" id="abendsTable"">
+				<table class="table table-sm table-bordered" id="abendsTable"">
 					<thead class="thead-light">
 						<th class="text-center" style="color:black;">Jobname</th>
 						<th class="text-center" style="color:black;">Site</th>
@@ -165,7 +165,7 @@ progress[value]  {
 	<div class="container">
 		<div class="row">
 			<div class="col-sm">
-				<table class="table table-hover table-sm table-bordered" id="longRunningTable">
+				<table class="table table-sm table-bordered" id="longRunningTable">
 					<thead class="thead-light">
 						<th class="text-center" style="color:black;">Jobname</th>
 						<th class="text-center" style="color:black;">Date</th>
@@ -200,7 +200,7 @@ progress[value]  {
 				 
 			  </div>
 			</div>
-			<!-- To be continued:)  -->
+			<!-- To be continued:)  
 			<div class="input-group input-group-lg">
 			  <div class="input-group-prepend">
 				<span class="input-group-text" >Select Month and Year (to be continued)</span>
@@ -225,7 +225,7 @@ progress[value]  {
 				  </div>
 				</div>
 			</div>	
-			
+			-->
 			<div class="input-group input-group-lg">
 			  <div class="input-group-prepend">
 				<span class="input-group-text" >Signature</span>
@@ -239,7 +239,7 @@ progress[value]  {
 			  </div>
 
 				<input type="text" value="advise;WAITING T/S INIT;check and advise;Updating abends;Updating" id="abendNotifyKeywords" class="form-control">
-				<input type="number" id="rerunMinute" min="1" value="3" class="form-control">
+				<!--<input type="number" id="rerunMinute" min="1" value="3" class="form-control">-->
 
 			</div>			
 			
@@ -248,7 +248,7 @@ progress[value]  {
 				<span class="input-group-text" >RR-Keywords: and minutes</span>
 			  </div>
 			  <input type="text" value="been rerun;RECOVERY FAILED" id="rerunKeywords" class="form-control">
-			  <input type="number" id="notifyMinute" min="1" value="3" class="form-control">
+			  <!--<input type="number" id="notifyMinute" min="1" value="3" class="form-control">-->
 			</div>			
 			
 			<div class="input-group">
@@ -256,7 +256,7 @@ progress[value]  {
 				<span class="input-group-text" >MC-Keywords and minutes</span>
 			  </div>
 			  <input type="text" value="NO RECOVERY REQUIRED;marked" id="mcKeywords" class="form-control">
-			  <input type="number" id="mcMinute" min="1" value="2" class="form-control">
+			  <!--<input type="number" id="mcMinute" min="1" value="2" class="form-control">-->
 			</div>			
 			
 			<div class="input-group">
@@ -264,7 +264,7 @@ progress[value]  {
 				<span class="input-group-text" >LongRunning-Keywords and minutes</span>
 			  </div>
 			  <input type="text" value="running" id="longRunningKeywords" class="form-control">
-			  <input type="number" id="longRunningMinute" min="1" value="4" class="form-control">
+			  <!--<input type="number" id="longRunningMinute" min="1" value="4" class="form-control">-->
 			</div>			
 			
 			<div class="input-group">
@@ -272,7 +272,7 @@ progress[value]  {
 				<span class="input-group-text" >Hold & Release-Keywords and minutes</span>
 			  </div>
 			  <input type="text" value="HELD;RELEASED" id="holdReleaseKeywords" class="form-control">
-			  <input type="number" id="holdReleaseMinute" min="1" value="2" class="form-control">
+			   <!--<input type="number" id="holdReleaseMinute" min="1" value="2" class="form-control">-->
 			</div>			
 			
 			<div class="input-group">
@@ -280,7 +280,7 @@ progress[value]  {
 				<span class="input-group-text" >Missed-Dueout-Keywords and minutes</span>
 			  </div>
 			  <input type="text" value="missed;LATE" id="missedDueOutKeywords" class="form-control">
-			  <input type="number" id="missedDueOutMinute" min="1" value="3" class="form-control">
+			  <!--  <input type="number" id="missedDueOutMinute" min="1" value="3" class="form-control">-->
 			</div>			
 			
 			<div class="input-group">
@@ -288,7 +288,7 @@ progress[value]  {
 				<span class="input-group-text" >Capping-Keywords and minutes</span>
 			  </div>
 			  <input type="text" value="capping;quick view" id="cappingKeywords" class="form-control">
-			  <input type="number" id="cappingMinute" min="1" value="3" class="form-control">
+			  <!--  <input type="number" id="cappingMinute" min="1" value="3" class="form-control">-->
 			</div>			
 			
 			<div class="input-group">
@@ -296,7 +296,7 @@ progress[value]  {
 				<span class="input-group-text" >Tpipe-Keywords and minutes</span>
 			  </div>
 			  <input type="text" value="TPIPE;L$" id="tpipeKeywords" class="form-control">
-			  <input type="number" id="tpipeMinute" min="1" value="3" class="form-control">
+			   <!-- <input type="number" id="tpipeMinute" min="1" value="3" class="form-control">-->
 			</div>			
 			
 			<div class="input-group">
@@ -304,7 +304,7 @@ progress[value]  {
 				<span class="input-group-text" >Stuck-Keywords and minutes</span>
 			  </div>
 			  <input type="text" value="stuck in submit" id="stuckKeywords" class="form-control">
-			  <input type="number" id="stuckMinute" min="1" value="3" class="form-control">
+			  <!--  <input type="number" id="stuckMinute" min="1" value="3" class="form-control">-->
 			</div>			
 			
 			<div class="input-group">
@@ -312,7 +312,7 @@ progress[value]  {
 				<span class="input-group-text" >CleanUp-Keywords and minutes</span>
 			  </div>
 			  <input type="text" value="clear off;clean job" id="cleanUpKeywords" class="form-control">
-			  <input disabled type="number" id="stuckMinute" min="1" value="0" class="form-control">
+			  <!--  <input disabled type="number" id="stuckMinute" min="1" value="0" class="form-control">-->
 			</div>			
 			
 			<div class="input-group">
@@ -320,7 +320,7 @@ progress[value]  {
 				<span class="input-group-text" >Force-Keywords and minutes</span>
 			  </div>
 			  <input type="text" value="force;force release" id="forceKeywords" class="form-control">
-			  <input type="number" id="forceMinute" min="1" value="3" class="form-control">
+			  <!--  <input type="number" id="forceMinute" min="1" value="3" class="form-control"> -->
 			</div>			
 
 			<div class="input-group">
@@ -328,7 +328,7 @@ progress[value]  {
 				<span class="input-group-text" >Insert-Keywords and minutes</span>
 			  </div>
 			  <input type="text" value="inserted;ADDED BY RUSH" id="insertKeywords" class="form-control">
-			  <input type="number" id="insertMinute" min="1" value="3" class="form-control">
+			 <!-- <input type="number" id="insertMinute" min="1" value="3" class="form-control">-->
 			</div>			
 			
 			<div class="input-group">
@@ -336,7 +336,7 @@ progress[value]  {
 				<span class="input-group-text" >Cancelled-Keywords and minutes</span>
 			  </div>
 			  <input type="text" value="cancelled" id="cancelledKeywords" class="form-control">
-			  <input type="number" min="1" value="3" id="cancelMinute" class="form-control">
+			  <!--<input type="number" min="1" value="3" id="cancelMinute" class="form-control">-->
 			</div> 			
 			
 			<div class="input-group">
@@ -344,7 +344,7 @@ progress[value]  {
 				<span class="input-group-text" >PCN-Keywords and minutes</span>
 			  </div>
 			  <input type="text" value="signed off" id="pcnKeywords" class="form-control">
-			  <input type="number" min="1" value="3" id="pcnMinute" class="form-control">
+			 <!-- <input type="number" min="1" value="3" id="pcnMinute" class="form-control"> -->
 			</div> 
 			
 			
@@ -375,11 +375,45 @@ progress[value]  {
 <script>
 
 	function removeRow(button){
-		alert("working..")
-		button.parentNode.parentNode.classList.remove("label-warning");
-		//button.parentNode.parentNode.setAttribute(
-		setMultipleAttributes(button,{"class":"btn btn-success btn-xs"});
-		button.innerHTML = "Undo";
+		//alert("working..")
+		if(button.getAttribute("data-status") == "enabled"){
+			button.parentNode.parentNode.classList.remove("label-warning");
+			//button.parentNode.parentNode.setAttribute(
+			setMultipleAttributes(button,{"class":"btn btn-danger btn-xs","data-status":"disabled"});
+			button.innerHTML = "REMOVE";	
+			if(button.getAttribute("data-table") == "abendTable"){
+				abendUndefinedCount--;
+				if(abendUndefinedCount == 0){
+					document.getElementById("abendUndefinedDisplayDiv").style.display = "none";
+				}
+					document.getElementById("abendUndefinedDisplay").textContent = abendUndefinedCount;
+			}else{
+				nonAbendUndefinedCount--;
+				if(nonAbendUndefinedCount == 0){
+					document.getElementById("nonAbendUndefinedDisplayDiv").style.display = "none";
+				}
+					document.getElementById("nonAbendUndefinedDisplay").textContent = nonAbendUndefinedCount;
+			}
+		}else{
+			button.parentNode.parentNode.classList.add("label-warning");
+			//button.parentNode.parentNode.setAttribute(
+			setMultipleAttributes(button,{"class":"btn btn-success btn-xs","data-status":"enabled"});
+			button.innerHTML = "ADD";		
+			if(button.getAttribute("data-table") == "abendTable"){
+				abendUndefinedCount++;
+				if(abendUndefinedCount > 0){
+					document.getElementById("abendUndefinedDisplayDiv").style.display = "block";
+				}
+					document.getElementById("abendUndefinedDisplay").textContent = abendUndefinedCount;
+			}else{
+				nonAbendUndefinedCount++;
+				if(nonAbendUndefinedCount > 0){
+					document.getElementById("nonAbendUndefinedDisplayDiv").style.display = "block";
+				}
+					document.getElementById("nonAbendUndefinedDisplay").textContent = nonAbendUndefinedCount;
+			}
+					
+		}
 	}
 	
 	function setMultipleAttributes(el, attrs) {
@@ -434,25 +468,29 @@ progress[value]  {
 					if ( data[0] == "Undefined" || data[1] == "Undefined" ) {
 						$('td', row).eq(6).addClass('highlight');
 						$(row).addClass('label-warning');
-						row.childNodes[6].innerHTML = "<button onclick='removeRow(this)' type='button' class='btn btn-danger btn-xs'>REMOVE</button>"
+						row.childNodes[6].innerHTML = "<button onclick='removeRow(this)' data-status='enabled' type='button' data-table='abendTable' class='btn btn-success btn-xs'>ADD</button>"
 						
 						abendUndefinedCount++;
 						document.getElementById("abendUndefinedDisplayDiv").style.display = "block";
 						document.getElementById("abendUndefinedDisplay").textContent = abendUndefinedCount;
 					}
-					
 				}
 				 
 			});	
 			
-			$('#abendsTable').on('click', 'tbody tr', function() {
+			$('#abendsTable').on('click', 'tbody tr td', function() {
+			
 				var email = this.getAttribute('data-email')
 				var temp = emailsGlobalVar.Item(email).Body;
+				//console.log( typeof(temp))
 				var info = "Sent:"+ new Date(emailsGlobalVar.Item(email).SentOn)+ "\n To: " + emailsGlobalVar.Item(email).to + "\n Cc: " + emailsGlobalVar.Item(email).cc + "\n Subject: " +emailsGlobalVar.Item(email).ConversationTopic;
 				this.setAttribute("title",info);
 				this.setAttribute("data-content",temp);
 				//$('[data-toggle="popover"]').popover('hide');
 				$(this).popover('show');
+				var previousSent = temp.slice(temp.split("Sent:", 1).join("Sent:").length,temp.split("Sent:", 1).join("Sent:").length+50);
+				var previousTime = previousSent.slice( previousSent.split(":", 2).join(":").length-2,previousSent.split(":", 2).join(":").length+7).trim();
+				console.log(previousTime)
 			})
 
 			var t2 = $('#longRunningTable').DataTable({
@@ -488,22 +526,21 @@ progress[value]  {
 				responsive: true,
 				colReorder: true,
 				"order": [[ 1, 'asc' ], [ 5, 'asc' ]],
-				"createdRow": function ( row, data, index ) {
+				"createdRow": function ( row, data, index,cells ) {
 					if ( data[0] == "Undefined" || data[4] == "Undefined" ) {
 						$('td', row).eq(6).addClass('highlight');
 						$(row).addClass('label-warning');
-						row.childNodes[6].innerHTML = "<button onclick='removeRow(this)' type='button' class='btn btn-danger btn-xs'>REMOVE</button>"
+						row.childNodes[6].innerHTML = "<button onclick='removeRow(this)' data-status='enabled' data-table='nonAbendTable' type='button' class='btn btn-success btn-xs'>ADD</button>"
 						//row.childNodes[6].innerHTML = "<input type='checkbox' data-toggle='toggle' data-on='Enabled' data-off='Disabled'>"
 						
 						nonAbendUndefinedCount++;
 						document.getElementById("nonAbendUndefinedDisplayDiv").style.display = "block";
 						document.getElementById("nonAbendUndefinedDisplay").textContent = nonAbendUndefinedCount;
 					}
-					
 				}
 			});
 			
-			$('#longRunningTable').on('click', 'tbody tr', function() {
+			$('#longRunningTable').on('click', 'tbody tr td', function() {
 			 var email = this.getAttribute('data-email')
 				var temp = emailsGlobalVar.Item(email).Body;
 				var info = "Sent:"+ new Date(emailsGlobalVar.Item(email).SentOn)+ "\n To: " + emailsGlobalVar.Item(email).to + "\n Cc: " + emailsGlobalVar.Item(email).cc + "\n Subject: " +emailsGlobalVar.Item(email).ConversationTopic;
@@ -766,7 +803,8 @@ progress[value]  {
 				//cancelledKeywords=='' ? cancelledKeywords = 'cancelled' : ''
 				//insertKeywords=='' ? insertKeywords = 'inserted;ADDED BY RUSH' : ''
 				//pcnKeywords=='' ? pcnKeywords = 'signed off' : ''
-			var tempNotifyMinute = document.getElementById("notifyMinute").value;
+				
+		/**	var tempNotifyMinute = document.getElementById("notifyMinute").value;
 			var tempRerunMinute = document.getElementById("rerunMinute").value;
 			var tempMcMinute = document.getElementById("mcMinute").value;
 			var tempLongRunningMinute = document.getElementById("longRunningMinute").value;
@@ -792,6 +830,8 @@ progress[value]  {
 				tempInsertMinute=='' ? insertMinute = 0 : insertMinute=tempInsertMinute;
 				tempCancelMinute=='' ? cancelMinute = 0 : cancelMinute=tempCancelMinute;
 				tempPcnMinute=='' ? pcnMinute = 0 : pcnMinute=tempPcnMinute;
+		*/	
+				
 				
 			//(str.search(/\bWidget\b/) >= 0)
 			//myBody.indexOf("advise")>0 ||myBody.indexOf("check and advise")>0 || myBody.indexOf("Updating abends")>0 || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 )|| myBody.indexOf("Updating")>0
@@ -1073,7 +1113,7 @@ progress[value]  {
 				//if( emailSubject.indexOf("ABEND") > 0){ //abends
 					var logType = "abend";
 				//-> MC expression=> myBody.indexOf("NO RECOVERY REQUIRED")>0 || myBody.indexOf("marked") >0
-					if( eval(mcExpression)  ){ //mark complete
+					if( eval(mcExpression) || myBody.indexOf("NO RECOVERY REQUIRE")>0 ){ //mark complete
 						var action = "";
 						var timeResult;
 						var where = "NO RECOVERY REQUIRED";
@@ -1097,14 +1137,18 @@ progress[value]  {
 
 			  //-> Abend Notify expression=> myBody.indexOf("advise")>0 ||myBody.indexOf("check and advise")>0 || myBody.indexOf("Updating abends")>0 || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 )|| myBody.indexOf("Updating")>0
 					if(  eval(abendNotifyExpression) && emailSubject.toUpperCase().indexOf("ABEND") >=0 || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 ) ){ // notify
+						
+						var previousSent = fullEmail.slice(fullEmail.split("Sent:", 1).join("Sent:").length,fullEmail.split("Sent:", 1).join("Sent:").length+50);
+						var previousTime = previousSent.slice( previousSent.split(":", 2).join(":").length-2,previousSent.split(":", 2).join(":").length+7).trim();
+												
 						var action = "notify programmer";
 						var where = "WAITING T/S"; //some email forgot the whole status
 						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - notifyMinute )).toTimeString().split(" ")[0];
-						//singleOrMultipleJobs(emailSubject,myBody);
+
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> notify-"+zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" notify found"
-						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
+						displayRow(zjobs,site,convertedDate,previousTime,action,logType,recipients,globalEmailSubject,i+1);
 					}
 					
 					//var logType = "abend";
@@ -1586,7 +1630,7 @@ progress[value]  {
 						var lineN = mySecondArray[g];
 						if( lineN.indexOf( "Z" ) >= 0 ){ 
 							for( var h=0; h < zjobsTemp.length; h++ ){
-								if( lineN.indexOf( zjobsTemp[h] ) >= 0  ){//there is already job in threads
+								if( lineN.indexOf( zjobsTemp[h] ) >= 0 && lineN.indexOf("NO RECOVERY REQUIRE") >= 0 ){//there is already job in threads
 									zjobs.splice( zjobsTemp.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
 								}
 							}
@@ -1884,15 +1928,15 @@ progress[value]  {
 						globalEmailSubject
 					] ).draw( false ).node();
 					
-				
-					
-					$(temp).attr({
-						'data-email':emailIndex,
-						"data-toggle":"popover",
-						 "data-placement":"bottom",
-						 "data-trigger":"focus"
-					 });
-					
+					//add popover to TDs
+					for(var i =0 ; i<6 ; i++){
+						$( temp ).find('td:eq('+i+')').attr({
+							'data-email':emailIndex,
+							"data-toggle":"popover",
+							"data-placement":"bottom",
+							"data-trigger":"focus"
+						});
+					}
 					console.log("SUCCESS")
 					createSummary(action);
 					
@@ -1907,14 +1951,24 @@ progress[value]  {
 						convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1],
 						globalEmailSubject
 					] ).draw( false ).node();
-					
+					//add popover to TDs
+					for(var i =0 ; i<6 ; i++){
+						$( temp ).find('td:eq('+i+')').attr({
+							'data-email':emailIndex,
+							"data-toggle":"popover",
+							"data-placement":"bottom",
+							"data-trigger":"focus"
+						});
+					}
+						 
+					/*
 					$(temp).attr({
 						'data-email':emailIndex,
 						"data-toggle":"popover",
 						 "data-placement":"bottom",
 						 "data-trigger":"focus"
 					 });
-								 
+						*/		 
 					console.log("SUCCESS")
 					createSummary(action);
 					
@@ -2012,12 +2066,17 @@ progress[value]  {
 							cellSixAbend,
 							globalEmailSubject
 						] ).draw( false ).node();
-						$(temp).attr({
-							'data-email':emailIndex,
-							"data-toggle":"popover",
-							 "data-placement":"bottom",
-							 "data-trigger":"focus"
-						 });
+						
+						//add popover to TDs
+						for(var i =0 ; i<6 ; i++){
+							$( temp ).find('td:eq('+i+')').attr({
+								'data-email':emailIndex,
+								"data-toggle":"popover",
+								"data-placement":"bottom",
+								"data-trigger":"focus"
+							});
+						}
+						
 						/*if( site == "Undefined" ){
 							abendUndefinedCount++;
 							document.getElementById("abendUndefinedDisplayDiv").style.display = "block";
@@ -2038,12 +2097,16 @@ progress[value]  {
 							globalEmailSubject
 						] ).draw( false ).node();
 						
-						$(temp).attr({
-							'data-email':emailIndex,
-							"data-toggle":"popover",
-							 "data-placement":"bottom",
-							 "data-trigger":"focus"
-						 });
+						//add popover to TDs
+						for(var i =0 ; i<6 ; i++){
+							$( temp ).find('td:eq('+i+')').attr({
+								'data-email':emailIndex,
+								"data-toggle":"popover",
+								"data-placement":"bottom",
+								"data-trigger":"focus"
+							});
+						}
+					
 						
 					/*	if( cellFive == "Undefined" ){
 							nonAbendUndefinedCount++;
