@@ -488,9 +488,10 @@ progress[value]  {
 				this.setAttribute("data-content",temp);
 				//$('[data-toggle="popover"]').popover('hide');
 				$(this).popover('show');
-				var previousSent = temp.slice(temp.split("Sent:", 1).join("Sent:").length,temp.split("Sent:", 1).join("Sent:").length+50);
-				var previousTime = previousSent.slice( previousSent.split(":", 2).join(":").length-2,previousSent.split(":", 2).join(":").length+7).trim();
-				console.log(previousTime)
+					//calculate Time column
+					//var previousSent = temp.slice(temp.split("Sent:", 1).join("Sent:").length,temp.split("Sent:", 1).join("Sent:").length+50);
+					//var previousTime = previousSent.slice( previousSent.split(":", 2).join(":").length-2,previousSent.split(":", 2).join(":").length+7).trim();
+					//console.log(previousTime)
 			})
 
 			var t2 = $('#longRunningTable').DataTable({
@@ -1001,6 +1002,24 @@ progress[value]  {
 				var emailSubject = theEmail.ConversationTopic;
 				globalEmailSubject = theEmail.ConversationTopic;
 				var site = "Jake";
+					//compute Time column
+					var previousEmailThread = fullEmail.slice(fullEmail.split("Sent:", 1).join("Sent:").length,fullEmail.split("Sent:", 1).join("Sent:").length+50);
+					var previousTime = previousEmailThread.slice( previousEmailThread.split(":", 2).join(":").length-2,previousEmailThread.split(":", 2).join(":").length+7).trim();
+					//previousTime = "2:30 PM",
+					if( previousTime != "") {
+						var d = new Date(),
+						parts = previousTime.match(/(\d+)\:(\d+) (\w+)/),
+						hours = /am/i.test(parts[3]) ? parseInt(parts[1], 10) : parseInt(parts[1], 10) + 12,
+						minutes = parseInt(parts[2], 10);
+						d.setHours(hours);
+						d.setMinutes(minutes);
+						previousTime = d.getHours()+":"+d.getMinutes();
+						console.log("new Time: \"" +d.getHours()+":"+d.getMinutes() +"\"")
+					}else{ //no previousEmailThread
+						previousTime = "";
+						//console.log("previouseTime is null");
+					}
+					
 				console.log(i)
 				//site = theEmail.ConversationTopic.split("|")[0].split(" ")[0];
 				if( emailSubject.indexOf("LE") >= 0 && emailSubject.indexOf("LE") <= 5){
@@ -1137,18 +1156,18 @@ progress[value]  {
 
 			  //-> Abend Notify expression=> myBody.indexOf("advise")>0 ||myBody.indexOf("check and advise")>0 || myBody.indexOf("Updating abends")>0 || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 )|| myBody.indexOf("Updating")>0
 					if(  eval(abendNotifyExpression) && emailSubject.toUpperCase().indexOf("ABEND") >=0 || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 ) ){ // notify
-						
-						var previousSent = fullEmail.slice(fullEmail.split("Sent:", 1).join("Sent:").length,fullEmail.split("Sent:", 1).join("Sent:").length+50);
-						var previousTime = previousSent.slice( previousSent.split(":", 2).join(":").length-2,previousSent.split(":", 2).join(":").length+7).trim();
-												
+						var tempPreviousTime = previousTime;
+						if( previousTime == ""){//if preivousTime is 0 -> means no previous time in email
+							tempPreviousTime = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0];
+						}
 						var action = "notify programmer";
 						var where = "WAITING T/S"; //some email forgot the whole status
-						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - notifyMinute )).toTimeString().split(" ")[0];
+						//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - notifyMinute )).toTimeString().split(" ")[0];
 
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> notify-"+zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" notify found"
-						displayRow(zjobs,site,convertedDate,previousTime,action,logType,recipients,globalEmailSubject,i+1);
+						displayRow(zjobs,site,convertedDate,tempPreviousTime,action,logType,recipients,globalEmailSubject,i+1);
 					}
 					
 					//var logType = "abend";
@@ -1161,6 +1180,12 @@ progress[value]  {
 						var where = "RECOVERY";
 						//singleOrMultipleJobs(emailSubject,myBody,where);
 						//var emailSubject = "";
+							var temp =fullEmail;
+							//calculate Time column
+							var previousSent = temp.slice(temp.split("Sent:", 1).join("Sent:").length,temp.split("Sent:", 1).join("Sent:").length+50);
+							var previousTime = previousSent.slice( previousSent.split(":", 2).join(":").length-2,previousSent.split(":", 2).join(":").length+7).trim();
+							console.log("previousTime: "+previousTime)
+						
 						extractJobs(emailSubject,myBody,where,fullEmail,tempDate,site,i+1);
 						//console.log("email("+i +")-> rerun-"+zjobs.length+" found")
 						//var action = "rerun as per programmer";
@@ -1836,7 +1861,8 @@ progress[value]  {
 				//newRow.insertCell(-1).innerHTML = convertedDate.toJSON().split("T")[0];
 				cellTwo = convertedDate.toJSON().split("T")[0];
 				//newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
-				cellThree = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+				//cellThree = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+				cellThree = timeResult;
 				//newRow.insertCell(-1).innerHTML = action;
 				cellFour = action;
 				
@@ -1844,14 +1870,16 @@ progress[value]  {
 					cellFiveLongRun = "Undefined";
 					
 					//newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];//time of action
-					cellSix = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+					//cellSix = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+					cellSix = timeResult;
 				
 						cellSeven = globalEmailSubject +"(" + recipients + ")";
 				}
 				if(logType === "abend"){
 					if( action == "rerun as per ps25"  ){ //if rr as per ps25, same time
 						//newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
-						cellSixAbend = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+						//cellSixAbend = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+						cellSixAbend = timeResult;
 					}else{
 						//newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
 						cellSixAbend = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];;
@@ -1907,7 +1935,8 @@ progress[value]  {
 						
 						//newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
 						if( logType == "pcn" ){
-							cellSix = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+							//cellSix = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+							cellSix = timeResult;
 							
 						}else{
 							cellSix = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
@@ -1922,7 +1951,8 @@ progress[value]  {
 						zjobs[0],
 						cellTwoAbend,
 						convertedDate.toJSON().split("T")[0],
-						timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
+						//timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
+						timeResult,
 						action,
 						cellSixAbend,
 						globalEmailSubject
@@ -1945,7 +1975,8 @@ progress[value]  {
 					var temp = t2.row.add( [
 						zjobs[0],
 						convertedDate.toJSON().split("T")[0],
-						timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
+						//timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
+						timeResult,
 						action,
 						cellFiveLongRun,
 						convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1],
