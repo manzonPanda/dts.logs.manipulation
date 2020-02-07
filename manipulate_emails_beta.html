@@ -930,6 +930,7 @@ progress[value]  {
 			document.getElementById("resultOfManipulation").style.display = "block";
 			startEmailsManipulation(newAbendNotifyKeywordsExpression,newRerunKeywordsExpression,newMcKeywordsExpression,newLongRunningKeywordsExpression,newHoldReleaseKeywordsExpression,newMissedDueOutKeywordsExpression,newCappingKeywordsExpression,newTpipeKeywordsExpression,newStuckKeywordsExpression,newCleanUpKeywordsExpression,newForceKeywordsExpression,newCancelledKeywordsExpression,newInsertKeywordsExpression,newPCNKeywordsExpression);
 		}
+		
 		function timeStringConverter(timeInString){
 			var d = new Date();
 			timeInString.split(":")[0] > 12 ? timeInString = timeInString+" PM" : timeInString = timeInString+" AM"
@@ -941,9 +942,9 @@ progress[value]  {
 			}else{
 				(parts[1] == 12) ? hours=parseInt(parts[1], 10) : hours=parseInt(parts[1], 10) + 12
 			}
-			console.log("hours->"+parseInt(parts[1], 10))
-			d.setHours(hours);
-			d.setMinutes(minutes);
+			console.log("hours->"+parseInt(parts[1], 10) + " minute-> "+minutes)
+			d.setHours(parseInt(parts[1], 10),minutes,1);
+			//d.setMinutes(minutes);
 			return d;
 		}
 		
@@ -1168,7 +1169,6 @@ progress[value]  {
 						
 						}else{ //there is previous time found in email
 							//calculate difference in minutes
-
 							var difference = Math.round( ((( timeStringConverter( convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1])-timeStringConverter(tempPreviousTime) )) /1000)/60 )
 							//console.log( (convertedDate.toTimeString().split(" ")[0].split(":")[0] > 12) ? timeStringConverter( convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1]) +" PM" : timeStringConverter( convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1]) )
 							console.log( timeStringConverter(convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1]))
@@ -1196,13 +1196,12 @@ progress[value]  {
 								console.log("end time-> " + tempPreviousTime)
 
 							}
-						/*	else if(  difference>= 15 && site=="Y2" ){
-							
-							}else{ //default..compute the reply time interval
-							
-							}
-						*/
-							
+							/*	else if(  difference>= 15 && site=="Y2" ){
+								
+								}else{ //default..compute the reply time interval
+								
+								}
+							*/
 						}
 						var where = "NO RECOVERY REQUIRED";
 						extractJobs(emailSubject,myBody,where,fullEmail);
@@ -1218,7 +1217,7 @@ progress[value]  {
 							//timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - markCompleteMinute )).toTimeString().split(" ")[0];
 						}
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" " + action+" found"
-						displayRow(zjobs,site,convertedDate,tempPreviousTime,action,logType,recipients,globalEmailSubject,i+1);
+						displayRow(zjobs,site,convertedDate,tempPreviousTime,action,logType,recipients,globalEmailSubject,i+1,fullEmail);
 					}
 
 			  //-> Abend Notify expression=> myBody.indexOf("advise")>0 ||myBody.indexOf("check and advise")>0 || myBody.indexOf("Updating abends")>0 || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 )|| myBody.indexOf("Updating")>0
@@ -1903,7 +1902,7 @@ progress[value]  {
 			//console.log(myBody.split("\n")[12].indexOf("Z")); //extract every job
 			//console.log(line12.substring(0, 11));
 		}
-		function displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,emailIndex){
+		function displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,emailIndex,fullEmail){
 			//(logType == "abend") ? (var newRow = abendsTbody.insertRow(-1)):(var newRow = longRunningTbody.insertRow(-1));
 			var t1 = $('#abendsTable').DataTable();
 			var t2 = $('#longRunningTable').DataTable();
@@ -1950,8 +1949,20 @@ progress[value]  {
 						//newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
 						//cellSixAbend = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
 						if( action == "mark complete as per ps25" ){
+							//get the time of the job when it was notified ::: WAITING T/S INIT
 							cellSixAbend = timeResult;
 							//cellSixAbend = globalPreviousEmailTime
+							var mySecondArray = fullEmail.split("\n");
+							for( var j = myArray.length; j <=mySecondArray.length-1; j++ ){
+								var lineN = mySecondArray[j];
+								if( lineN.indexOf("L$") >= 0 ){
+									if( title.indexOf(temp) < 0 ){ //-1 if not found
+										var temp = lineN.substring( lineN.indexOf("L$"), lineN.indexOf("L$") + 6).trim();
+										title.push(temp)									
+									}
+								}
+							}
+
 						}
 						if( action == "rerun as per ps25" ){
 							cellSixAbend = timeResult;
