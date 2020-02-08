@@ -988,7 +988,7 @@ progress[value]  {
 			  
 				//finished manipulating emails
 				if( i == emailCount ){ 
-					console.log("Done.")
+					console.log("100% complete.")
 					document.getElementById("myBar").style.display = "none";
 					document.getElementById("myBar2").setAttribute("class","progress-bar bg-success progress-bar-striped progress-bar-animated")
 					document.getElementById("myBar2").innerHTML = "100% COMPLETE";
@@ -1020,7 +1020,8 @@ progress[value]  {
 				globalEmail = fullEmail;
 				var site = "Jake";
 					//compute Time column
-					var previousEmailThread = fullEmail.slice(fullEmail.split("Sent:", 1).join("Sent:").length,fullEmail.split("Sent:", 1).join("Sent:").length+50);
+					//occurence
+					var previousEmailThread = fullEmail.slice(fullEmail.split("Sent:", 1).join("Sent:").length , fullEmail.split("Sent:", 1).join("Sent:").length+50); //get value of the nth Sent:
 					var previousTime = previousEmailThread.slice( previousEmailThread.split(":", 2).join(":").length-2,previousEmailThread.split(":", 2).join(":").length+7).trim();
 					//previousTime = "2:30 PM",
 					console.log("previous email time-> \""+previousTime +"\"")
@@ -1217,7 +1218,7 @@ progress[value]  {
 							//timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - markCompleteMinute )).toTimeString().split(" ")[0];
 						}
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" " + action+" found"
-						displayRow(zjobs,site,convertedDate,tempPreviousTime,action,logType,recipients,globalEmailSubject,i+1,fullEmail);
+						displayRow(zjobs,site,convertedDate,tempPreviousTime,action,logType,recipients,globalEmailSubject,i+1,fullEmail,myBody);
 					}
 
 			  //-> Abend Notify expression=> myBody.indexOf("advise")>0 ||myBody.indexOf("check and advise")>0 || myBody.indexOf("Updating abends")>0 || (myBody.indexOf("check")>0 && myBody.indexOf("WAITING T/S")>0 )|| myBody.indexOf("Updating")>0
@@ -1902,7 +1903,7 @@ progress[value]  {
 			//console.log(myBody.split("\n")[12].indexOf("Z")); //extract every job
 			//console.log(line12.substring(0, 11));
 		}
-		function displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,emailIndex,fullEmail){
+		function displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,emailIndex,fullEmail,myBody){
 			//(logType == "abend") ? (var newRow = abendsTbody.insertRow(-1)):(var newRow = longRunningTbody.insertRow(-1));
 			var t1 = $('#abendsTable').DataTable();
 			var t2 = $('#longRunningTable').DataTable();
@@ -1952,16 +1953,22 @@ progress[value]  {
 							//get the time of the job when it was notified ::: WAITING T/S INIT
 							cellSixAbend = timeResult;
 							//cellSixAbend = globalPreviousEmailTime
+							
+							/*To be continued... */
+							var myArray = myBody.split("\n");
+							console.log( fullEmail.split("Sent:") )
 							var mySecondArray = fullEmail.split("\n");
+							var previousEmailThread = fullEmail.slice(fullEmail.split("Sent:", 1).join("Sent:").length , fullEmail.split("Sent:", 1).join("Sent:").length+50);
 							for( var j = myArray.length; j <=mySecondArray.length-1; j++ ){
 								var lineN = mySecondArray[j];
-								if( lineN.indexOf("L$") >= 0 ){
-									if( title.indexOf(temp) < 0 ){ //-1 if not found
-										var temp = lineN.substring( lineN.indexOf("L$"), lineN.indexOf("L$") + 6).trim();
-										title.push(temp)									
-									}
+								if( lineN.indexOf(zjobs[0]) >= 0 && lineN.indexOf("WAITING T/S INI") >= 0 ){
+									//get time in Sent:
+									//get index of the zjob
+									//get index of Sent:
+									//console.log("found! index in-> " + mySecondArray.indexOf(lineN))
 								}
 							}
+							
 
 						}
 						if( action == "rerun as per ps25" ){
