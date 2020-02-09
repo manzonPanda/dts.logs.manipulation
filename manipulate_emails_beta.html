@@ -936,6 +936,7 @@ progress[value]  {
 			timeInString.split(":")[0] > 12 ? timeInString = timeInString+" PM" : timeInString = timeInString+" AM"
 			parts = timeInString.match(/(\d+)\:(\d+) (\w+)/),
 			//["11:16 AM", "11", "16", "AM"]
+			console.log(parts)
 			minutes = parseInt(parts[2], 10);
 			if( parts[3] == "AM" ) {
 				hours = parseInt(parts[1], 10)
@@ -1031,6 +1032,7 @@ progress[value]  {
 						//["11:16 AM", "11", "16", "AM"]
 						//hours = /am/i.test(parts[3]) ? parseInt(parts[1], 10) : parseInt(parts[1], 10) + 12,
 						minutes = parseInt(parts[2], 10);
+						//( parts[2].split("")[0] === "0" ) ? minutes = : minutes = parseInt(parts[2], 10)
 						if( parts[3] == "AM" ) {
 							hours = parseInt(parts[1], 10)
 						}else{
@@ -1038,8 +1040,8 @@ progress[value]  {
 						}
 						d.setHours(hours);
 						d.setMinutes(minutes);
-						previousTime = d.getHours()+":"+d.getMinutes();
-						console.log("previous trimmed Time: \"" +d.getHours()+":"+d.getMinutes() +"\"")
+						previousTime = d.getHours()+":"+d.toTimeString().split(":")[1];
+						console.log("previous Time trimmed: \"" +d.getHours()+":"+d.toTimeString().split(":")[1] +"\"")
 					}else{ //no previousEmailThread
 						previousTime = "";
 						console.log("second "+previousTime)
@@ -1193,8 +1195,9 @@ progress[value]  {
 								d.setMinutes(minutes);
 								//console.log("result difference: " );
 								//console.log(d)
-								tempPreviousTime = d.getHours()+":"+d.getMinutes();
+								tempPreviousTime = d.getHours()+":"+d.toTimeString().split(":")[1];
 								console.log("end time-> " + tempPreviousTime)
+								console.log("minute-> " +minutes)
 
 							}
 							/*	else if(  difference>= 15 && site=="Y2" ){
@@ -1951,26 +1954,29 @@ progress[value]  {
 						//cellSixAbend = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
 						if( action == "mark complete as per ps25" ){
 							//get the time of the job when it was notified ::: WAITING T/S INIT
-							cellSixAbend = timeResult;
-							//cellSixAbend = globalPreviousEmailTime
-							
+							//cellSixAbend = timeResult;
+			
 							/*To be continued... */
 							var myArray = myBody.split("\n");
-							console.log( fullEmail.split("Sent:") )
+							//console.log( fullEmail.split("Sent:")[0] )
 							var mySecondArray = fullEmail.split("\n");
 							var previousEmailThread = fullEmail.slice(fullEmail.split("Sent:", 1).join("Sent:").length , fullEmail.split("Sent:", 1).join("Sent:").length+50);
+								var sentValue ; 
+								//get time in Sent: where zjob located
+								//get index of the zjob
+								//get index of Sent:
 							for( var j = myArray.length; j <=mySecondArray.length-1; j++ ){
 								var lineN = mySecondArray[j];
+								( lineN.indexOf("Sent:") >=0 ) ? sentValue=lineN.slice( lineN.split(":", 2).join(":").length-2,lineN.split(":", 2).join(":").length+7).trim() : "" //first get the Sent: value
 								if( lineN.indexOf(zjobs[0]) >= 0 && lineN.indexOf("WAITING T/S INI") >= 0 ){
-									//get time in Sent:
-									//get index of the zjob
-									//get index of Sent:
-									//console.log("found! index in-> " + mySecondArray.indexOf(lineN))
+									//console.log("found->"+lineN); //found ////get the time of the job when it was notified ::: WAITING T/S INIT
+									break;
 								}
 							}
-							
-
+							//cellSixAbend = sentValue.split(" ")[0];
+							cellSixAbend = timeResult.split(":")[0] +":"+ convertedDate.toTimeString().split(":")[1]; //  : 14:53:35 GMT-0600 (Central America Standard Time)
 						}
+						
 						if( action == "rerun as per ps25" ){
 							cellSixAbend = timeResult;
 						}
