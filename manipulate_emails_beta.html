@@ -1962,18 +1962,24 @@ progress[value]  {
 							var mySecondArray = fullEmail.split("\n");
 							var previousEmailThread = fullEmail.slice(fullEmail.split("Sent:", 1).join("Sent:").length , fullEmail.split("Sent:", 1).join("Sent:").length+50);
 								var sentValue ; 
+								var tempSentValue;
 								//get time in Sent: where zjob located
+								//what if duplicate found(zjob - - - WAITING T/S INIT)..then search the last occurence
 								//get index of the zjob
 								//get index of Sent:
 							for( var j = myArray.length; j <=mySecondArray.length-1; j++ ){
 								var lineN = mySecondArray[j];
-								( lineN.indexOf("Sent:") >=0 ) ? sentValue=lineN.slice( lineN.split(":", 2).join(":").length-2,lineN.split(":", 2).join(":").length+7).trim() : "" //first get the Sent: value
+								( lineN.indexOf("Sent:") >=0 ) ? tempSentValue=lineN.slice( lineN.split(":", 2).join(":").length-2,lineN.split(":", 2).join(":").length+7).trim() : "" //first get the Sent: value
 								if( lineN.indexOf(zjobs[0]) >= 0 && lineN.indexOf("WAITING T/S INI") >= 0 ){
 									//console.log("found->"+lineN); //found ////get the time of the job when it was notified ::: WAITING T/S INIT
-									break;
+									sentValue = tempSentValue;
+									//break;
 								}
 							}
+							//mark complete as per ps2
 							//cellSixAbend = sentValue.split(" ")[0];
+							console.log("sentValue-> "+sentValue)
+							console.log("time result-> "+timeResult)
 							cellSixAbend = timeResult.split(":")[0] +":"+ convertedDate.toTimeString().split(":")[1]; //  : 14:53:35 GMT-0600 (Central America Standard Time)
 						}
 						
@@ -2107,9 +2113,9 @@ progress[value]  {
 				}
 			
 			}else{ //multiple zjobs
+				console.log("multiple zjobs executing..." + zjobs.length)
 				if( zjobs.length > 1){
 					for(var i=0; i< zjobs.length; i++ ){
-
 					cellOne = zjobs[i];
 					if( logType === "abend" ) {
 						if( site != "Undefined"){
@@ -2200,8 +2206,8 @@ progress[value]  {
 						] ).draw( false ).node();
 						
 						//add popover to TDs
-						for(var i =0 ; i<6 ; i++){
-							$( temp ).find('td:eq('+i+')').attr({
+						for(var j =0 ; j<6 ; j++){
+							$( temp ).find('td:eq('+j+')').attr({
 								'data-email':emailIndex,
 								"data-toggle":"popover",
 								"data-placement":"bottom",
@@ -2230,8 +2236,8 @@ progress[value]  {
 						] ).draw( false ).node();
 						
 						//add popover to TDs
-						for(var i =0 ; i<6 ; i++){
-							$( temp ).find('td:eq('+i+')').attr({
+						for(var h =0 ; h<6 ; h++){
+							$( temp ).find('td:eq('+h+')').attr({
 								'data-email':emailIndex,
 								"data-toggle":"popover",
 								"data-placement":"bottom",
@@ -2240,7 +2246,7 @@ progress[value]  {
 						}
 					
 						
-					/*	if( cellFive == "Undefined" ){
+						/*	if( cellFive == "Undefined" ){
 							nonAbendUndefinedCount++;
 							document.getElementById("nonAbendUndefinedDisplayDiv").style.display = "block";
 							document.getElementById("nonAbendUndefinedDisplay").textContent = nonAbendUndefinedCount;
