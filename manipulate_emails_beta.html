@@ -1163,13 +1163,11 @@ progress[value]  {
 					if( eval(mcExpression) || myBody.indexOf("NO RECOVERY REQUIRE")>0 ){ //mark complete
 						var action = "";
 						//var timeResult;
-						
 						var tempPreviousTime = previousTime;
 						globalPreviousEmailTime = previousTime;
 						if( tempPreviousTime == "" ){//if preivousTime is null -> means no previous time found in email 
 							tempPreviousTime = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0]; //-3mins by default
 							tempPreviousTime =  tempPreviousTime.slice(0 , tempPreviousTime.indexOf(":")+3 ) ; //trim time " '11:20':39"
-						
 						}
 						/**
 						else{ //there is previous time found in email
@@ -1267,7 +1265,15 @@ progress[value]  {
 						var logType = "longRunning";
 						var action = "long running";
 						var where = "longRunning";			
-						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - longRunningMinute )).toTimeString().split(" ")[0];
+						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0];
+						
+						/**var tempPreviousTime = previousTime;
+						globalPreviousEmailTime = previousTime;
+						if( tempPreviousTime == "" ){//if preivousTime is null -> means no previous time found in email 
+							tempPreviousTime = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0]; //-3mins by default
+							tempPreviousTime =  tempPreviousTime.slice(0 , tempPreviousTime.indexOf(":")+3 ) ; //trim the time " '11:20':39"
+						}
+						*/
 						extractJobs(emailSubject,myBody,where,fullEmail);				
 						console.log("email["+i +","+emailSubject+"]-> longRun-" +zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" long Running found"
@@ -1741,7 +1747,7 @@ progress[value]  {
 				zjobs = zjobsTemp;
 				//console.log(mySecondArray[1].indexOf("dts@msg.ti.com [mailto:dts@msg.ti.com]"));
 				//only when notify || search job duplication in thread->don't notify
-				for( var g = myArray.length; g < mySecondArray.length; g++){ 
+				for( var g = myArray.length; g < mySecondArray.length; g++){
 					var lineN = mySecondArray[g];
 					//var indexOfAutoEmail = 0;
 					if( lineN.indexOf( "From: dts@msg.ti.com [mailto:dts@msg.ti.com]" ) >= 0  ){
@@ -1903,6 +1909,65 @@ progress[value]  {
 			//console.log(myBody.split("\n")[12].indexOf("Z")); //extract every job
 			//console.log(line12.substring(0, 11));
 		}
+		function solveTimeColumnsForMC(myBody,fullEmail,convertedDate,timeResult){
+			//get the time of the job when it was notified ::: WAITING T/S INIT
+			//cellSixAbend = timeResult;
+			/*To be continued... */
+			var myArray = myBody.split("\n");
+			var timeResult;
+			var cellSixAbend;
+			//console.log( fullEmail.split("Sent:")[0] )
+			var mySecondArray = fullEmail.split("\n");
+			var previousEmailThread = fullEmail.slice(fullEmail.split("Sent:", 1).join("Sent:").length , fullEmail.split("Sent:", 1).join("Sent:").length+50);
+				var sentValue =""; 
+				var tempSentValue;
+				//get time in Sent: where zjob located
+				//what if duplicate found(zjob - - - WAITING T/S INIT)..then search the last occurence
+				//get index of the zjob
+				//get index of Sent:
+			for( var j = myArray.length; j <=mySecondArray.length-1; j++ ){
+				var lineN = mySecondArray[j];
+				( lineN.indexOf("Sent:") >=0 ) ? tempSentValue=lineN.slice( lineN.split(":", 2).join(":").length-2,lineN.split(":", 2).join(":").length+7).trim() : "" //first get the Sent: value
+				if( lineN.indexOf(zjobs[0]) >= 0 && lineN.indexOf("WAITING T/S INI") >= 0 ){
+					//console.log("found->"+lineN); //found ////get the time of the job when it was notified ::: WAITING T/S INIT
+					sentValue = tempSentValue;
+					//break;
+				}
+			}
+			console.log("sentValue-> "+sentValue)
+			if( sentValue != "" ){ //find the difference			
+				///////////////////////////////
+				var difference = Math.round( ((( timeStringConverter( convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1])-timeStringConverter(sentValue) )) /1000)/60 )							
+				console.log("difference-> ("+convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1]+"-" +sentValue+") " + difference + " minutes")
+				if( difference >= 119  ){ // > minutes ---(i.e)---> mc if no response in 2hours(120mins-YR) | (15mins-Y2)
+					//adjust time column in 2 hours
+					//["11:16 AM", "11", "16", "AM"]
+					sentValue.split(":")[0] > 12 ? sentValue = sentValue+" PM" : sentValue = sentValue+" AM"
+					var d = new Date();
+					var hours;
+					var minutes = parseInt(sentValue.split(":")[1], 10);
+					if( sentValue.split(" ")[1] == "AM" ) { //+2 hours
+						hours = parseInt(sentValue.split(":")[0], 10)+2
+					}else{ //+hours
+						(sentValue.split(":")[0] == 12) ? hours=parseInt(sentValue.split(":")[0], 10)+2 : hours=parseInt(sentValue.split(":")[0], 10) + 14 
+					}
+					d.setHours(hours);
+					d.setMinutes(minutes)
+					sentValue = d.getHours()+":"+d.toTimeString().split(":")[1];
+					console.log("timeResult-> "+sentValue)
+					//////////////////////////////
+					timeResult = sentValue //column 4 abend table
+					cellSixAbend =  convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1]
+				}
+				
+			}else{
+				timeResult = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":" +timeResult.split(":")[1];//column 4 abend table
+				cellSixAbend =  convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1]
+			}
+			
+			return [timeResult,cellSixAbend]
+			
+		}
 		function displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,emailIndex,fullEmail,myBody){
 			//(logType == "abend") ? (var newRow = abendsTbody.insertRow(-1)):(var newRow = longRunningTbody.insertRow(-1));
 			var t1 = $('#abendsTable').DataTable();
@@ -1954,60 +2019,9 @@ progress[value]  {
 						//newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
 						//cellSixAbend = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
 						if( action == "mark complete as per ps25" ){
-							//get the time of the job when it was notified ::: WAITING T/S INIT
-							//cellSixAbend = timeResult;
-							/*To be continued... */
-							var myArray = myBody.split("\n");
-							//console.log( fullEmail.split("Sent:")[0] )
-							var mySecondArray = fullEmail.split("\n");
-							var previousEmailThread = fullEmail.slice(fullEmail.split("Sent:", 1).join("Sent:").length , fullEmail.split("Sent:", 1).join("Sent:").length+50);
-								var sentValue =""; 
-								var tempSentValue;
-								//get time in Sent: where zjob located
-								//what if duplicate found(zjob - - - WAITING T/S INIT)..then search the last occurence
-								//get index of the zjob
-								//get index of Sent:
-							for( var j = myArray.length; j <=mySecondArray.length-1; j++ ){
-								var lineN = mySecondArray[j];
-								( lineN.indexOf("Sent:") >=0 ) ? tempSentValue=lineN.slice( lineN.split(":", 2).join(":").length-2,lineN.split(":", 2).join(":").length+7).trim() : "" //first get the Sent: value
-								if( lineN.indexOf(zjobs[0]) >= 0 && lineN.indexOf("WAITING T/S INI") >= 0 ){
-									//console.log("found->"+lineN); //found ////get the time of the job when it was notified ::: WAITING T/S INIT
-									sentValue = tempSentValue;
-									//break;
-								}
-							}
-							//cellSixAbend = sentValue.split(" ")[0];
-							console.log("sentValue-> "+sentValue)
-							if( sentValue != "" ){ //find the difference
-							
-								///////////////////////////////
-								var difference = Math.round( ((( timeStringConverter( convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1])-timeStringConverter(sentValue) )) /1000)/60 )							
-								console.log("difference-> ("+convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1]+"-" +sentValue+") " + difference + " minutes")
-								if( difference >= 119  ){ // > minutes ---(i.e)---> mc if no response in 2hours(120mins-YR) | (15mins-Y2)
-									//adjust time column in 2 hours
-									//["11:16 AM", "11", "16", "AM"]
-									sentValue.split(":")[0] > 12 ? sentValue = sentValue+" PM" : sentValue = sentValue+" AM"
-									var d = new Date();
-									var hours;
-									var minutes = parseInt(sentValue.split(":")[1], 10);
-									if( sentValue.split(" ")[1] == "AM" ) { //+2 hours
-										hours = parseInt(sentValue.split(":")[0], 10)+2
-									}else{ //+hours
-										(sentValue.split(":")[0] == 12) ? hours=parseInt(sentValue.split(":")[0], 10)+2 : hours=parseInt(sentValue.split(":")[0], 10) + 14 
-									}
-									d.setHours(hours);
-									d.setMinutes(minutes)
-									sentValue = d.getHours()+":"+d.toTimeString().split(":")[1];
-									console.log("timeResult-> "+sentValue)
-									//////////////////////////////
-									timeResult = sentValue //column 4 abend table
-									cellSixAbend =  convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1]
-								}
-								
-							}else{
-								timeResult = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":" +timeResult.split(":")[1];//column 4 abend table
-								cellSixAbend =  convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1]
-							}
+							var myVariables = solveTimeColumnsForMC(myBody,fullEmail,convertedDate,timeResult)
+							timeResult =  myVariables[0];
+							cellSixAbend = myVariables[1];
 						}
 						
 						if( action == "rerun as per ps25" ){
@@ -2067,6 +2081,9 @@ progress[value]  {
 							cellFiveLongRun = 	"Undefined";
 						}
 						
+						if(logType == "longRunning"){
+							timeResult = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1]
+						}
 						//newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
 						if( logType == "pcn" ){
 							//cellSix = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
@@ -2159,9 +2176,16 @@ progress[value]  {
 					cellFour = action;
 					
 					if(logType === "abend"){
-						if( action == "rerun as per ps25"  ){ //if rr as per ps25, same time
-							//newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
-							cellSixAbend = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+						if( action == "rerun as per ps25" || action == "mark complete as per ps25" ){ //if rr as per ps25, same time
+							if( action == "mark complete as per ps25" ){
+								//cellSixAbend = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+								var myVariables = solveTimeColumnsForMC(myBody,fullEmail,convertedDate,timeResult)
+									timeResult =  myVariables[0];
+									cellSixAbend = myVariables[1];
+							}
+							if( action == "rerun as per ps25" ){
+								cellSixAbend = timeResult;
+							}
 						}else{
 							//newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
 							cellSixAbend = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
