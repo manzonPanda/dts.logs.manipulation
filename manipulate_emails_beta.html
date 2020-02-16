@@ -247,7 +247,7 @@ progress[value]  {
 			  <div class="input-group-prepend">
 				<span class="input-group-text" >RR-Keywords: and minutes</span>
 			  </div>
-			  <input type="text" value="been rerun;RECOVERY FAILED" id="rerunKeywords" class="form-control">
+			  <input type="text" value="RECOVERY FAILED;been rerun" id="rerunKeywords" class="form-control">
 			  <!--<input type="number" id="notifyMinute" min="1" value="3" class="form-control">-->
 			</div>			
 			
@@ -255,7 +255,7 @@ progress[value]  {
 			  <div class="input-group-prepend">
 				<span class="input-group-text" >MC-Keywords and minutes</span>
 			  </div>
-			  <input type="text" value="NO RECOVERY REQUIRED;marked" id="mcKeywords" class="form-control">
+			  <input type="text" value="NO RECOVERY REQUIRED;marked complete;marked as complete" id="mcKeywords" class="form-control">
 			  <!--<input type="number" id="mcMinute" min="1" value="2" class="form-control">-->
 			</div>			
 			
@@ -271,6 +271,7 @@ progress[value]  {
 			  <div class="input-group-prepend">
 				<span class="input-group-text" >Hold & Release-Keywords and minutes</span>
 			  </div>
+									<!-- HELD    -   NEW  ST;RELEASED - NEW ST -->
 			  <input type="text" value="HELD;RELEASED" id="holdReleaseKeywords" class="form-control">
 			   <!--<input type="number" id="holdReleaseMinute" min="1" value="2" class="form-control">-->
 			</div>			
@@ -327,7 +328,7 @@ progress[value]  {
 			  <div class="input-group-prepend">
 				<span class="input-group-text" >Insert-Keywords and minutes</span>
 			  </div>
-			  <input type="text" value="inserted;ADDED BY RUSH" id="insertKeywords" class="form-control">
+			  <input type="text" value="inserted;ADDED BY RUSH;HAS BEEN ADDED TO THE SCHEDULE" id="insertKeywords" class="form-control">
 			 <!-- <input type="number" id="insertMinute" min="1" value="3" class="form-control">-->
 			</div>			
 			
@@ -1081,7 +1082,8 @@ progress[value]  {
 					var title = [emailSubject]
 					//var site = "";
 					var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 0 )).toTimeString().split(" ")[0];;
-				    var action = "DTS Shift Turnover (turnover)";
+				    timeResult = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1]
+					var action = "DTS Shift Turnover (turnover)";
 					var logType = "turnover";
 					var recipient = "";
 					console.log("email["+i +","+emailSubject+"]-> Turnover- 1 found")
@@ -1340,7 +1342,8 @@ progress[value]  {
 							}
 							
 							var site = "Undefined";
-							var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - tpipeMinute )).toTimeString().split(" ")[0];;
+							var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0];;
+							timeResult = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1]
 							var action = "Tpipe";
 							var logType = "tpipe";
 							var recipient = "";
@@ -1376,29 +1379,36 @@ progress[value]  {
 						var logType = "force";
 						var action = "Force running";
 						var where = "force";			
-						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - forceMinute )).toTimeString().split(" ")[0];
+						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> force-" +zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" force found"
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					}					
-					//-> Insert expression=> myBody.indexOf("inserted") >0 
+					//-> Insert expression=> myBody.indexOf("inserted") >0 ||  ADDED BY RUSH || HAS BEEN ADDED TO THE SCHEDULE
 					if( eval(insertExpression) ){
 						var logType = "inserted";
 						var action = "Inserting of jobs";
 						var where = "insert";			
-						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - insertMinute )).toTimeString().split(" ")[0];
+						//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0];
+						var tempPreviousTime = previousTime;
+						globalPreviousEmailTime = previousTime;
+						if( tempPreviousTime == "" ){//if preivousTime is null -> means no previous time found in email 
+							tempPreviousTime = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0]; //-3mins by default
+							tempPreviousTime =  tempPreviousTime.slice(0 , tempPreviousTime.indexOf(":")+3 ) ; //trim the time " '11:20':39"
+						}
+
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> Insert-" +zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" inserted found"
-						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
+						displayRow(zjobs,site,convertedDate,tempPreviousTime,action,logType,recipients,globalEmailSubject,i+1);
 					}	
 					//-> Cancelled expression=> myBody.indexOf("cancelled") >0 
 					if( eval(cancelledExpression) ){
 						var logType = "cancelled";
 						var action = "Cancelling of jobs";
 						var where = "cancelled";			
-						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - cancelMinute )).toTimeString().split(" ")[0];
+						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> cancelled-" +zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" cancelling of jobs found"
@@ -1513,9 +1523,14 @@ progress[value]  {
 					}
 	
 				}else if( where == "insert"){
-					if( lineN.trim().indexOf("Z") >= 0 && lineN.trim().replace(/\s+/g, "-").split("-")[3] == 'R'){
+					if( (lineN.trim().indexOf("Z") >= 0 && lineN.trim().replace(/\s+/g, "-").split("-")[3] == 'R' || (lineN.trim().indexOf("ADDED BY RUSH") > 0) )){
 						//console.log( lineN.trim().replace(/\s+/g, "-").split("-")[3] )
 						var temp = lineN.trim().replace(/\s+/g, "-").split("-")[0];
+						zjobsTemp.push(temp);
+						zjobs.push( temp )
+					}
+					if( (lineN.trim().indexOf("HAS BEEN ADDED TO THE SCHEDULE")>0 ) ){
+						var temp = lineN.trim().split(",")[2].split(" ")[0].trim(); //5PT6,SCDBSINT,ZTPS110  HAS BEEN ADDED TO THE SCHEDULE
 						zjobsTemp.push(temp);
 						zjobs.push( temp )
 					}
