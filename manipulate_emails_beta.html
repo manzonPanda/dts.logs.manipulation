@@ -296,7 +296,7 @@ progress[value]  {
 			  <div class="input-group-prepend">
 				<span class="input-group-text" >Tpipe-Keywords and minutes</span>
 			  </div>
-			  <input type="text" value="TPIPE;L$" id="tpipeKeywords" class="form-control">
+			  <input type="text" value="TPIPE;L$;L@" id="tpipeKeywords" class="form-control">
 			   <!-- <input type="number" id="tpipeMinute" min="1" value="3" class="form-control">-->
 			</div>			
 			
@@ -1286,7 +1286,7 @@ progress[value]  {
 						var logType = "holdRelease";
 						var action = "Hold and Release of jobs";
 						var where = "holdRelease";			
-						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - holdReleaseMinute )).toTimeString().split(" ")[0];
+						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);				
 						console.log("email["+i +","+emailSubject+"]-> hold & release-" +zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" hold & release found";
@@ -1329,27 +1329,40 @@ progress[value]  {
 						//console.log(limitUntilLine +":"+ fullEmail.split("\n").length)
 						
 						if( fullEmail.split("From").length == 2 ){
-							
 							var title = [];
 							for( var j = myArray.length; j <=mySecondArray.length-1; j++ ){
 								var lineN = mySecondArray[j];
-								if( lineN.indexOf("L$") >= 0 ){
+								var temp = "";
+								if( lineN.indexOf("L$") >= 0 || lineN.indexOf("L@") >= 0){
+									temp = lineN.substring( lineN.indexOf("L$") , lineN.indexOf("L$") + 6).trim();	
 									if( title.indexOf(temp) < 0 ){ //-1 if not found
-										var temp = lineN.substring( lineN.indexOf("L$"), lineN.indexOf("L$") + 6).trim();
 										title.push(temp)									
 									}
+								}
+								if(lineN.indexOf("L@") >= 0){
+									temp = lineN.substring( lineN.indexOf("L@") , lineN.indexOf("L@") + 6).trim();	
+									if( title.indexOf(temp) < 0 ){ //-1 if not found
+										title.push(temp)									
+									}								
 								}
 							}
 							
 							var site = "Undefined";
-							var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0];;
-							timeResult = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1]
+							//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0];;
+							//timeResult = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1]
+							var tempPreviousTime = previousTime;
+							globalPreviousEmailTime = previousTime;
+							if( tempPreviousTime == "" ){//if preivousTime is null -> means no previous time found in email 
+								tempPreviousTime = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0]; //-3mins by default
+								tempPreviousTime =  tempPreviousTime.slice(0 , tempPreviousTime.indexOf(":")+3 ) ; //trim the time " '11:20':39"
+							}
+						
 							var action = "Tpipe";
 							var logType = "tpipe";
 							var recipient = "";
 							console.log("email["+i +","+emailSubject+"]-> Turnover-"+zjobs.length+" found")
 							document.getElementById("resultOfManipulation").textContent = zjobs.length+" tpipe found"
-							displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
+							displayRow(title,site,convertedDate,tempPreviousTime,action,logType,recipients,globalEmailSubject,i+1);
 						}
 					}
 					//-> Stuck in Submit expression=> myBody.indexOf("stuck in submit") >0 
@@ -1507,7 +1520,7 @@ progress[value]  {
 						zjobs.push( temp )
 					}
 				}else if( where == "holdRelease"){
-					if( lineN.trim().indexOf("Z") >= 0 && (lineN.trim().indexOf("HELD") > 0 || lineN.trim().indexOf("RELEASED") > 0) ){
+					if( lineN.trim().indexOf("Z") >= 0 && (lineN.trim().indexOf("HELD") > 0  || lineN.trim().indexOf("RELEASED") > 0) ){
 						//var temp = lineN.trim().substring(0,8);
 						var temp = lineN.trim().split(",")[2].split("-")[0].trim()
 						zjobsTemp.push(temp);
