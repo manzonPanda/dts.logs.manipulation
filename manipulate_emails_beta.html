@@ -39,37 +39,44 @@
 	 height: 300px;
     overflow-y: auto;
 }
-.label-warning{
+.label-warning{ /* Undefined */
 	
 	background-color:#ff4d4d
 }
 td.highlight {
-       text-align:center;
-        background-color: white;
-		
-    }
+   text-align:center;
+	background-color: white;
+	
+}
 
-	.footer{
-		position:fixed;
-		left:0;
-		bottom:0;
-		width: 100%;
-		background-color: #302f2f;
-		color:white;
-		text-align: right;
-	}
+.footer{
+	position:fixed;
+	left:0;
+	bottom:0;
+	width: 100%;
+	background-color: #302f2f;
+	color:white;
+	text-align: right;
+}
 progress[value]  {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: none;
+
+  height: 30px;
   width: 100%;
-  height: 20px;
   color: green; 
    border-radius: 9px;
    content: attr('80%');
 }
-
+.progress{
+	height:25px;
+	font-size:1.2rem;
+	font-weight: bold
+}
+.badge{
+	padding: 0.40rem
+}
 
 </style>
 </head>
@@ -79,8 +86,8 @@ progress[value]  {
 <div class="container">
 	<progress style="display:none" max="100" value="0" id="myBar" data-label="50%"></progress>
 	<div class="progress">
-		<div id="myBar2" class="progress-bar bg-danger progress-bar-striped progress-bar-animated" style="width:0%">
-			0% 
+		<div id="myBar2" class="progress-bar progress-bar-striped progress-bar-animated" style="width:0%">
+			 
 		</div>
 	</div>
 
@@ -104,37 +111,37 @@ progress[value]  {
 		  <div class="row">
 			<div class="col-sm">
 				 <div class="card border-dark mb-3" >
-					<div class="card-header text-center">ABEND</div>
+					<div class="card-header text-center" style="font-weight:bold">ABEND</div>
 					  <div class="card-body text-primary">
 							<div class="col-sm text-center">
-								 <span class="badge badge-pill badge-primary">Notify <span id="notifyDisplay" class="badge badge-dark" >0</span></span>
-								 <span class="badge badge-pill badge-primary">RR <span id="rerunDisplay" class="badge badge-dark">0</span></span>
-								 <span class="badge badge-pill badge-primary">RR ps25 <span id="rrPsDisplay" class="badge badge-dark">0</span></span>
-								 <span class="badge badge-pill badge-primary">MC <span id="mcDisplay" class="badge badge-dark">0</span></span>
-								 <span class="badge badge-pill badge-primary">MC ps25 <span id="mcPsDisplay" class="badge badge-dark">0</span></span>
-								 <div style="display:none" id="abendUndefinedDisplayDiv"><span  class="badge badge-pill badge-danger">Undefined <span id="abendUndefinedDisplay" class="badge badge-dark">0</span></span></div>
+								 <span class="badge badge-pill badge-info">Notify <span id="notifyDisplay" class="badge badge-dark" >0</span></span>
+								 <span class="badge badge-pill badge-info">RR <span id="rerunDisplay" class="badge badge-dark">0</span></span>
+								 <span class="badge badge-pill badge-info">RR ps25 <span id="rrPsDisplay" class="badge badge-dark">0</span></span>
+								 <span class="badge badge-pill badge-info">MC <span id="mcDisplay" class="badge badge-dark">0</span></span>
+								 <span class="badge badge-pill badge-info">MC ps25 <span id="mcPsDisplay" class="badge badge-dark">0</span></span>
+								 <div style="display:none" id="abendUndefinedDisplayDiv"><span  class="badge badge-pill badge-warning">Undefined <span id="abendUndefinedDisplay" class="badge badge-dark">0</span></span></div>
 							</div>
 					  </div>
 				</div>
 			</div>
 			<div class="col-sm">
 				 <div class="card border-dark mb-3">
-					  <div class="card-header text-center">NON-ABEND</div>
+					  <div class="card-header text-center" style="font-weight:bold">NON-ABEND</div>
 					  <div class="card-body text-primary">
 							<div class="col-sm text-center">
-								<span class="badge badge-pill badge-primary">Long Running <span id="longRunDisplay" class="badge badge-dark">0</span></span>
-								<span class="badge badge-pill badge-primary">Due-out <span id="dueOutDisplay" class="badge badge-dark">0</span></span>
-								<span class="badge badge-pill badge-primary">Stuck <span id="stuckDisplay" class="badge badge-dark">0</span></span>
-								<span class="badge badge-pill badge-primary">PCN <span id="pcnDisplay" class="badge badge-dark">0</span></span>
-								<span class="badge badge-pill badge-primary">Capping <span id="cappingDisplay" class="badge badge-dark">0</span></span>
-								<span class="badge badge-pill badge-primary">Hold & Release <span id="holdReleaseDisplay" class="badge badge-dark">0</span></span>
-								<span class="badge badge-pill badge-primary">Cancelling <span id="cancellingDisplay"class="badge badge-dark">0</span></span>
-								<span class="badge badge-pill badge-primary">Force <span id="forceDisplay" class="badge badge-dark">0</span></span>
-								<span class="badge badge-pill badge-primary">Insert <span id="insertDisplay" class="badge badge-dark">0</span></span>
-								<span class="badge badge-pill badge-primary">Tpipe <span id="tpipeDisplay" class="badge badge-dark">0</span></span>
-								<span class="badge badge-pill badge-primary">CleanUp <span id="cleanUpDisplay" class="badge badge-dark">0</span></span>
-								<span class="badge badge-pill badge-primary">Turnover <span id="turnoverDisplay" class="badge badge-dark">0</span></span>
-								<div style="display:none" id="nonAbendUndefinedDisplayDiv"><span  class="badge badge-pill badge-danger">Undefined <span id="nonAbendUndefinedDisplay" class="badge badge-dark">0</span></span></div>
+								<span class="badge badge-pill badge-info">Long Running <span id="longRunDisplay" class="badge badge-dark">0</span></span>
+								<span class="badge badge-pill badge-info">Due-out <span id="dueOutDisplay" class="badge badge-dark">0</span></span>
+								<span class="badge badge-pill badge-info">Stuck <span id="stuckDisplay" class="badge badge-dark">0</span></span>
+								<span class="badge badge-pill badge-info">PCN <span id="pcnDisplay" class="badge badge-dark">0</span></span>
+								<span class="badge badge-pill badge-info">Capping <span id="cappingDisplay" class="badge badge-dark">0</span></span>
+								<span class="badge badge-pill badge-info">Hold & Release <span id="holdReleaseDisplay" class="badge badge-dark">0</span></span>
+								<span class="badge badge-pill badge-info">Cancelling <span id="cancellingDisplay"class="badge badge-dark">0</span></span>
+								<span class="badge badge-pill badge-info">Force <span id="forceDisplay" class="badge badge-dark">0</span></span>
+								<span class="badge badge-pill badge-info">Insert <span id="insertDisplay" class="badge badge-dark">0</span></span>
+								<span class="badge badge-pill badge-info">Tpipe <span id="tpipeDisplay" class="badge badge-dark">0</span></span>
+								<span class="badge badge-pill badge-info">CleanUp <span id="cleanUpDisplay" class="badge badge-dark">0</span></span>
+								<span class="badge badge-pill badge-info">Turnover <span id="turnoverDisplay" class="badge badge-dark">0</span></span>
+								<div style="display:none" id="nonAbendUndefinedDisplayDiv"><span  class="badge badge-pill badge-warning">Undefined <span id="nonAbendUndefinedDisplay" class="badge badge-dark">0</span></span></div>
 							</div>
 					  </div>
 				  </div>
@@ -669,6 +676,9 @@ progress[value]  {
 			 cancelledCount = 0;
 			 turnOverCount = 0;
 			 pcnCount = 0;
+			 abendUndefinedCount = 0;
+			 nonAbendUndefinedCount = 0;
+			 
 		}
 		
 		function createSummary(action){
@@ -750,6 +760,9 @@ progress[value]  {
 		function inputValidation(){
 			document.getElementById("abendsTbody").innerHTML = "";
 			document.getElementById("longRunningTbody").innerHTML = "";
+			var abendsTable = $('#abendsTable').DataTable().clear().draw();
+			var nonAbendsTable = $('#longRunningTable').DataTable().clear().draw();
+
 			//document.getElementById("showDebugButton").style.display = "none";
 			//document.getElementById("showDebugButton").setAttribute("class","btn btn-danger")
 			//document.getElementById("showDebugButton").innerHTML = "HIDE DEBUG"
@@ -964,7 +977,13 @@ progress[value]  {
 			var outlookApp = new ActiveXObject("Outlook.Application");
 			var nameSpace = outlookApp.getNameSpace("MAPI");
 			//nameSpace.logon("ja20076062@wipro.com","jjgm@WL6062",false,false);
-			var mailFolder = nameSpace.GetDefaultFolder(6).Folders(document.getElementById("folderName").value).Items.Item(1).ConversationTopic;
+			try{
+				var mailFolder = nameSpace.GetDefaultFolder(6).Folders(document.getElementById("folderName").value).Items.Item(1).ConversationTopic;
+			}
+			catch(error){
+				alert("Folder named \""+document.getElementById("folderName").value+"\" cannot be found or the folder is empty.")
+			}
+			
 			var emails = nameSpace.GetDefaultFolder(6).Folders(document.getElementById("folderName").value).Items;
 			 emailsGlobalVar = emails;
 			 abendsTbody = document.getElementById("abendsTbody");	
@@ -974,7 +993,10 @@ progress[value]  {
 			console.log(emailCount)
 			i = 0;
 			resetCounter();
-			document.getElementById("myBar2").setAttribute("class","progress-bar bg-danger progress-bar-striped progress-bar-animated")
+			//document.getElementById("myBar2").setAttribute("style","color:yellow")
+				document.getElementById("myBar2").setAttribute("class","progress-bar bg-danger progress-bar-striped progress-bar-animated")
+
+			
 			document.getElementById("emailsCountDisplay").textContent = emailCount;
 			myLoop( emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression,pcnExpression);
 			
@@ -1001,6 +1023,7 @@ progress[value]  {
 					//document.getElementById("btnExportAbends").style.display = "block";
 					//document.getElementById("btnExportNonAbends").style.display = "block";
 					elem2.setAttribute("style","width:"+parseInt( (i/emailCount)*100)+"%");
+					elem2.setAttribute("style","width:100%");
 					return;
 				}
 			  //////////////////////////////////////////////////////////////////
@@ -1009,7 +1032,19 @@ progress[value]  {
 					console.log( parseInt( (i/emailCount)*100 ))
 					elem2.innerHTML = parseInt( (i/emailCount)*100)+"%";
 					document.getElementById("emailsCountStartDisplay").textContent = i;
-
+		
+				//To be continued...15...30...45..60...75...90...
+					if( (i/emailCount)*100 < 20 ){
+						document.getElementById("myBar2").setAttribute("class","progress-bar bg-danger progress-bar-striped progress-bar-animated")
+					}else if( (i/emailCount)*100 > 20 && (i/emailCount)*100 < 40 ){
+						document.getElementById("myBar2").setAttribute("class","progress-bar bg-warning progress-bar-striped progress-bar-animated")			
+					}else if( (i/emailCount)*100 > 40 && (i/emailCount)*100 < 80 ){
+						document.getElementById("myBar2").setAttribute("class","progress-bar bg-info progress-bar-striped progress-bar-animated")						
+					}else{
+						
+					}
+	
+				///////////////////////////////////////////////////////////
  
 				//console.log( emails )
 				var theEmail = emails.Item(i+1);
@@ -1297,11 +1332,24 @@ progress[value]  {
 						var logType = "missedDue";
 						var action = "Missed Due Out";
 						var where = "missedDue";			
-						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - missedDueOutMinute )).toTimeString().split(" ")[0];
+						//var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0];
+						
+						if( fullEmail.split("From").length == 2 ){
+							var tempPreviousTime = previousTime;
+							globalPreviousEmailTime = previousTime;
+							if( tempPreviousTime == "" ){//if preivousTime is null -> means no previous time found in email 
+								tempPreviousTime = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0]; //-3mins by default
+								tempPreviousTime =  tempPreviousTime.slice(0 , tempPreviousTime.indexOf(":")+3 ) ; //trim the time " '11:20':39"
+							}
+						}else{
+							var tempPreviousTime = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0];
+						}
+						
+						
 						extractJobs(emailSubject,myBody,where,fullEmail);				
 						console.log("email["+i +","+emailSubject+"]-> missedDueout-" +zjobs.length+" found")
 						document.getElementById("resultOfManipulation").textContent = zjobs.length+" missed Due-out found";
-						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
+						displayRow(zjobs,site,convertedDate,tempPreviousTime,action,logType,recipients,globalEmailSubject,i+1);
 					}					
 					//-> Capping expression=> myBody.indexOf("quick view") >0 && myBody.indexOf("%") >=0
 					if( eval(cappingExpression) && myBody.indexOf("%") >=0){
@@ -1333,7 +1381,7 @@ progress[value]  {
 							for( var j = myArray.length; j <=mySecondArray.length-1; j++ ){
 								var lineN = mySecondArray[j];
 								var temp = "";
-								if( lineN.indexOf("L$") >= 0 || lineN.indexOf("L@") >= 0){
+								if( lineN.indexOf("L$") >= 0 ){
 									temp = lineN.substring( lineN.indexOf("L$") , lineN.indexOf("L$") + 6).trim();	
 									if( title.indexOf(temp) < 0 ){ //-1 if not found
 										title.push(temp)									
@@ -1536,7 +1584,7 @@ progress[value]  {
 					}
 	
 				}else if( where == "insert"){
-					if( (lineN.trim().indexOf("Z") >= 0 && lineN.trim().replace(/\s+/g, "-").split("-")[3] == 'R' || (lineN.trim().indexOf("ADDED BY RUSH") > 0) )){
+					if( lineN.trim().indexOf("Z") >= 0 && (lineN.trim().replace(/\s+/g, "-").split("-")[3] == 'R' || (lineN.trim().indexOf("ADDED BY RUSH") > 0)) ){
 						//console.log( lineN.trim().replace(/\s+/g, "-").split("-")[3] )
 						var temp = lineN.trim().replace(/\s+/g, "-").split("-")[0];
 						zjobsTemp.push(temp);
@@ -1568,6 +1616,13 @@ progress[value]  {
 						zjobsTemp.push(temp);
 						zjobs.push( temp )
 					}
+				}else if( where == "missedDue" ){//missed due out
+					if( lineN.trim().indexOf("Z") >= 0 && (lineN.trim().indexOf("LATE") > 0 ) ){
+						var temp = lineN.trim().split(" ")[0].trim()
+						zjobsTemp.push(temp);
+						zjobs.push( temp )
+					}
+				
 				}else{ //abend
 					//get all zjobs first and then compare it to full email thread-if there is duplicate-then someone already report it
 					if( lineN.trim().indexOf("Z") >= 0 && lineN.trim().indexOf("Z") <3 && lineN.indexOf(where) >= 0 ){
@@ -1602,28 +1657,48 @@ progress[value]  {
 				//	return;
 				//}
 			}
+					
+			console.log("zjobs") 
+			console.log(zjobs) 
 			
 			//for missed due-out 
 			if( where == "missedDue" ){//missed due out
-				for( var k = 0; k < mySecondArray.length; k++ ){
-					var lineN = mySecondArray[k];
-					if( lineN.trim().indexOf("Z") >= 0 && (lineN.trim().indexOf("LATE") > 0 ) ){
-						var temp = lineN.trim().split(" ")[0].trim()
-						zjobsTemp.push(temp);
-						zjobs.push( temp )
-					}
-				}
 				if( zjobs.length == 0 ){ //if no found in email body, get from the subject
 					var jobname =  emailSubject.substring( emailSubject.indexOf("Z")  )  
 						zjobsTemp.push(jobname)
 						//zjobs.push( temp )
 						zjobs.push( jobname )
 				}
+				/////////////////////////////////////////////////////////////////////
+				var mySecondArray = fullEmail.split("\n");
+				zjobs = zjobsTemp;
+				//console.log(mySecondArray[1].indexOf("dts@msg.ti.com [mailto:dts@msg.ti.com]"));
+				//search job duplication in thread
+				for( var g = myArray.length; g < mySecondArray.length; g++){
+					var lineN = mySecondArray[g];
+					//"From: dts@msg.ti.com [mailto:dts@msg.ti.com]"
+					if( lineN.indexOf( "From: due-out.notification@" ) >= 0  ){
+						//console.log("AUTO EMAIL FOUND!")
+						var from = lineN.indexOf( "From: due-out.notification@" );
+						var fromNumberline = mySecondArray.indexOf(mySecondArray[g]);
+						var indexOfAutoEmail = fromNumberline;
+						//console.log(indexOfAutoEmail)
+					}
+					if( lineN.indexOf( "Z" ) >= 0 ){ 
+						for( var h=0; h < zjobsTemp.length; h++ ){
+							if( lineN.indexOf( zjobsTemp[h] ) >= 0  && !(g>indexOfAutoEmail)  ){//there is already job in threads until first line of AutoEmail
+								//&& lineN.indexOf( zjobsTemp[m]) < fromNumberline
+								//console.log( fromNumberline <  )
+								console.log("!g<AE->" + g +"<"+indexOfAutoEmail )
+								//console.log( lineN.indexOf( zjobsTemp[h] ) + " == " + lineN) //if found duplicate
+								zjobs.splice( zjobsTemp.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
+							}
+						}
+					}
+				}
+				
 			}
 			
-								
-			console.log("zjobs") 
-			console.log(zjobs) 
 			if( where == "RECOVERY" ){ //rerun
 				var splitFrom = fullEmail.split("From");
 				if( zjobsRecoveryActive.length > 0 ){
