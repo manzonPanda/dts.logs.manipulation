@@ -74,9 +74,56 @@ progress[value]  {
 	font-size:1.2rem;
 	font-weight: bold
 }
+.progress-bar{
+	color:black
+}
+
+.progress-bar-tenPercent{
+	background-color: #FF0000
+}
+.progress-bar-twentyPercent{
+	background-color:#FF3400
+}
+.progress-bar-thirtyPercent{
+	background-color:#FF6900
+}
+.progress-bar-fourtyPercent{
+	background-color:#FF8C00
+}
+.progress-bar-fiftyPercent{
+	background-color:#FFC100 
+}
+.progress-bar-sixtyPercent{
+	background-color:#FFE400 
+}
+.progress-bar-seventyPercent{
+	background-color: #FFF600 
+}
+.progress-bar-eightyPercent{
+	background-color:#C2FF00
+}
+.progress-bar-ninetyPercent{
+	background-color:#8DFF00 
+}
+.progress-bar-hundredPercent{
+	background-color:#58FF00 
+}
+.progress-bar-fullPercent{
+	background-color:green;
+	color:white
+}
+
 .badge{
 	padding: 0.40rem
+	
 }
+
+#myContainer,#myContainer2{
+	 justify-content: center;
+	 display: flex;
+}
+
+
 
 </style>
 </head>
@@ -119,7 +166,10 @@ progress[value]  {
 								 <span class="badge badge-pill badge-info">RR ps25 <span id="rrPsDisplay" class="badge badge-dark">0</span></span>
 								 <span class="badge badge-pill badge-info">MC <span id="mcDisplay" class="badge badge-dark">0</span></span>
 								 <span class="badge badge-pill badge-info">MC ps25 <span id="mcPsDisplay" class="badge badge-dark">0</span></span>
-								 <div style="display:none" id="abendUndefinedDisplayDiv"><span  class="badge badge-pill badge-warning">Undefined <span id="abendUndefinedDisplay" class="badge badge-dark">0</span></span></div>
+								<div id="myContainer">
+									<div style="display:none" id="abendUndefinedDisplayDiv"><span  class="badge badge-pill badge-danger">Undefined <span id="abendUndefinedDisplay" class="badge badge-dark">0</span></span></div>
+									 <div style="display:none" id="abendAlertDisplayDiv"><span  class="badge badge-pill badge-warning">Alert <span id="abendAlertDisplay" class="badge badge-dark">0</span></span></div>
+								</div>
 							</div>
 					  </div>
 				</div>
@@ -141,7 +191,10 @@ progress[value]  {
 								<span class="badge badge-pill badge-info">Tpipe <span id="tpipeDisplay" class="badge badge-dark">0</span></span>
 								<span class="badge badge-pill badge-info">CleanUp <span id="cleanUpDisplay" class="badge badge-dark">0</span></span>
 								<span class="badge badge-pill badge-info">Turnover <span id="turnoverDisplay" class="badge badge-dark">0</span></span>
-								<div style="display:none" id="nonAbendUndefinedDisplayDiv"><span  class="badge badge-pill badge-warning">Undefined <span id="nonAbendUndefinedDisplay" class="badge badge-dark">0</span></span></div>
+								<div id="myContainer2">
+									<div style="display:none" id="nonAbendUndefinedDisplayDiv"><span  class="badge badge-pill badge-danger">Undefined <span id="nonAbendUndefinedDisplay" class="badge badge-dark">0</span></span></div>
+									<div style="display:none" id="nonAbendAlertDisplayDiv"><span  class="badge badge-pill badge-warning">Alert <span id="nonAbendAlertDisplay" class="badge badge-dark">0</span></span></div>
+								</div>
 							</div>
 					  </div>
 				  </div>
@@ -473,15 +526,24 @@ progress[value]  {
 				 colReorder: true,
 				 "order": [[ 2, 'asc' ], [ 5, 'asc' ]], 
 				 "createdRow": function ( row, data, index ) {
+					var difference = Math.round( ((timeStringConverter(data[5]) - timeStringConverter(data[3]))/1000) )/60  
+					if( difference > 15){
+						abendAlertCount++;
+						document.getElementById("abendAlertDisplayDiv").style.display = "block";
+						document.getElementById("abendAlertDisplay").textContent = abendAlertCount;
+						row.childNodes[6].innerHTML = " <span class='badge badge-pill badge-warning'>Alert </span> " + row.childNodes[6].innerHTML
+					}
+					
 					if ( data[0] == "Undefined" || data[1] == "Undefined" ) {
 						$('td', row).eq(6).addClass('highlight');
 						$(row).addClass('label-warning');
-						row.childNodes[6].innerHTML = "<button onclick='removeRow(this)' data-status='enabled' type='button' data-table='abendTable' class='btn btn-success btn-xs'>ADD</button>"
+						row.childNodes[6].innerHTML = "<button onclick='removeRow(this)' data-status='enabled' type='button' data-table='abendTable' class='btn btn-success btn-xs'>ADD</button> " + row.childNodes[6].innerHTML
 						
 						abendUndefinedCount++;
 						document.getElementById("abendUndefinedDisplayDiv").style.display = "block";
 						document.getElementById("abendUndefinedDisplay").textContent = abendUndefinedCount;
 					}
+
 				}
 				 
 			});	
@@ -535,10 +597,18 @@ progress[value]  {
 				colReorder: true,
 				"order": [[ 1, 'asc' ], [ 5, 'asc' ]],
 				"createdRow": function ( row, data, index,cells ) {
+					var difference = Math.round( ((timeStringConverter(data[5]) - timeStringConverter(data[2]))/1000) )/60  
+					if( difference > 2){
+						nonAbendAlertCount++;
+						document.getElementById("nonAbendAlertDisplayDiv").style.display = "block";
+						document.getElementById("nonAbendAlertDisplay").textContent = nonAbendAlertCount;
+						row.childNodes[6].innerHTML = " <span class='badge badge-pill badge-warning'>Alert </span> " + row.childNodes[6].innerHTML
+					}
+					
 					if ( data[0] == "Undefined" || data[4] == "Undefined" ) {
 						$('td', row).eq(6).addClass('highlight');
 						$(row).addClass('label-warning');
-						row.childNodes[6].innerHTML = "<button onclick='removeRow(this)' data-status='enabled' data-table='nonAbendTable' type='button' class='btn btn-success btn-xs'>ADD</button>"
+						row.childNodes[6].innerHTML = " <button onclick='removeRow(this)' data-status='enabled' data-table='nonAbendTable' type='button' class='btn btn-success btn-xs'>ADD</button> " + row.childNodes[6].innerHTML
 						//row.childNodes[6].innerHTML = "<input type='checkbox' data-toggle='toggle' data-on='Enabled' data-off='Disabled'>"
 						
 						nonAbendUndefinedCount++;
@@ -602,6 +672,8 @@ progress[value]  {
 		var pcnCount = 0;
 		var abendUndefinedCount = 0;
 		var nonAbendUndefinedCount = 0;
+		var abendAlertCount = 0;
+		var nonAbendAlertCount = 0;
 		
 		
 	function exportLogs(name){
@@ -678,6 +750,8 @@ progress[value]  {
 			 pcnCount = 0;
 			 abendUndefinedCount = 0;
 			 nonAbendUndefinedCount = 0;
+			 nonAbendAlertCount = 0;
+			 abendAlertCount = 0;
 			 
 		}
 		
@@ -762,7 +836,17 @@ progress[value]  {
 			document.getElementById("longRunningTbody").innerHTML = "";
 			var abendsTable = $('#abendsTable').DataTable().clear().draw();
 			var nonAbendsTable = $('#longRunningTable').DataTable().clear().draw();
-
+			
+			document.getElementById("abendUndefinedDisplayDiv").style.display = "none";
+			document.getElementById("abendUndefinedDisplay").textContent = abendUndefinedCount;
+			document.getElementById("abendAlertDisplayDiv").style.display = "none";
+			document.getElementById("abendAlertDisplay").textContent = abendAlertCount;
+			
+			document.getElementById("nonAbendUndefinedDisplayDiv").style.display = "none";
+			document.getElementById("nonAbendUndefinedDisplay").textContent = nonAbendUndefinedCount;
+			document.getElementById("nonAbendAlertDisplayDiv").style.display = "none";
+			document.getElementById("nonAbendAlertDisplay").textContent = nonAbendAlertCount;
+		
 			//document.getElementById("showDebugButton").style.display = "none";
 			//document.getElementById("showDebugButton").setAttribute("class","btn btn-danger")
 			//document.getElementById("showDebugButton").innerHTML = "HIDE DEBUG"
@@ -982,6 +1066,7 @@ progress[value]  {
 			}
 			catch(error){
 				alert("Folder named \""+document.getElementById("folderName").value+"\" cannot be found or the folder is empty.")
+				
 			}
 			
 			var emails = nameSpace.GetDefaultFolder(6).Folders(document.getElementById("folderName").value).Items;
@@ -1014,7 +1099,7 @@ progress[value]  {
 				if( i == emailCount ){ 
 					console.log("100% complete.")
 					document.getElementById("myBar").style.display = "none";
-					document.getElementById("myBar2").setAttribute("class","progress-bar bg-success progress-bar-striped progress-bar-animated")
+					document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-fullPercent progress-bar-striped progress-bar-animated")
 					document.getElementById("myBar2").innerHTML = "100% COMPLETE";
 					//document.getElementById("fakeProgress").innerHTML = "<span style='width:100%' class='badge badge-pill badge-success'>100% COMPLETE </span>";
 					document.getElementById("fakeProgress").style.display = "none";
@@ -1033,17 +1118,30 @@ progress[value]  {
 					elem2.innerHTML = parseInt( (i/emailCount)*100)+"%";
 					document.getElementById("emailsCountStartDisplay").textContent = i;
 		
-				//To be continued...15...30...45..60...75...90...
-					if( (i/emailCount)*100 < 20 ){
-						document.getElementById("myBar2").setAttribute("class","progress-bar bg-danger progress-bar-striped progress-bar-animated")
-					}else if( (i/emailCount)*100 > 20 && (i/emailCount)*100 < 40 ){
-						document.getElementById("myBar2").setAttribute("class","progress-bar bg-warning progress-bar-striped progress-bar-animated")			
-					}else if( (i/emailCount)*100 > 40 && (i/emailCount)*100 < 80 ){
-						document.getElementById("myBar2").setAttribute("class","progress-bar bg-info progress-bar-striped progress-bar-animated")						
-					}else{
-						
+				//To be continued...10..20...30..40..50..60..70...80..90..100
+					
+					if( (i/emailCount)*100 < 10 ){
+						document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-tenPercent progress-bar-striped progress-bar-animated")
+					}else if( (i/emailCount)*100 > 10 && (i/emailCount)*100 < 20 ){
+						document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-twentyPercent progress-bar-striped progress-bar-animated")			
+					}else if( (i/emailCount)*100 > 20 && (i/emailCount)*100 < 30 ){
+						document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-thirtyPercent progress-bar-striped progress-bar-animated")			
+					}else if( (i/emailCount)*100 > 30 && (i/emailCount)*100 < 40 ){
+						document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-fourtyPercent progress-bar-striped progress-bar-animated")			
+					}else if( (i/emailCount)*100 > 40 && (i/emailCount)*100 < 50 ){
+						document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-fiftyPercent progress-bar-striped progress-bar-animated")						
+					}else if( (i/emailCount)*100 > 50 && (i/emailCount)*100 < 60 ) {
+						document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-sixtyPercent progress-bar-striped progress-bar-animated")						
+					}else if( (i/emailCount)*100 > 60 && (i/emailCount)*100 < 70 ) {
+						document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-seventyPercent progress-bar-striped progress-bar-animated")						
+					}else if( (i/emailCount)*100 > 70 && (i/emailCount)*100 < 80 ) {
+						document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-eightyPercent progress-bar-striped progress-bar-animated")						
+					}else if( (i/emailCount)*100 > 80 && (i/emailCount)*100 < 90 ) {
+						document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-ninetyPercent progress-bar-striped progress-bar-animated")						
+					}else if( (i/emailCount)*100 > 90 && (i/emailCount)*100 < 100 ) {
+						document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-hundredPercent progress-bar-striped progress-bar-animated")						
 					}
-	
+					
 				///////////////////////////////////////////////////////////
  
 				//console.log( emails )
