@@ -56,7 +56,7 @@ td.highlight {
 	width: 100%;
 	background-color: #302f2f;
 	color:white;
-	text-align: right;
+	text-align: center;
 }
 progress[value]  {
   -webkit-appearance: none;
@@ -128,7 +128,7 @@ progress[value]  {
 </style>
 </head>
 
-<body>
+<body oncontextmenu="return false">
 
 <div class="container">
 	<progress style="display:none" max="100" value="0" id="myBar" data-label="50%"></progress>
@@ -372,7 +372,7 @@ progress[value]  {
 			  <div class="input-group-prepend">
 				<span class="input-group-text" >CleanUp-Keywords and minutes</span>
 			  </div>
-			  <input type="text" value="clear off;clean job" id="cleanUpKeywords" class="form-control">
+			  <input type="text" value="clear off;clean job;clean up" id="cleanUpKeywords" class="form-control">
 			  <!--  <input disabled type="number" id="stuckMinute" min="1" value="0" class="form-control">-->
 			</div>			
 			
@@ -427,7 +427,7 @@ progress[value]  {
 
 	<br><br><br>
 		<div class="footer">
-			<p style="color:white">Nov 25th 2019 - Made by Duke and Jake :)	</p>
+			<p style="color:white"> (c) November 25th,2019 Made by Duke and Jake :). All rights reserved.</p>
 		</div>
 		<script>
 
@@ -598,7 +598,7 @@ progress[value]  {
 				"order": [[ 1, 'asc' ], [ 5, 'asc' ]],
 				"createdRow": function ( row, data, index,cells ) {
 					var difference = Math.round( ((timeStringConverter(data[5]) - timeStringConverter(data[2]))/1000) )/60  
-					if( difference > 2){
+					if( difference > 15){
 						nonAbendAlertCount++;
 						document.getElementById("nonAbendAlertDisplayDiv").style.display = "block";
 						document.getElementById("nonAbendAlertDisplay").textContent = nonAbendAlertCount;
@@ -1342,10 +1342,9 @@ progress[value]  {
 						console.log("email("+i +")-> mc-"+zjobs.length+" found")
 						
 						if( myBody.indexOf("ps25")>0 || myBody.indexOf("ps22")>0 || myBody.indexOf("recovery instruction")>0){ //as per?ps25
-							console.log(theEmail.Body.indexOf("ps25"))
 							action = "mark complete as per ps25";
 							//timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - markCompleteMinute )).toTimeString().split(" ")[0];
-							console.log("mcMinute: " +tempDate.getMinutes() - markCompleteMinute)
+							//console.log("mcMinute: " +tempDate.getMinutes() - markCompleteMinute)
 						}else{
 							action = "mark complete as per programmer";
 							//timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - markCompleteMinute )).toTimeString().split(" ")[0];
@@ -1755,8 +1754,10 @@ progress[value]  {
 				//	return;
 				//}
 			}
-					
-			console.log("zjobs") 
+			
+			///---->BELOW IS FOR REMOVING JOB DUPLICATION<----///
+			
+			console.log("::: [zjobs result found below] :::") 
 			console.log(zjobs) 
 			
 			//for missed due-out 
@@ -2049,9 +2050,11 @@ progress[value]  {
 				zjobs = zjobsTemp;
 				var mySecondArray = fullEmail.split("\n");
 				// search job duplication in thread->don't notify
-				for( var g = myArray.length; g <= mySecondArray.length; g++){ 
+				for( var g = myArray.length; g <= mySecondArray.length-1; g++){ 
 					var lineN = mySecondArray[g];
+					console.log( lineN.indexOf( "From: dts@msg.ti.com [mailto:dts@msg.ti.com]" ) )
 					if( lineN.indexOf( "From: dts@msg.ti.com [mailto:dts@msg.ti.com]" ) >= 0  ){
+						console.log("ineN.indexOf( From: dts@msg.ti.com [mailto:dts@msg.ti.com] ) >= 0")
 						var from = lineN.indexOf( "From: dts@msg.ti.com [mailto:dts@msg.ti.com]" );
 						var fromNumberline = mySecondArray.indexOf(mySecondArray[g]);
 						var indexOfAutoEmail = fromNumberline;
@@ -2130,8 +2133,9 @@ progress[value]  {
 				var lineN = mySecondArray[j];
 				( lineN.indexOf("Sent:") >=0 ) ? tempSentValue=lineN.slice( lineN.split(":", 2).join(":").length-2,lineN.split(":", 2).join(":").length+7).trim() : "" //first get the Sent: value
 				if( lineN.indexOf(zjobs[0]) >= 0 && lineN.indexOf("WAITING T/S INI") >= 0 ){
-					//console.log("found->"+lineN); //found ////get the time of the job when it was notified ::: WAITING T/S INIT
 					sentValue = tempSentValue;
+					//console.log("found->"+lineN); //found ////get the time of the job when it was notified ::: WAITING T/S INIT
+					//console.log("time: "+ sentValue) // time: 1:11 AM
 					//break;
 				}
 			}
