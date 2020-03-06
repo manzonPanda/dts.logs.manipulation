@@ -1031,6 +1031,7 @@ progress[value]  {
 		
 		function timeStringConverter(timeInString){
 			var d = new Date();
+			console.log("error->>>>>> "+timeInString)
 			timeInString.split(":")[0] > 12 ? timeInString = timeInString+" PM" : timeInString = timeInString+" AM"
 			parts = timeInString.match(/(\d+)\:(\d+) (\w+)/),
 			//["11:16 AM", "11", "16", "AM"]
@@ -2119,7 +2120,7 @@ progress[value]  {
 			/*To be continued... */
 			var myArray = myBody.split("\n");
 			var timeResult;
-			var cellSixAbend;
+			var cellSixAbend = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
 			//console.log( fullEmail.split("Sent:")[0] )
 			var mySecondArray = fullEmail.split("\n");
 			var previousEmailThread = fullEmail.slice(fullEmail.split("Sent:", 1).join("Sent:").length , fullEmail.split("Sent:", 1).join("Sent:").length+50);
@@ -2142,8 +2143,10 @@ progress[value]  {
 			console.log("sentValue-> "+sentValue)
 			if( sentValue != "" ){ //find the difference			
 				///////////////////////////////
+				console.log("start")
 				var difference = Math.round( ((( timeStringConverter( convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1])-timeStringConverter(sentValue) )) /1000)/60 )							
 				console.log("difference-> ("+convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1]+"-" +sentValue+") " + difference + " minutes")
+				//console.log( Math.round( ((( timeStringConverter( convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1])-timeStringConverter(sentValue) )) /1000)/60 )							 )
 				if( difference >= 119  ){ // > minutes ---(i.e)---> mc if no response in 2hours(120mins-YR) | (15mins-Y2)
 					//adjust time column in 2 hours
 					//["11:16 AM", "11", "16", "AM"]
@@ -2162,14 +2165,16 @@ progress[value]  {
 					console.log("timeResult-> "+sentValue)
 					//////////////////////////////
 					timeResult = sentValue //column 4 abend table
-					cellSixAbend =  convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1]
+					//cellSixAbend =  convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1]
+
 				}
 				
 			}else{
+				console.log("heree?")
 				timeResult = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":" +timeResult.split(":")[1];//column 4 abend table
-				cellSixAbend =  convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1]
+				//cellSixAbend =  convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1]
 			}
-			
+
 			return [timeResult,cellSixAbend]
 			
 		}
@@ -2225,8 +2230,11 @@ progress[value]  {
 						//cellSixAbend = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
 						if( action == "mark complete as per ps25" ){
 							var myVariables = solveTimeColumnsForMC(myBody,fullEmail,convertedDate,timeResult)
+							console.log(myVariables)
 							timeResult =  myVariables[0];
 							cellSixAbend = myVariables[1];
+
+
 						}
 						
 						if( action == "rerun as per ps25" ){
@@ -2300,7 +2308,7 @@ progress[value]  {
 						}
 						cellSeven = globalEmailSubject;
 				}
-				
+
 				//add row in ? table
 				if( logType === "abend" ) {
 					var temp = t1.row.add( [
