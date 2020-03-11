@@ -136,9 +136,9 @@ progress[value]  {
 </style>
 </head>
 <!-- oncontextmenu="return false" -->
-<body oncontextmenu="return false">
+<body >
 
-<div class="container">
+<div class="container" >
 	<progress style="display:none" max="100" value="0" id="myBar" data-label="50%"></progress>
 	<div class="progress">
 		<div id="myBar2" class="progress-bar progress-bar-striped progress-bar-animated" style="width:0%">
@@ -146,15 +146,15 @@ progress[value]  {
 		</div>
 	</div>
 
-	<div class="row">
+	<div class="row" style="display:none" id="progressBarDiv">
 		<div class="col-sm">
-			<div id="fakeProgress" style="display:none">
+			<div id="fakeProgress" style="display:block">
 				<span class="badge badge-pill" style="color:white"> <span id="emailsCountStartDisplay" class="badge badge-light" style="color:white">0</span></span><progress></progress><span class="badge badge-pill" style="color:white"> <span id="emailsCountDisplay" class="badge badge-light" style="color:white">0</span> Emails</span>
 			</div>
 		</div>
 		
 		<div class="col-sm">
-			<span class="badge badge-pill badge-danger" style="width:100%;display:none" id="resultOfManipulation"> ???</span>
+			<span class="badge badge-pill badge-danger" style="width:100%;display:block" id="resultOfManipulation"> ???</span>
 		</div>
 	</div>
 
@@ -261,7 +261,7 @@ progress[value]  {
 			  </div>
 			  <input type="text" value="tempNovember" id="folderName" class="form-control">
 			   <div class="input-group-append">
-				<button class="btn btn-success" type="button" onclick="inputValidation()"> CREATE LOGS</button>
+				<button id="createLogButton" style="border-color:green" class="btn btn-success" type="button" onclick="inputValidation()"> CREATE LOGS</button>
 				<!--<button id="showDebugButton" style="display:none" class="btn btn-danger" type="button" data-status="hidden" onclick="showDebug(this)"> HIDE DEBUG</button> -->
 				<!--<button class="btn btn-success" id="btnExportAbends" style="display:none" onclick="exportLogs('abends');"> EXPORT ABENDS </button> -->
 				<!--<button class="btn btn-success" id="btnExportNonAbends" style="display:none" onclick="exportLogs('nonAbends');"> EXPORT NON-ABENDS </button> -->
@@ -1070,8 +1070,12 @@ progress[value]  {
 			try{
 				//start
 				var mailFolder = nameSpace.GetDefaultFolder(6).Folders(document.getElementById("folderName").value).Items.Item(1).ConversationTopic;
-				document.getElementById("fakeProgress").style.display = "block";
-				document.getElementById("resultOfManipulation").style.display = "block";
+				$("#progressBarDiv").slideDown(1000);
+
+				setMultipleAttributes(document.getElementById("createLogButton"),{"style":"background-color:grey;border-color:white"});
+				document.getElementById("createLogButton").setAttribute("disabled")
+				//document.getElementById("fakeProgress").style.display = "block";
+				//document.getElementById("resultOfManipulation").style.display = "block";
 			}
 			catch(error){
 				alert("Folder named \""+document.getElementById("folderName").value+"\" cannot be found or the folder is empty.")
@@ -1086,8 +1090,7 @@ progress[value]  {
 			console.log(emailCount)
 			i = 0;
 			resetCounter();
-			//document.getElementById("myBar2").setAttribute("style","color:yellow")
-				document.getElementById("myBar2").setAttribute("class","progress-bar bg-danger progress-bar-striped progress-bar-animated")
+			document.getElementById("myBar2").setAttribute("class","progress-bar bg-danger progress-bar-striped progress-bar-animated")
 			
 			//start the loop
 			document.getElementById("emailsCountDisplay").textContent = emailCount;
@@ -1108,8 +1111,11 @@ progress[value]  {
 					document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-fullPercent progress-bar-striped progress-bar-animated")
 					document.getElementById("myBar2").innerHTML = "100% COMPLETE";
 					//document.getElementById("fakeProgress").innerHTML = "<span style='width:100%' class='badge badge-pill badge-success'>100% COMPLETE </span>";
-					document.getElementById("fakeProgress").style.display = "none";
-					document.getElementById("resultOfManipulation").style.display = "none";
+					$("#progressBarDiv").slideUp(2000);
+				
+					//document.getElementById("fakeProgress").style.display = "none";
+					//document.getElementById("resultOfManipulation").style.display = "none";
+					
 					//document.getElementById("showDebugButton").style.display = "block";
 					//document.getElementById("btnExportAbends").style.display = "block";
 					//document.getElementById("btnExportNonAbends").style.display = "block";
