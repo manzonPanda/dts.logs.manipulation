@@ -136,7 +136,7 @@ progress[value]  {
 </style>
 </head>
 <!-- oncontextmenu="return false" -->
-<body >
+<body oncontextmenu="return false">
 
 <div class="container" >
 	<progress style="display:none" max="100" value="0" id="myBar" data-label="50%"></progress>
@@ -435,7 +435,7 @@ progress[value]  {
 
 	<br><br><br>
 		<div class="footer">
-			<p style="color:white"> (c) November 25th,2019 Made by Duke and Jake :). All rights reserved.</p>
+			<p style="color:white"> (c) Copyright November 25th,2019 Made by Duke and Jake :). All rights reserved.</p>
 		</div>
 		<script>
 
@@ -763,75 +763,92 @@ progress[value]  {
 			 
 		}
 		
-		function createSummary(action){
+		function createSummary(action,zjob){
 			switch( action ){
 				case "mark complete as per ps25":
 					mcPsCount++;
 					document.getElementById("mcPsDisplay").textContent = mcPsCount;
+					document.getElementById("resultOfManipulation").textContent = zjob+" mcPS25 found"
 					break;
 				case "mark complete as per programmer":
 					mcCount++;
 					document.getElementById("mcDisplay").textContent = mcCount;
+					document.getElementById("resultOfManipulation").textContent = zjob+" mcPerProgrammer found"
 					break;
 				case "notify programmer":
 					abendCount++;
 					document.getElementById("notifyDisplay").textContent = abendCount;
+					document.getElementById("resultOfManipulation").textContent = zjob+" notify programmer found"
 					break;
 				case "rerun as per PS25":
 					rrPsCount++;
 					document.getElementById("rrPsDisplay").textContent = rrPsCount;
+					document.getElementById("resultOfManipulation").textContent = zjob+" rrPS25 found"
 					break;
 				case "rerun as per programmer":
 					rrCount++;
 					document.getElementById("rerunDisplay").textContent = rrCount;
+					document.getElementById("resultOfManipulation").textContent = zjob+" mcPS25 found"
 					break;
 				case "Missed Due Out":
 					dueOutCount++;
 					document.getElementById("dueOutDisplay").textContent = dueOutCount;
+					document.getElementById("resultOfManipulation").textContent = zjob+" missed-due out found"
 					break;
 				case "long running":
 					longRunCount++;
 					document.getElementById("longRunDisplay").textContent = longRunCount;
+					document.getElementById("resultOfManipulation").textContent = zjob+" long running found"
 					break;					
 				case "Stuck in Submit":
 					stuckCount++;
 					document.getElementById("stuckDisplay").textContent = stuckCount;
+					document.getElementById("resultOfManipulation").textContent = zjob+" stuck found"
 					break;
 				case "PCN":
 					pcnCount++;
 					document.getElementById("pcnDisplay").textContent = pcnCount;
+					document.getElementById("resultOfManipulation").textContent = zjob+" PCN found"
 					break;
 				case "Capping":
 					cappingCount++;
 					document.getElementById("cappingDisplay").textContent = cappingCount;
+					document.getElementById("resultOfManipulation").textContent = zjob+" capping found"
 					break;					
 				case "Hold and Release of jobs":
 					holdReleaseCount++;
 					document.getElementById("holdReleaseDisplay").textContent = holdReleaseCount;
+					document.getElementById("resultOfManipulation").textContent = zjob+" hold and release found"
 					break;
 				case "Cancelling of jobs":
 					cancelledCount++;
 					document.getElementById("cancellingDisplay").textContent = cancelledCount;
+					document.getElementById("resultOfManipulation").textContent = zjob+" cancelling of job found"
 					break;
 				case "Force running":
 					forceCount++;
 					document.getElementById("forceDisplay").textContent = forceCount;
+					document.getElementById("resultOfManipulation").textContent = zjob+" force running found"
 					break;				
 				case "Inserting of jobs":
 					insertCount++;
 					document.getElementById("insertDisplay").textContent = insertCount;
+					document.getElementById("resultOfManipulation").textContent = zjob+" insert found"
 					break;
 				case "Tpipe":
 					tpipeCount++;
 					document.getElementById("tpipeDisplay").textContent = tpipeCount;
+					document.getElementById("resultOfManipulation").textContent = zjob+" Tpipe found"
 					break;
 				case "PPC05 CLEAN UP":
 					cleanUpCount++;
 					document.getElementById("cleanUpDisplay").textContent = cleanUpCount;
+					document.getElementById("resultOfManipulation").textContent = zjob+" clean up found"
 					break;					
 				case "DTS Shift Turnover (turnover)":
 					turnOverCount++;
 					document.getElementById("turnoverDisplay").textContent = turnOverCount;
+					document.getElementById("resultOfManipulation").textContent = zjob+" turnover found"
 					break;
 				default:
 					
@@ -1071,14 +1088,18 @@ progress[value]  {
 				//start
 				var mailFolder = nameSpace.GetDefaultFolder(6).Folders(document.getElementById("folderName").value).Items.Item(1).ConversationTopic;
 				$("#progressBarDiv").slideDown(1000);
-
+				//disable create logs button
 				setMultipleAttributes(document.getElementById("createLogButton"),{"style":"background-color:grey;border-color:white"});
 				document.getElementById("createLogButton").setAttribute("disabled")
+				
 				//document.getElementById("fakeProgress").style.display = "block";
 				//document.getElementById("resultOfManipulation").style.display = "block";
 			}
 			catch(error){
 				alert("Folder named \""+document.getElementById("folderName").value+"\" cannot be found or the folder is empty.")
+				//disable create logs button
+				setMultipleAttributes(document.getElementById("createLogButton"),{"style":"background-color:grey;border-color:white"});
+				document.getElementById("createLogButton").setAttribute("disabled")
 			}
 			
 			var emails = nameSpace.GetDefaultFolder(6).Folders(document.getElementById("folderName").value).Items;
@@ -1232,7 +1253,8 @@ progress[value]  {
 					var logType = "turnover";
 					var recipient = "";
 					console.log("email["+i +","+emailSubject+"]-> Turnover- 1 found")
-					document.getElementById("resultOfManipulation").textContent = zjobs.length+" turnover found"
+					//display
+					//document.getElementById("resultOfManipulation").textContent = zjobs.length+" turnover found"
 					displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					 
 					 
@@ -1279,7 +1301,8 @@ progress[value]  {
 						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - pcnMinute )).toTimeString().split(" ")[0];
 						//extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> PCN-" +zjobs.length+" found")
-						document.getElementById("resultOfManipulation").textContent = zjobs.length+" pcn found"
+						//display
+						//document.getElementById("resultOfManipulation").textContent = zjobs.length+" pcn found"
 						console.log(timeResult)
 						displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					}	
@@ -1361,7 +1384,8 @@ progress[value]  {
 							action = "mark complete as per programmer";
 							//timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - markCompleteMinute )).toTimeString().split(" ")[0];
 						}
-						document.getElementById("resultOfManipulation").textContent = zjobs.length+" " + action+" found"
+						//display
+						//document.getElementById("resultOfManipulation").textContent = zjobs.length+" " + action+" found"
 						displayRow(zjobs,site,convertedDate,tempPreviousTime,action,logType,recipients,globalEmailSubject,i+1,fullEmail,myBody);
 					}
 
@@ -1380,7 +1404,8 @@ progress[value]  {
 
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> notify-"+zjobs.length+" found")
-						document.getElementById("resultOfManipulation").textContent = zjobs.length+" notify found"
+						//display
+						//document.getElementById("resultOfManipulation").textContent = zjobs.length+" notify found"
 						displayRow(zjobs,site,convertedDate,tempPreviousTime,action,logType,recipients,globalEmailSubject,i+1);
 					}
 					
@@ -1422,7 +1447,8 @@ progress[value]  {
 						*/
 						extractJobs(emailSubject,myBody,where,fullEmail);				
 						console.log("email["+i +","+emailSubject+"]-> longRun-" +zjobs.length+" found")
-						document.getElementById("resultOfManipulation").textContent = zjobs.length+" long Running found"
+						//display
+						//document.getElementById("resultOfManipulation").textContent = zjobs.length+" long Running found"
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					}
 				  //-> Hold & release expression=> myBody.indexOf("HELD") >0 || myBody.indexOf("RELEASED") >0
@@ -1433,7 +1459,8 @@ progress[value]  {
 						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);				
 						console.log("email["+i +","+emailSubject+"]-> hold & release-" +zjobs.length+" found")
-						document.getElementById("resultOfManipulation").textContent = zjobs.length+" hold & release found";
+						//display
+						//document.getElementById("resultOfManipulation").textContent = zjobs.length+" hold & release found";
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					}				 
 					//-> missed due-out expression=> myBody.indexOf("LATE") >0 || myBody.indexOf("missed") >=0
@@ -1457,7 +1484,8 @@ progress[value]  {
 						
 						extractJobs(emailSubject,myBody,where,fullEmail);				
 						console.log("email["+i +","+emailSubject+"]-> missedDueout-" +zjobs.length+" found")
-						document.getElementById("resultOfManipulation").textContent = zjobs.length+" missed Due-out found";
+						//display
+						//document.getElementById("resultOfManipulation").textContent = zjobs.length+" missed Due-out found";
 						displayRow(zjobs,site,convertedDate,tempPreviousTime,action,logType,recipients,globalEmailSubject,i+1);
 					}					
 					//-> Capping expression=> myBody.indexOf("quick view") >0 && myBody.indexOf("%") >=0
@@ -1469,7 +1497,8 @@ progress[value]  {
 						var logType = "capping";
 						var recipient = "";
 						console.log("email["+i +","+emailSubject+"]-> Capping-"+zjobs.length+" found")
-						document.getElementById("resultOfManipulation").textContent = zjobs.length+" capping found"
+						//display
+						//document.getElementById("resultOfManipulation").textContent = zjobs.length+" capping found"
 						displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 						 
 						//i++;  
@@ -1518,7 +1547,8 @@ progress[value]  {
 							var logType = "tpipe";
 							var recipient = "";
 							console.log("email["+i +","+emailSubject+"]-> Turnover-"+zjobs.length+" found")
-							document.getElementById("resultOfManipulation").textContent = zjobs.length+" tpipe found"
+							//display
+							//document.getElementById("resultOfManipulation").textContent = zjobs.length+" tpipe found"
 							displayRow(title,site,convertedDate,tempPreviousTime,action,logType,recipients,globalEmailSubject,i+1);
 						}
 					}
@@ -1530,7 +1560,8 @@ progress[value]  {
 						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - stuckMinute )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> stuck-" +zjobs.length+" found")
-						document.getElementById("resultOfManipulation").textContent = zjobs.length+" stuck found"
+						//display
+						//document.getElementById("resultOfManipulation").textContent = zjobs.length+" stuck found"
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					}
 					//-> CleanUp expression=> myBody.indexOf("clean job") >0 || myBody.indexOf("clear off") >0
@@ -1541,7 +1572,8 @@ progress[value]  {
 						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 0 )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> cleanUp-" +zjobs.length+" found")
-						document.getElementById("resultOfManipulation").textContent = zjobs.length+" clean up found"
+						//display
+						//document.getElementById("resultOfManipulation").textContent = zjobs.length+" clean up found"
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					}
 					//-> Force expression=> myBody.indexOf("force") >0 
@@ -1552,7 +1584,8 @@ progress[value]  {
 						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> force-" +zjobs.length+" found")
-						document.getElementById("resultOfManipulation").textContent = zjobs.length+" force found"
+						//display
+						//document.getElementById("resultOfManipulation").textContent = zjobs.length+" force found"
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					}					
 					//-> Insert expression=> myBody.indexOf("inserted") >0 ||  ADDED BY RUSH || HAS BEEN ADDED TO THE SCHEDULE
@@ -1570,7 +1603,8 @@ progress[value]  {
 
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> Insert-" +zjobs.length+" found")
-						document.getElementById("resultOfManipulation").textContent = zjobs.length+" inserted found"
+						//display
+						//document.getElementById("resultOfManipulation").textContent = zjobs.length+" inserted found"
 						displayRow(zjobs,site,convertedDate,tempPreviousTime,action,logType,recipients,globalEmailSubject,i+1);
 					}	
 					//-> Cancelled expression=> myBody.indexOf("cancelled") >0 
@@ -1581,7 +1615,8 @@ progress[value]  {
 						var timeResult = new Date(tempDate.setMinutes( tempDate.getMinutes() - 3 )).toTimeString().split(" ")[0];
 						extractJobs(emailSubject,myBody,where,fullEmail);
 						console.log("email["+i +","+emailSubject+"]-> cancelled-" +zjobs.length+" found")
-						document.getElementById("resultOfManipulation").textContent = zjobs.length+" cancelling of jobs found"
+						//display
+						//document.getElementById("resultOfManipulation").textContent = zjobs.length+" cancelling of jobs found"
 						displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1);
 					}
 					//Duke and I have successfully created a program that turns our manual 
@@ -1904,7 +1939,8 @@ progress[value]  {
 									oneAtATime.push(zjobsRRprogrammer[h])
 									displayRow(oneAtATime,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,emailIndex);
 									console.log("email("+emailSubject +")-> rerunAsProgrammer- 1 found")
-									document.getElementById("resultOfManipulation").textContent = zjobs.length+" rerun as per programmer found"
+									//display
+									//document.getElementById("resultOfManipulation").textContent = zjobs.length+" rerun as per programmer found"
 									zjobsRRprogrammer.splice( zjobsRRprogrammer.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
 									//console.log(zjobsTemp)
 								}
@@ -1925,7 +1961,9 @@ progress[value]  {
 							oneAtATime.push(zjobsRRps25[h])
 							displayRow(oneAtATime,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,emailIndex);
 							console.log("email("+emailSubject +")-> rerunAsPs25- 1 found")
-							document.getElementById("resultOfManipulation").textContent = zjobs.length+" rerun as per ps25 found"
+							//display
+							//document.getElementById("resultOfManipulation").textContent = zjobs.length+" rerun as per ps25 found"
+							
 							//zjobsTemp.splice( zjobsRecoveryFailed.indexOf(zjobsTemp[h]), 1) //remove job zjobs array
 							//console.log(zjobsTemp)
 						}	
@@ -2359,7 +2397,7 @@ progress[value]  {
 						});
 					}
 					console.log("SUCCESS")
-					createSummary(action);
+					createSummary(action,zjobs[0]);
 					
 				}else{ //Non-abend
 					var cellOne = zjobs[0];
@@ -2392,7 +2430,7 @@ progress[value]  {
 					 });
 						*/		 
 					console.log("SUCCESS")
-					createSummary(action);
+					createSummary(action,zjobs[0]);
 					
 				}
 			
@@ -2400,154 +2438,157 @@ progress[value]  {
 				console.log("multiple zjobs executing..." + zjobs.length)
 				if( zjobs.length > 1){
 					for(var i=0; i< zjobs.length; i++ ){
-					cellOne = zjobs[i];
-					if( logType === "abend" ) {
-						if( site != "Undefined"){
-							cellTwoAbend = site;
-						}else{
-							cellTwoAbend = "Undefined";	
+						cellOne = zjobs[i];
+						if( logType === "abend" ) {
+							if( site != "Undefined"){
+								cellTwoAbend = site;
+							}else{
+								cellTwoAbend = "Undefined";	
+							}
 						}
-					}
-					//newRow.insertCell(-1).innerHTML = convertedDate.toJSON().split("T")[0];
-					cellTwo = convertedDate.toJSON().split("T")[0];
-					//newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
-					cellThree = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
-					//newRow.insertCell(-1).innerHTML = action;
-					cellFour = action;
+						//newRow.insertCell(-1).innerHTML = convertedDate.toJSON().split("T")[0];
+						cellTwo = convertedDate.toJSON().split("T")[0];
+						//newRow.insertCell(-1).innerHTML = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+						cellThree = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+						//newRow.insertCell(-1).innerHTML = action;
+						cellFour = action;
+						
+						if(logType === "abend"){
+							if( action == "rerun as per ps25" || action == "mark complete as per ps25" ){ //if rr as per ps25, same time
+								if( action == "mark complete as per ps25" ){
+									//cellSixAbend = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
+									var myVariables = solveTimeColumnsForMC(myBody,fullEmail,convertedDate,timeResult)
+										timeResult =  myVariables[0];
+										cellSixAbend = myVariables[1];
+								}
+								if( action == "rerun as per ps25" ){
+									cellSixAbend = timeResult;
+								}
+							}else{
+								//newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
+								cellSixAbend = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
+							}
+							cellSeven = globalEmailSubject;
+						}
 					
-					if(logType === "abend"){
-						if( action == "rerun as per ps25" || action == "mark complete as per ps25" ){ //if rr as per ps25, same time
-							if( action == "mark complete as per ps25" ){
-								//cellSixAbend = timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1];
-								var myVariables = solveTimeColumnsForMC(myBody,fullEmail,convertedDate,timeResult)
-									timeResult =  myVariables[0];
-									cellSixAbend = myVariables[1];
+						if( logType == "longRunning" || logType == "holdRelease" || logType == "missedDue" || logType == "stuckInSubmit"|| logType == "cleanUp" || logType == "force"  || logType === "pcn" || logType == "inserted" || logType === "cancelled" || logType === "tpipe") { //team
+							if( recipients.indexOf("data_mart") >= 0 ){
+								var team = "Datamart";
+							}else if ( recipients.indexOf("scssupport") >= 0 ){
+								var team = "SCS";
+							}else if ( recipients.indexOf("firm") >= 0 ){
+								var team = "Firm";
+							}else if ( recipients.indexOf("logistics") >= 0 ){
+								var team = "Logistics";
+							}else if ( recipients.indexOf("ap-mmpp") >= 0 ){
+								var team = "Ap-mmpp";
+							}else if ( recipients.indexOf("obsresv") >= 0 ){
+								var team = "Obsersv";
+							}else if ( recipients.indexOf("dcit") >= 0 ){
+								var team = "Dcit";
+							}else if ( recipients.indexOf("emk-dba") >=0 ){
+								var team = "Emk-Dba";
+							}else if ( recipients.indexOf("hrsprodsup") >= 0 ){
+								var team = "Hrsprodsup";
+							}else if ( recipients.indexOf("busit") >= 0 ){
+								var team = "Tt-ops/Bizzaps";
+							}else if ( recipients.indexOf("bizapps") >= 0 ){
+								var team = "Tt-ops/Bizzaps";
+							}else if ( recipients.indexOf("vendavo") >= 0 ){
+								var team = "Vendavo";
+							}else if ( recipients.indexOf("wwmit_qms") >= 0 ){
+								var team = "wwmit_qms";
+							}else if ( recipients.indexOf("fs_oncall") >= 0 ){
+								var team = "Fs_oncall";
+							}else if ( recipients.indexOf("debatch") >= 0 ){
+								var team = "Debatch";
+							}else if ( recipients.indexOf("mpder") >= 0 ){
+								var team = "Mpder";
+							}else if ( recipients.indexOf("sapbw") >= 0 ){
+								var team = "Sapbw";
+							}else if( recipients.indexOf("sap") >= 0 ){
+								var team = "SAP";
+							}else{
+								var team = "undefined";
 							}
-							if( action == "rerun as per ps25" ){
-								cellSixAbend = timeResult;
+							
+							if( team != "undefined"){
+								cellFive = team;
+							}else{
+								cellFive = "Undefined";
 							}
-						}else{
 							//newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
-							cellSixAbend = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
-						}
-						cellSeven = globalEmailSubject;
-					}
-				
-					if( logType == "longRunning" || logType == "holdRelease" || logType == "missedDue" || logType == "stuckInSubmit"|| logType == "cleanUp" || logType == "force"  || logType === "pcn" || logType == "inserted" || logType === "cancelled" || logType === "tpipe") { //team
-						if( recipients.indexOf("data_mart") >= 0 ){
-							var team = "Datamart";
-						}else if ( recipients.indexOf("scssupport") >= 0 ){
-							var team = "SCS";
-						}else if ( recipients.indexOf("firm") >= 0 ){
-							var team = "Firm";
-						}else if ( recipients.indexOf("logistics") >= 0 ){
-							var team = "Logistics";
-						}else if ( recipients.indexOf("ap-mmpp") >= 0 ){
-							var team = "Ap-mmpp";
-						}else if ( recipients.indexOf("obsresv") >= 0 ){
-							var team = "Obsersv";
-						}else if ( recipients.indexOf("dcit") >= 0 ){
-							var team = "Dcit";
-						}else if ( recipients.indexOf("emk-dba") >=0 ){
-							var team = "Emk-Dba";
-						}else if ( recipients.indexOf("hrsprodsup") >= 0 ){
-							var team = "Hrsprodsup";
-						}else if ( recipients.indexOf("busit") >= 0 ){
-							var team = "Tt-ops/Bizzaps";
-						}else if ( recipients.indexOf("bizapps") >= 0 ){
-							var team = "Tt-ops/Bizzaps";
-						}else if ( recipients.indexOf("vendavo") >= 0 ){
-							var team = "Vendavo";
-						}else if ( recipients.indexOf("wwmit_qms") >= 0 ){
-							var team = "wwmit_qms";
-						}else if ( recipients.indexOf("fs_oncall") >= 0 ){
-							var team = "Fs_oncall";
-						}else if ( recipients.indexOf("debatch") >= 0 ){
-							var team = "Debatch";
-						}else if ( recipients.indexOf("mpder") >= 0 ){
-							var team = "Mpder";
-						}else if ( recipients.indexOf("sapbw") >= 0 ){
-							var team = "Sapbw";
-						}else if( recipients.indexOf("sap") >= 0 ){
-							var team = "SAP";
-						}else{
-							var team = "undefined";
-						}
-						
-						if( team != "undefined"){
-							cellFive = team;
-						}else{
-							cellFive = "Undefined";
-						}
-						//newRow.insertCell(-1).innerHTML = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
-						cellSix = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
-						cellSeven = globalEmailSubject;	
+							cellSix = convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];
+							cellSeven = globalEmailSubject;	
 
-					}
-				
-					if( logType === "abend" ) {
-						var temp = t1.row.add( [
-							zjobs[i],
-							cellTwoAbend,
-							convertedDate.toJSON().split("T")[0],
-							timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
-							action,
-							cellSixAbend,
-							globalEmailSubject
-						] ).draw( false ).node();
-						
-						//add popover to TDs
-						for(var j =0 ; j<6 ; j++){
-							$( temp ).find('td:eq('+j+')').attr({
-								'data-email':emailIndex,
-								"data-toggle":"popover",
-								"data-placement":"bottom",
-								"data-trigger":"focus"
-							});
-						}
-						
-						/*if( site == "Undefined" ){
-							abendUndefinedCount++;
-							document.getElementById("abendUndefinedDisplayDiv").style.display = "block";
-							document.getElementById("abendUndefinedDisplay").textContent = abendUndefinedCount;
-							$( temp ).addClass('label-warning');
-						}*/
-						
-						console.log("SUCCESS")
-						createSummary(action);
-					}else{//Non-abend
-						var temp = t2.row.add( [
-							zjobs[i],
-							convertedDate.toJSON().split("T")[0],
-							timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
-							action,
-							cellFive,
-							convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1],
-							globalEmailSubject
-						] ).draw( false ).node();
-						
-						//add popover to TDs
-						for(var h =0 ; h<6 ; h++){
-							$( temp ).find('td:eq('+h+')').attr({
-								'data-email':emailIndex,
-								"data-toggle":"popover",
-								"data-placement":"bottom",
-								"data-trigger":"focus"
-							});
 						}
 					
+						if( logType === "abend" ) {
+							var temp = t1.row.add( [
+								zjobs[i],
+								cellTwoAbend,
+								convertedDate.toJSON().split("T")[0],
+								timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
+								action,
+								cellSixAbend,
+								globalEmailSubject
+							] ).draw( false ).node();
+							
+							//add popover to TDs
+							for(var j =0 ; j<6 ; j++){
+								$( temp ).find('td:eq('+j+')').attr({
+									'data-email':emailIndex,
+									"data-toggle":"popover",
+									"data-placement":"bottom",
+									"data-trigger":"focus"
+								});
+							}
+							
+							/*if( site == "Undefined" ){
+								abendUndefinedCount++;
+								document.getElementById("abendUndefinedDisplayDiv").style.display = "block";
+								document.getElementById("abendUndefinedDisplay").textContent = abendUndefinedCount;
+								$( temp ).addClass('label-warning');
+							}*/
+							
+							console.log("SUCCESS(" +i+ ")")
+							createSummary(action,zjobs[i]);
+						}else{//Non-abend
+							var temp = t2.row.add( [
+								zjobs[i],
+								convertedDate.toJSON().split("T")[0],
+								timeResult.split(" ")[0].split(":")[0] +":" +timeResult.split(" ")[0].split(":")[1],
+								action,
+								cellFive,
+								convertedDate.toTimeString().split(" ")[0].split(":")[0] +":"+convertedDate.toTimeString().split(" ")[0].split(":")[1],
+								globalEmailSubject
+							] ).draw( false ).node();
+							
+							//add popover to TDs
+							for(var h =0 ; h<6 ; h++){
+								$( temp ).find('td:eq('+h+')').attr({
+									'data-email':emailIndex,
+									"data-toggle":"popover",
+									"data-placement":"bottom",
+									"data-trigger":"focus"
+								});
+							}
 						
-						/*	if( cellFive == "Undefined" ){
-							nonAbendUndefinedCount++;
-							document.getElementById("nonAbendUndefinedDisplayDiv").style.display = "block";
-							document.getElementById("nonAbendUndefinedDisplay").textContent = nonAbendUndefinedCount;
-							$( temp ).addClass('label-warning');
-						 }  */
-						
-						console.log("SUCCESS")
-						createSummary(action);
+							
+							/*	if( cellFive == "Undefined" ){
+								nonAbendUndefinedCount++;
+								document.getElementById("nonAbendUndefinedDisplayDiv").style.display = "block";
+								document.getElementById("nonAbendUndefinedDisplay").textContent = nonAbendUndefinedCount;
+								$( temp ).addClass('label-warning');
+							 }  */
+							
+							console.log("SUCCESS (" +i+ ")")
+							 createSummary(action,zjobs[i]);
+							//setTimeout(function() {
+							//}, 50);
+							
+						}
 					}
-				}
 				}
 				
 			}
