@@ -2,6 +2,21 @@
 <html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<!--
+<script type="text/javascript" data-id="1" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+<link rel="stylesheet" data-id="2" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<link rel="stylesheet" data-id="3" type="text/css" href="https://cdn.datatables.net/v/bs4/jqc-1.12.4/jszip-2.5.0/dt-1.10.20/b-1.6.1/b-colvis-1.6.1/b-flash-1.6.1/b-html5-1.6.1/b-print-1.6.1/cr-1.5.2/fh-3.1.6/r-2.2.3/rr-1.2.6/sl-1.3.1/datatables.min.css"/> 
+<script type="text/javascript" data-id="4" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" data-id="5" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" data-id="6" src="https://cdn.datatables.net/v/bs4/jqc-1.12.4/jszip-2.5.0/dt-1.10.20/b-1.6.1/b-colvis-1.6.1/b-flash-1.6.1/b-html5-1.6.1/b-print-1.6.1/cr-1.5.2/fh-3.1.6/r-2.2.3/rr-1.2.6/sl-1.3.1/datatables.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+-->
+
+
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -12,437 +27,494 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"></script>
 
+<!--
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+-->
+
 <style>
-  .popover {
-    max-width: 100%;
-    /* Max Width of the popover (depending on the container!) */
-    white-space: pre-wrap;
-    /* To preserve spaces */
-    height: 300px;
+.popover{
+    max-width: 100%; /* Max Width of the popover (depending on the container!) */
+	 white-space: pre-wrap;  /* To preserve spaces */
+	 height: 300px;
     overflow-y: auto;
-  }
-  .label-warning {
-    /* Undefined */
-    background-color:#ff4d4d
-  }
-  td.highlight {
-    text-align:center;
-    background-color: white;
-  }
-  .footer {
-    position:fixed;
-    left:0;
-    bottom:0;
-    width: 100%;
-    background-color: #302f2f;
-    color:white;
-    text-align: center;
-  }
-  progress[value] {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    height: 30px;
-    width: 100%;
-    color: green;
-    border-radius: 9px;
-    content: attr('80%');
-  }
-  .progress {
-    height:25px;
-    font-size:1.2rem;
-    font-weight: bold
-  }
-  .progress-bar {
-    color:black
-  }
-  .progress-bar-tenPercent {
-    background-color: #FF0000
-  }
-  .progress-bar-twentyPercent {
-    background-color:#FF3400
-  }
-  .progress-bar-thirtyPercent {
-    background-color:#FF6900
-  }
-  .progress-bar-fourtyPercent {
-    background-color:#FF8C00
-  }
-  .progress-bar-fiftyPercent {
-    background-color:#FFC100
-  }
-  .progress-bar-sixtyPercent {
-    background-color:#FFE400
-  }
-  .progress-bar-seventyPercent {
-    background-color: #FFF600
-  }
-  .progress-bar-eightyPercent {
-    background-color:#C2FF00
-  }
-  .progress-bar-ninetyPercent {
-    background-color:#8DFF00
-  }
-  .progress-bar-hundredPercent {
-    background-color:#58FF00
-  }
-  .progress-bar-fullPercent {
-    background-color:green;
-    color:white
-  }
-  .badge {
-    background-color:#337ab7;
-    font-size:15px;
-    padding-right:0.6em;
-    padding-left:0.6em;
-    padding-top:0.3em;
-    padding-bottom:0.3em;
-  }
-  .badge-white {
-    background-color:white;
-    color:#337ab7
-  }
-  #myContainer, #myContainer2 {
-    justify-content: center;
-    display: flex;
-  }
+}
+.label-warning{ /* Undefined */
+	
+	background-color:#ff4d4d
+}
+td.highlight {
+   text-align:center;
+	background-color: white;
+	
+}
+
+.footer{
+	position:fixed;
+	left:0;
+	bottom:0;
+	width: 100%;
+	background-color: #302f2f;
+	color:white;
+	text-align: center;
+}
+progress[value]  {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+
+  height: 30px;
+  width: 100%;
+  color: green; 
+   border-radius: 9px;
+   content: attr('80%');
+}
+.progress{
+	height:25px;
+	font-size:1.2rem;
+	font-weight: bold
+}
+.progress-bar{
+	color:black
+}
+
+.progress-bar-tenPercent{
+	background-color: #FF0000
+}
+.progress-bar-twentyPercent{
+	background-color:#FF3400
+}
+.progress-bar-thirtyPercent{
+	background-color:#FF6900
+}
+.progress-bar-fourtyPercent{
+	background-color:#FF8C00
+}
+.progress-bar-fiftyPercent{
+	background-color:#FFC100 
+}
+.progress-bar-sixtyPercent{
+	background-color:#FFE400 
+}
+.progress-bar-seventyPercent{
+	background-color: #FFF600 
+}
+.progress-bar-eightyPercent{
+	background-color:#C2FF00
+}
+.progress-bar-ninetyPercent{
+	background-color:#8DFF00 
+}
+.progress-bar-hundredPercent{
+	background-color:#58FF00 
+}
+.progress-bar-fullPercent{
+	background-color:green;
+	color:white
+}
+
+.badge{
+	background-color:#337ab7;
+	font-size:15px;
+	padding-right:0.6em;
+	padding-left:0.6em;
+	padding-top:0.3em;
+	padding-bottom:0.3em;
+}
+
+.badge-white{
+	background-color:white;
+	color:#337ab7
+}
+#myContainer,#myContainer2{
+	 justify-content: center;
+	 display: flex;
+}
+  /* The alert message box */
+.alert {
+  padding: 20px;
+  background-color: green; /* Red */
+  color: white;
+  margin-bottom: 15px;
+  position:fixed;
+  text-align:center;
+  font-weight:bold;
+}
+
+
 </style>
 </head>
 
 <body oncontextmenu="return false">
 
-    <div class="container">
-        <progress style="display:none" max="100" value="0" id="myBar" data-label="50%"></progress>
-        <div class="progress">
-            <div id="myBar2" class="progress-bar progress-bar-striped progress-bar-animated" style="width:0%">
+<div class="container" >
+	<progress style="display:none" max="100" value="0" id="myBar" data-label="50%"></progress>
+	<div class="progress">
+		<div id="myBar2" class="progress-bar progress-bar-striped progress-bar-animated" style="width:0%">
+			 
+		</div>
+	</div>
 
-            </div>
-        </div>
+	<div class="row" style="display:none" id="progressBarDiv">
+		<div class="col-sm">
+			<div id="fakeProgress" style="display:block">
+				<span class="badge badge-pill" style="color:white"> <span id="emailsCountStartDisplay" class="badge badge-light" style="color:white">0</span></span><progress></progress><span class="badge badge-pill" style="color:white"> <span id="emailsCountDisplay" class="badge badge-light" style="color:white">0</span> Emails</span>
+			</div>
+		</div>
+		
+		<div class="col-sm">
+			<span class="badge badge-pill badge-danger" style="width:100%;display:block" id="resultOfManipulation"> ???</span>
+		</div>
+	</div>
+	
 
-        <div class="row" style="display:none" id="progressBarDiv">
-            <div class="col-sm">
-                <div id="fakeProgress" style="display:block">
-                    <span class="badge badge-pill" style="color:white"> <span id="emailsCountStartDisplay" class="badge badge-light" style="color:white">0</span></span>
-                    <progress></progress><span class="badge badge-pill" style="color:white"> <span id="emailsCountDisplay" class="badge badge-light" style="color:white">0</span> Emails</span>
-                </div>
-            </div>
+</div>
+	<div class="alert">
+	 
+	 NEW FEATURE ADDED: <br>
+	 &#10004;Job definition
+	 
+	</div>
+<br>
+<div >
+	<p id="displayTemp"> </p>
+</div>
+		<div class="container">
+		  <div class="row">
+			<div class="col-sm">
+				 <div class="card border-dark mb-3" >
+					<div class="card-header text-center" style="font-weight:bold">ABENDS</div>
+					  <div class="card-body text-primary">
+							<div class="col-sm text-center">
+								 <span class="badge badge-info">Notify <span id="notifyDisplay" class="badge badge-white" >0</span></span>
+								 <span class="badge badge-info">RR <span id="rerunDisplay" class="badge badge-white">0</span></span>
+								 <span class="badge badge-info">RR ps25 <span id="rrPsDisplay" class="badge badge-white">0</span></span>
+								 <span class="badge badge-info">MC <span id="mcDisplay" class="badge badge-white">0</span></span>
+								 <span class="badge badge-info">MC ps25 <span id="mcPsDisplay" class="badge badge-white">0</span></span>
+								<div id="myContainer">
+									<div style="display:none" id="abendUndefinedDisplayDiv"><span  class="badge" style="background-color:#d9534f;color:white">Undefined <span id="abendUndefinedDisplay" class="badge badge-white">0</span></span></div>
+									 <div style="display:none" id="abendAlertDisplayDiv"><span  class="badge" style="background-color:#f0ad4e;color:white">Alert <span id="abendAlertDisplay" class="badge badge-white">0</span></span></div>
+								</div>
+							</div>
+					  </div>
+				</div>
+			</div>
+			<div class="col-sm">
+				 <div class="card border-dark mb-3">
+					  <div class="card-header text-center" style="font-weight:bold">NON-ABENDS</div>
+					  <div class="card-body text-primary">
+							<div class="col-sm text-center">
+								<span class="badge badge-info">Long Running <span id="longRunDisplay" class="badge badge-white">0</span></span>
+								<span class="badge badge-info">Due-out <span id="dueOutDisplay" class="badge badge-white">0</span></span>
+								<span class="badge badge-info">Stuck <span id="stuckDisplay" class="badge badge-white">0</span></span>
+								<span class="badge badge-info">PCN <span id="pcnDisplay" class="badge badge-white">0</span></span>
+								<span class="badge badge-info">Capping <span id="cappingDisplay" class="badge badge-white">0</span></span>
+								<span class="badge badge-info">Hold & Release <span id="holdReleaseDisplay" class="badge badge-white">0</span></span>
+								<span class="badge badge-info">Cancelling <span id="cancellingDisplay"class="badge badge-white">0</span></span>
+								<span class="badge badge-info">Force <span id="forceDisplay" class="badge badge-white">0</span></span>
+								<span class="badge badge-info">Insert <span id="insertDisplay" class="badge badge-white">0</span></span>
+								<span class="badge badge-info">Tpipe <span id="tpipeDisplay" class="badge badge-white">0</span></span>
+								<span class="badge badge-info">CleanUp <span id="cleanUpDisplay" class="badge badge-white">0</span></span>
+								<span class="badge badge-info">Turnover <span id="turnoverDisplay" class="badge badge-white">0</span></span>
+								<span class="badge badge-info">Job Definition <span id="jobDefinitionDisplay" class="badge badge-white">0</span></span>
+								<div id="myContainer2">
+									<div style="display:none" id="nonAbendUndefinedDisplayDiv"><span class="badge" style="background-color:#d9534f;color:white">Undefined <span id="nonAbendUndefinedDisplay" class="badge badge-white">0</span></span></div>
+									<div style="display:none" id="nonAbendAlertDisplayDiv"><span class="badge" style="background-color:#f0ad4e;color:white">Alert <span id="nonAbendAlertDisplay" class="badge badge-white">0</span></span></div>
+								</div>
+							</div>
+					  </div>
+				  </div>
+			 </div>
+	
+		  </div>
+		</div><br><br>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm">
+				<table class="table table-sm table-bordered" id="abendsTable"">
+					<thead class="thead-light">
+						<th class="text-center" style="color:black;">Jobname</th>
+						<th class="text-center" style="color:black;">Site</th>
+						<th class="text-center" style="color:black;">Date</th>
+						<th class="text-center" style="color:black;">Time</th>
+						<th class="text-center" style="width:25%;color:black" >Action</th>
+						<th class="text-center" style="color:black;">Time of action</th>
+						<th class="text-center" style="color:red">DebugMe</th>
+					</thead>
+					<tbody id="abendsTbody">
+					<tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+		<br>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm">
+				<table class="table table-sm table-bordered" id="longRunningTable">
+					<thead class="thead-light">
+						<th class="text-center" style="color:black;">Jobname</th>
+						<th class="text-center" style="color:black;">Date</th>
+						<th class="text-center" style="color:black;">Time</th>
+						<th class="text-center" style="width:25%;color:black">Action</th>
+						<th class="text-center" style="color:black;">Team</th>
+						<th class="text-center" style="color:black;">Time of action</th>
+						<th class="text-center" style="color:red;">DebugMe</th>
+					</thead>
+					<tbody id="longRunningTbody" >
+					<tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+		<br><br>
+		
+	<div class="container">
+		<div class="row">
+			<div class="col-sm">
+			
+			<div class="input-group input-group-lg">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Folder Name</span>
+			  </div>
+			  <input type="text" value="tempMay" id="folderName" class="form-control">
+			   <div class="input-group-append">
+				<button id="createLogButton" style="border-color:green" class="btn btn-success" type="button" onclick="inputValidation()"> CREATE LOGS</button>
+				<!--<button id="showDebugButton" style="display:none" class="btn btn-danger" type="button" data-status="hidden" onclick="showDebug(this)"> HIDE DEBUG</button> -->
+				<!--<button class="btn btn-success" id="btnExportAbends" style="display:none" onclick="exportLogs('abends');"> EXPORT ABENDS </button> -->
+				<!--<button class="btn btn-success" id="btnExportNonAbends" style="display:none" onclick="exportLogs('nonAbends');"> EXPORT NON-ABENDS </button> -->
+				 
+			  </div>
+			</div>
+			<!-- To be continued:)  
+			<div class="input-group input-group-lg">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Select Month and Year (to be continued)</span>
+			  </div>
+				 <div class="dropdown">
+				  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMonth" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Month
+				  </button>
+				  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+					<a class="dropdown-item" href="#">October</a>
+					<a class="dropdown-item" href="#">November</a>
+					<a class="dropdown-item" href="#">December</a>
+				  </div>
+				</div>				
+				<div class="dropdown">
+				  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownYear" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Year
+				  </button>
+				  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+					<a class="dropdown-item" href="#">2019</a>
+					<a class="dropdown-item" href="#">2020</a>
+				  </div>
+				</div>
+			</div>	
+			-->
+			<div class="input-group input-group-lg">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Signature</span>
+			  </div>
+			  <input type="text" value="Jake James Manzon" id="signatureName" class="form-control">
+			</div>			
+			
+			<div class="input-group" >
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Abend-Notify-Keywords:</span>
+			  </div>
 
-            <div class="col-sm">
-                <span class="badge badge-pill badge-danger" style="width:100%;display:block" id="resultOfManipulation"> ???</span>
-            </div>
-        </div>
+				<input type="text" value="advise;WAITING T/S INIT;check and advise;Updating abends;Updating" id="abendNotifyKeywords" class="form-control">
+				<!--<input type="number" id="rerunMinute" min="1" value="3" class="form-control">-->
 
-    </div>
-    <br>
-    <div>
-        <p id="displayTemp"> </p>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm">
-                <div class="card border-dark mb-3">
-                    <div class="card-header text-center" style="font-weight:bold">ABENDS</div>
-                    <div class="card-body text-primary">
-                        <div class="col-sm text-center">
-                            <span class="badge badge-info">Notify <span id="notifyDisplay" class="badge badge-white" >0</span></span>
-                            <span class="badge badge-info">RR <span id="rerunDisplay" class="badge badge-white">0</span></span>
-                            <span class="badge badge-info">RR ps25 <span id="rrPsDisplay" class="badge badge-white">0</span></span>
-                            <span class="badge badge-info">MC <span id="mcDisplay" class="badge badge-white">0</span></span>
-                            <span class="badge badge-info">MC ps25 <span id="mcPsDisplay" class="badge badge-white">0</span></span>
-                            <div id="myContainer">
-                                <div style="display:none" id="abendUndefinedDisplayDiv"><span class="badge" style="background-color:#d9534f;color:white">Undefined <span id="abendUndefinedDisplay" class="badge badge-white">0</span></span>
-                                </div>
-                                <div style="display:none" id="abendAlertDisplayDiv"><span class="badge" style="background-color:#f0ad4e;color:white">Alert <span id="abendAlertDisplay" class="badge badge-white">0</span></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm">
-                <div class="card border-dark mb-3">
-                    <div class="card-header text-center" style="font-weight:bold">NON-ABENDS</div>
-                    <div class="card-body text-primary">
-                        <div class="col-sm text-center">
-                            <span class="badge badge-info">Long Running <span id="longRunDisplay" class="badge badge-white">0</span></span>
-                            <span class="badge badge-info">Due-out <span id="dueOutDisplay" class="badge badge-white">0</span></span>
-                            <span class="badge badge-info">Stuck <span id="stuckDisplay" class="badge badge-white">0</span></span>
-                            <span class="badge badge-info">PCN <span id="pcnDisplay" class="badge badge-white">0</span></span>
-                            <span class="badge badge-info">Capping <span id="cappingDisplay" class="badge badge-white">0</span></span>
-                            <span class="badge badge-info">Hold & Release <span id="holdReleaseDisplay" class="badge badge-white">0</span></span>
-                            <span class="badge badge-info">Cancelling <span id="cancellingDisplay"class="badge badge-white">0</span></span>
-                            <span class="badge badge-info">Force <span id="forceDisplay" class="badge badge-white">0</span></span>
-                            <span class="badge badge-info">Insert <span id="insertDisplay" class="badge badge-white">0</span></span>
-                            <span class="badge badge-info">Tpipe <span id="tpipeDisplay" class="badge badge-white">0</span></span>
-                            <span class="badge badge-info">CleanUp <span id="cleanUpDisplay" class="badge badge-white">0</span></span>
-                            <span class="badge badge-info">Turnover <span id="turnoverDisplay" class="badge badge-white">0</span></span>
-                            <div id="myContainer2">
-                                <div style="display:none" id="nonAbendUndefinedDisplayDiv"><span class="badge" style="background-color:#d9534f;color:white">Undefined <span id="nonAbendUndefinedDisplay" class="badge badge-white">0</span></span>
-                                </div>
-                                <div style="display:none" id="nonAbendAlertDisplayDiv"><span class="badge" style="background-color:#f0ad4e;color:white">Alert <span id="nonAbendAlertDisplay" class="badge badge-white">0</span></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >RR-Keywords:</span>
+			  </div>
+			  <input type="text" value="RECOVERY FAILED;been rerun;RECOVERY ACTIVE" id="rerunKeywords" class="form-control">
+			  <!--<input type="number" id="notifyMinute" min="1" value="3" class="form-control">-->
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >MC-Keywords:</span>
+			  </div>
+			  <input type="text" value="NO RECOVERY REQUIRED;marked complete;marked as complete" id="mcKeywords" class="form-control">
+			  <!--<input type="number" id="mcMinute" min="1" value="2" class="form-control">-->
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >LongRunning-Keywords:</span>
+			  </div>
+			  <input type="text" value="running" id="longRunningKeywords" class="form-control">
+			  <!--<input type="number" id="longRunningMinute" min="1" value="4" class="form-control">-->
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Hold & Release-Keywords:</span>
+			  </div>
+									<!-- HELD    -   NEW  ST;RELEASED - NEW ST -->
+			  <input type="text" value="HELD;RELEASED" id="holdReleaseKeywords" class="form-control">
+			   <!--<input type="number" id="holdReleaseMinute" min="1" value="2" class="form-control">-->
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Missed-Dueout-Keywords:</span>
+			  </div>
+			  <input type="text" value="missed;LATE" id="missedDueOutKeywords" class="form-control">
+			  <!--  <input type="number" id="missedDueOutMinute" min="1" value="3" class="form-control">-->
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Capping-Keywords:</span>
+			  </div>
+			  <input type="text" value="capping;quick view" id="cappingKeywords" class="form-control">
+			  <!--  <input type="number" id="cappingMinute" min="1" value="3" class="form-control">-->
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Tpipe-Keywords:</span>
+			  </div>
+			  <input type="text" value="TPIPE;L$;L@" id="tpipeKeywords" class="form-control">
+			   <!-- <input type="number" id="tpipeMinute" min="1" value="3" class="form-control">-->
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Stuck-Keywords:</span>
+			  </div>
+			  <input type="text" value="stuck in submit" id="stuckKeywords" class="form-control">
+			  <!--  <input type="number" id="stuckMinute" min="1" value="3" class="form-control">-->
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >CleanUp-Keywords:</span>
+			  </div>
+			  <input type="text" value="clear off;clean job;clean up" id="cleanUpKeywords" class="form-control">
+			  <!--  <input disabled type="number" id="stuckMinute" min="1" value="0" class="form-control">-->
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Force-Keywords:</span>
+			  </div>
+			  <input type="text" value="force;force release" id="forceKeywords" class="form-control">
+			  <!--  <input type="number" id="forceMinute" min="1" value="3" class="form-control"> -->
+			</div>			
 
-        </div>
-    </div>
-    <br>
-    <br>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm">
-                <table class="table table-sm table-bordered" id="abendsTable">
-                    <thead class="thead-light">
-                        <th class="text-center" style="color:black;">Jobname</th>
-                        <th class="text-center" style="color:black;">Site</th>
-                        <th class="text-center" style="color:black;">Date</th>
-                        <th class="text-center" style="color:black;">Time</th>
-                        <th class="text-center" style="width:25%;color:black">Action</th>
-                        <th class="text-center" style="color:black;">Time of action</th>
-                        <th class="text-center" style="color:red">DebugMe</th>
-                    </thead>
-                    <tbody id="abendsTbody">
-                        <tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <br>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm">
-                <table class="table table-sm table-bordered" id="longRunningTable">
-                    <thead class="thead-light">
-                        <th class="text-center" style="color:black;">Jobname</th>
-                        <th class="text-center" style="color:black;">Date</th>
-                        <th class="text-center" style="color:black;">Time</th>
-                        <th class="text-center" style="width:25%;color:black">Action</th>
-                        <th class="text-center" style="color:black;">Team</th>
-                        <th class="text-center" style="color:black;">Time of action</th>
-                        <th class="text-center" style="color:red;">DebugMe</th>
-                    </thead>
-                    <tbody id="longRunningTbody">
-                        <tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <br>
-    <br>
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Insert-Keywords:</span>
+			  </div>
+			  <input type="text" value="inserted;ADDED BY RUSH;HAS BEEN ADDED TO THE SCHEDULE" id="insertKeywords" class="form-control">
+			 <!-- <input type="number" id="insertMinute" min="1" value="3" class="form-control">-->
+			</div>			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Cancelled-Keywords:</span>
+			  </div>
+			  <input type="text" value="cancelled" id="cancelledKeywords" class="form-control">
+			  <!--<input type="number" min="1" value="3" id="cancelMinute" class="form-control">-->
+			</div> 			
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >PCN-Keywords:</span>
+			  </div>
+			  <input type="text" value="signed off" id="pcnKeywords" class="form-control">
+			 <!-- <input type="number" min="1" value="3" id="pcnMinute" class="form-control"> -->
+			</div> 
+			
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Job definition-Keywords:</span>
+			  </div>
+			  <input type="text" value="defined" id="jobDefinitionKeywords" class="form-control">
+			</div> 
+			
+			
+			</div>
+		</div>
+		<br>
+	</div>
+		
+		
+		<iframe id="txtArea1" style="display:none"></iframe>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-sm">
-
-                <div class="input-group input-group-lg">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Folder Name</span>
-                    </div>
-                    <input type="text" value="" id="folderName" class="form-control">
-                    <div class="input-group-append">
-                        <button id="createLogButton" style="border-color:green" class="btn btn-success" type="button" onclick="inputValidation()"> CREATE LOGS</button>
-
-                    </div>
-                </div>
-
-                <div class="input-group input-group-lg">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Signature</span>
-                    </div>
-                    <input type="text" value="" id="signatureName" class="form-control">
-                </div>
-
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Abend-Notify-Keywords and minutes</span>
-                    </div>
-
-                    <input type="text" value="advise;WAITING T/S INIT;check and advise;Updating abends;Updating" id="abendNotifyKeywords" class="form-control">
-                    <!--<input type="number" id="rerunMinute" min="1" value="3" class="form-control">-->
-
-                </div>
-
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">RR-Keywords: and minutes</span>
-                    </div>
-                    <input type="text" value="RECOVERY FAILED;been rerun;RECOVERY ACTIVE" id="rerunKeywords" class="form-control">
-
-                </div>
-
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">MC-Keywords and minutes</span>
-                    </div>
-                    <input type="text" value="NO RECOVERY REQUIRED;marked complete;marked as complete" id="mcKeywords" class="form-control">
-
-                </div>
-
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">LongRunning-Keywords and minutes</span>
-                    </div>
-                    <input type="text" value="running" id="longRunningKeywords" class="form-control">
-
-                </div>
-
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Hold & Release-Keywords and minutes</span>
-                    </div>
-
-                    <input type="text" value="HELD;RELEASED" id="holdReleaseKeywords" class="form-control">
-
-                </div>
-
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Missed-Dueout-Keywords and minutes</span>
-                    </div>
-                    <input type="text" value="missed;LATE" id="missedDueOutKeywords" class="form-control">
-
-                </div>
-
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Capping-Keywords and minutes</span>
-                    </div>
-                    <input type="text" value="capping;quick view" id="cappingKeywords" class="form-control">
-
-                </div>
-
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Tpipe-Keywords and minutes</span>
-                    </div>
-                    <input type="text" value="TPIPE;L$;L@" id="tpipeKeywords" class="form-control">
-                    <!-- <input type="number" id="tpipeMinute" min="1" value="3" class="form-control">-->
-                </div>
-
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Stuck-Keywords and minutes</span>
-                    </div>
-                    <input type="text" value="stuck in submit" id="stuckKeywords" class="form-control">
-                    <!--  <input type="number" id="stuckMinute" min="1" value="3" class="form-control">-->
-                </div>
-
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">CleanUp-Keywords and minutes</span>
-                    </div>
-                    <input type="text" value="clear off;clean job;clean up" id="cleanUpKeywords" class="form-control">
-                    <!--  <input disabled type="number" id="stuckMinute" min="1" value="0" class="form-control">-->
-                </div>
-
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Force-Keywords and minutes</span>
-                    </div>
-                    <input type="text" value="force;force release" id="forceKeywords" class="form-control">
-                    <!--  <input type="number" id="forceMinute" min="1" value="3" class="form-control"> -->
-                </div>
-
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Insert-Keywords and minutes</span>
-                    </div>
-                    <input type="text" value="inserted;ADDED BY RUSH;HAS BEEN ADDED TO THE SCHEDULE" id="insertKeywords" class="form-control">
-                    <!-- <input type="number" id="insertMinute" min="1" value="3" class="form-control">-->
-                </div>
-
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Cancelled-Keywords and minutes</span>
-                    </div>
-                    <input type="text" value="cancelled" id="cancelledKeywords" class="form-control">
-                    <!--<input type="number" min="1" value="3" id="cancelMinute" class="form-control">-->
-                </div>
-
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">PCN-Keywords and minutes</span>
-                    </div>
-                    <input type="text" value="signed off" id="pcnKeywords" class="form-control">
-                    <!-- <input type="number" min="1" value="3" id="pcnMinute" class="form-control"> -->
-                </div>
-
-            </div>
-        </div>
-        <br>
-
-    </div>
-
-    <iframe id="txtArea1" style="display:none"></iframe>
-
-    <div>
-        Reminder:
+		<div >
+			Reminder: <br>
         <br> *Folder Name, Signature and keywords are case sensitive.
         <br> *For Zjob/s to be called Mark as Complete as per ps25/ps22, indicate whether the job has been marked complete as per ps22|ps25 in your email, pd34 or MARS record of Zjob must be included too (NO RECOVERY REQUIRED).
         <br> *For Zjob/s to be called RR as per ps25, pd34 or MARS record of Zjob must be included (RECOVERY ACTIVE). So thus RR as per programmer (RECOVERY ACTIVE).
         
-		<br> --add reminder--
-    </div>
+			--add reminder--
+		</div>
 
-    <br>
-    <br>
-    <br>
-    <div class="footer">
-        <p style="color:white"> (c) Copyright November 25th,2019 Made by Duke and Jake :). All rights reserved.</p>
-    </div>
-    <script>
-    </script>
+	<br><br><br>
+		<div class="footer">
+			<p style="color:white"> (c) Copyright November 25th,2019 Made by Duke and Jake :). All rights reserved.</p>
+		</div>
+		<script>
+
+		</script>
 </body>
 <script>
 function removeRow(button){if(button.getAttribute("data-status")=="enabled"){button.parentNode.parentNode.classList.remove("label-warning");setMultipleAttributes(button,{"class":"btn btn-danger btn-xs","data-status":"disabled"});button.innerHTML="REMOVE";if(button.getAttribute("data-table")=="abendTable"){abendUndefinedCount--;if(abendUndefinedCount==0)document.getElementById("abendUndefinedDisplayDiv").style.display="none";document.getElementById("abendUndefinedDisplay").textContent=abendUndefinedCount}else{nonAbendUndefinedCount--;
 if(nonAbendUndefinedCount==0)document.getElementById("nonAbendUndefinedDisplayDiv").style.display="none";document.getElementById("nonAbendUndefinedDisplay").textContent=nonAbendUndefinedCount}}else{button.parentNode.parentNode.classList.add("label-warning");setMultipleAttributes(button,{"class":"btn btn-success btn-xs","data-status":"enabled"});button.innerHTML="ADD";if(button.getAttribute("data-table")=="abendTable"){abendUndefinedCount++;if(abendUndefinedCount>0)document.getElementById("abendUndefinedDisplayDiv").style.display=
 "block";document.getElementById("abendUndefinedDisplay").textContent=abendUndefinedCount}else{nonAbendUndefinedCount++;if(nonAbendUndefinedCount>0)document.getElementById("nonAbendUndefinedDisplayDiv").style.display="block";document.getElementById("nonAbendUndefinedDisplay").textContent=nonAbendUndefinedCount}}}function setMultipleAttributes(el,attrs){for(var key in attrs)el.setAttribute(key,attrs[key])}
-$(document).ready(function(){$('[data-toggle="popover"]').popover({html:true,container:"html"});var t1=$("#abendsTable").DataTable({destroy:true,dom:"Bfrtip","paging":false,"scrollY":"300px","scrollCollapse":true,buttons:[{extend:"copyHtml5",exportOptions:{columns:[0,":visible"]}},{title:document.getElementById("signatureName").value.split(" ")[0]+" Abends logs",extend:"excelHtml5",exportOptions:{columns:[0,1,2,3,4,5],rows:":not(.label-warning)"}},{title:document.getElementById("signatureName").value.split(" ")[0]+
+$(document).ready(function(){$('[data-toggle="popover"]').popover({html:true,container:"html"});var t1=$("#abendsTable").DataTable({destroy:true,dom:"Bfrtip","paging":false,"scrollY":"250px","scrollCollapse":true,buttons:[{extend:"copyHtml5",exportOptions:{columns:[0,":visible"]}},{title:document.getElementById("signatureName").value.split(" ")[0]+" Abends logs",extend:"excelHtml5",exportOptions:{columns:[0,1,2,3,4,5],rows:":not(.label-warning)"}},{title:document.getElementById("signatureName").value.split(" ")[0]+
 " Abends logs",extend:"pdfHtml5",exportOptions:{columns:[0,1,2,3,4,5]}},"colvis"],responsive:true,colReorder:true,"order":[[2,"asc"],[5,"asc"]],"createdRow":function(row,data,index){var difference=Math.round((timeStringConverter(data[5])-timeStringConverter(data[3]))/1E3)/60;if(difference>15){abendAlertCount++;document.getElementById("abendAlertDisplayDiv").style.display="block";document.getElementById("abendAlertDisplay").textContent=abendAlertCount;row.childNodes[6].innerHTML=" <span class='badge badge-pill' style='background-color:#f0ad4e;color:white'>Alert </span> "+
 row.childNodes[6].innerHTML}if(data[0]=="Undefined"||data[1]=="Undefined"){$("td",row).eq(6).addClass("highlight");$(row).addClass("label-warning");row.childNodes[6].innerHTML="<button onclick='removeRow(this)' data-status='enabled' type='button' data-table='abendTable' class='btn btn-success btn-xs'>ADD</button> "+row.childNodes[6].innerHTML;abendUndefinedCount++;document.getElementById("abendUndefinedDisplayDiv").style.display="block";document.getElementById("abendUndefinedDisplay").textContent=
 abendUndefinedCount}}});$("#abendsTable").on("click","tbody tr td",function(){var email=this.getAttribute("data-email");var temp=emailsGlobalVar.Item(email).Body;var info="Sent:"+new Date(emailsGlobalVar.Item(email).SentOn)+"\n To: "+emailsGlobalVar.Item(email).to+"\n Cc: "+emailsGlobalVar.Item(email).cc+"\n Subject: "+emailsGlobalVar.Item(email).ConversationTopic;this.setAttribute("title",info);this.setAttribute("data-content",temp);$(this).popover("show")});var t2=$("#longRunningTable").DataTable({destroy:true,
-dom:"Bfrtip","paging":false,"scrollY":"300px","scrollCollapse":true,buttons:[{extend:"copyHtml5",exportOptions:{columns:[0,":visible"]}},{title:document.getElementById("signatureName").value.split(" ")[0]+" Non-abends logs",extend:"excelHtml5",exportOptions:{columns:[0,1,2,3,4,5],rows:":not(.label-warning)"}},{title:document.getElementById("signatureName").value.split(" ")[0]+" Non-abends logs",extend:"pdfHtml5",exportOptions:{columns:[0,1,2,3,4,5]}},"colvis"],responsive:true,colReorder:true,"order":[[1,
+dom:"Bfrtip","paging":false,"scrollY":"250px","scrollCollapse":true,buttons:[{extend:"copyHtml5",exportOptions:{columns:[0,":visible"]}},{title:document.getElementById("signatureName").value.split(" ")[0]+" Non-abends logs",extend:"excelHtml5",exportOptions:{columns:[0,1,2,3,4,5],rows:":not(.label-warning)"}},{title:document.getElementById("signatureName").value.split(" ")[0]+" Non-abends logs",extend:"pdfHtml5",exportOptions:{columns:[0,1,2,3,4,5]}},"colvis"],responsive:true,colReorder:true,"order":[[1,
 "asc"],[5,"asc"]],"createdRow":function(row,data,index,cells){var difference=Math.round((timeStringConverter(data[5])-timeStringConverter(data[2]))/1E3)/60;if(difference>15){nonAbendAlertCount++;document.getElementById("nonAbendAlertDisplayDiv").style.display="block";document.getElementById("nonAbendAlertDisplay").textContent=nonAbendAlertCount;row.childNodes[6].innerHTML=" <span class='badge badge-pill' style='background-color:#f0ad4e;color:white'>Alert </span> "+row.childNodes[6].innerHTML}if(data[0]==
 "Undefined"||data[4]=="Undefined"){$("td",row).eq(6).addClass("highlight");$(row).addClass("label-warning");row.childNodes[6].innerHTML=" <button onclick='removeRow(this)' data-status='enabled' data-table='nonAbendTable' type='button' class='btn btn-success btn-xs'>ADD</button> "+row.childNodes[6].innerHTML;nonAbendUndefinedCount++;document.getElementById("nonAbendUndefinedDisplayDiv").style.display="block";document.getElementById("nonAbendUndefinedDisplay").textContent=nonAbendUndefinedCount}}});
 $("#longRunningTable").on("click","tbody tr td",function(){var email=this.getAttribute("data-email");var temp=emailsGlobalVar.Item(email).Body;var info="Sent:"+new Date(emailsGlobalVar.Item(email).SentOn)+"\n To: "+emailsGlobalVar.Item(email).to+"\n Cc: "+emailsGlobalVar.Item(email).cc+"\n Subject: "+emailsGlobalVar.Item(email).ConversationTopic;this.setAttribute("title",info);this.setAttribute("data-content",temp);$(this).popover("show")});$("#showDebugButton").on("click",function(e){e.preventDefault();
-var column=t2.column(6);column.visible(!column.visible())})});var rerunMinute=0;var notifyMinute=0;var markCompleteMinute=0;var longRunningMinute=0;var holdReleaseMinute=0;var missedDueOutMinute=0;var cappingMinute=0;var tpipeMinute=0;var stuckMinute=0;var forceMinute=0;var insertMinute=0;var cancelMinute=0;var pcnMinute=0;var abendCount=0;var rrCount=0;var rrPsCount=0;var mcCount=0;var mcPsCount=0;var longRunCount=0;var holdReleaseCount=0;var dueOutCount=0;var cappingCount=0;var tpipeCount=0;
-var stuckCount=0;var cleanUpCount=0;var forceCount=0;var insertCount=0;var cancelledCount=0;var turnOverCount=0;var pcnCount=0;var abendUndefinedCount=0;var nonAbendUndefinedCount=0;var abendAlertCount=0;var nonAbendAlertCount=0;
+var column=t2.column(6);column.visible(!column.visible())})});var rerunMinute=0;var notifyMinute=0;var markCompleteMinute=0;var longRunningMinute=0;var holdReleaseMinute=0;var missedDueOutMinute=0;var cappingMinute=0;var tpipeMinute=0;var stuckMinute=0;var forceMinute=0;var insertMinute=0;var cancelMinute=0;var pcnMinute=0;var jobDefinitionMinute=0;var abendCount=0;var rrCount=0;var rrPsCount=0;var mcCount=0;var mcPsCount=0;var longRunCount=0;var holdReleaseCount=0;var dueOutCount=0;
+var cappingCount=0;var tpipeCount=0;var stuckCount=0;var cleanUpCount=0;var forceCount=0;var insertCount=0;var cancelledCount=0;var turnOverCount=0;var pcnCount=0;var jobDefinitionCount=0;var abendUndefinedCount=0;var nonAbendUndefinedCount=0;var abendAlertCount=0;var nonAbendAlertCount=0;
 function exportLogs(name){var table;name=="abends"?table=document.getElementById("abendsTable"):table=document.getElementById("longRunningTable");var tab_text="<table border='2px'><tr bgcolor='grey' color='white'>";var textRange;var j=0;var latestRow=1;for(j=0;j<table.rows.length;j++){if(j>=1&&table.rows[j].cells.length>4)latestRow++;tab_text=tab_text+table.rows[j].innerHTML+"</tr>"}tab_text=tab_text+"</table>";tab_text=tab_text.replace(/<A[^>]*>|<\/A>/g,"");tab_text=tab_text.replace(/<img[^>]*>/gi,
 "");tab_text=tab_text.replace(/<input[^>]*>|<\/input>/gi,"");var ua=window.navigator.userAgent;var msie=ua.indexOf("MSIE ");if(msie>0||!!navigator.userAgent.match(/Trident.*rv:11\./)){txtArea1.document.open("xls","replace");txtArea1.document.write(tab_text);txtArea1.document.close();txtArea1.focus();var user=document.getElementById("signatureName").value.split(" ")[0];name=="abends"?sa=txtArea1.document.execCommand("SaveAs",true,user+"'s Abends logs.xls"):sa=txtArea1.document.execCommand("SaveAs",
 true,user+"'s Non-Abends logs.xls")}else sa=window.open("data:application/vnd.ms-excel,"+encodeURIComponent(tab_text));return sa}var abendsDebugColumn=[];var nonAbendsDebugColumn=[];
-function resetCounter(){abendCount=0;rrCount=0;rrPsCount=0;mcCount=0;mcPsCount=0;longRunCount=0;holdReleaseCount=0;dueOutCount=0;cappingCount=0;tpipeCount=0;stuckCount=0;cleanUpCount=0;forceCount=0;insertCount=0;cancelledCount=0;turnOverCount=0;pcnCount=0;abendUndefinedCount=0;nonAbendUndefinedCount=0;nonAbendAlertCount=0;abendAlertCount=0}
+function resetCounter(){abendCount=0;rrCount=0;rrPsCount=0;mcCount=0;mcPsCount=0;longRunCount=0;holdReleaseCount=0;dueOutCount=0;cappingCount=0;tpipeCount=0;stuckCount=0;cleanUpCount=0;forceCount=0;insertCount=0;cancelledCount=0;turnOverCount=0;pcnCount=0;jobDefinitionCount=0;abendUndefinedCount=0;nonAbendUndefinedCount=0;nonAbendAlertCount=0;abendAlertCount=0}
 function createSummary(action,zjob){var displayResult=document.getElementById("resultOfManipulation");switch(action){case "mark complete as per ps25":mcPsCount++;document.getElementById("mcPsDisplay").textContent=mcPsCount;displayResult.textContent=zjob+" mcPS25 found";break;case "mark complete as per programmer":mcCount++;document.getElementById("mcDisplay").textContent=mcCount;displayResult.textContent=zjob+" mcPerProgrammer found";break;case "notify programmer":abendCount++;document.getElementById("notifyDisplay").textContent=
 abendCount;displayResult.textContent=zjob+" notify programmer found";break;case "rerun as per PS25":rrPsCount++;document.getElementById("rrPsDisplay").textContent=rrPsCount;displayResult.textContent=zjob+" rrPS25 found";break;case "rerun as per programmer":rrCount++;document.getElementById("rerunDisplay").textContent=rrCount;displayResult.textContent=zjob+" mcPS25 found";break;case "Missed Due Out":dueOutCount++;document.getElementById("dueOutDisplay").textContent=dueOutCount;displayResult.textContent=
 zjob+" missed-due out found";break;case "long running":longRunCount++;document.getElementById("longRunDisplay").textContent=longRunCount;displayResult.textContent=zjob+" long running found";break;case "Stuck in Submit":stuckCount++;document.getElementById("stuckDisplay").textContent=stuckCount;displayResult.textContent=zjob+" stuck found";break;case "PCN":pcnCount++;document.getElementById("pcnDisplay").textContent=pcnCount;displayResult.textContent=zjob+" PCN found";break;case "Capping":cappingCount++;
 document.getElementById("cappingDisplay").textContent=cappingCount;displayResult.textContent=zjob+" capping found";break;case "Hold and Release of jobs":holdReleaseCount++;document.getElementById("holdReleaseDisplay").textContent=holdReleaseCount;displayResult.textContent=zjob+" hold and release found";break;case "Cancelling of jobs":cancelledCount++;document.getElementById("cancellingDisplay").textContent=cancelledCount;displayResult.textContent=zjob+" cancelling of job found";break;case "Force running":forceCount++;
 document.getElementById("forceDisplay").textContent=forceCount;displayResult.textContent=zjob+" force running found";break;case "Inserting of jobs":insertCount++;document.getElementById("insertDisplay").textContent=insertCount;displayResult.textContent=zjob+" insert found";break;case "Tpipe":tpipeCount++;document.getElementById("tpipeDisplay").textContent=tpipeCount;displayResult.textContent=zjob+" Tpipe found";break;case "PPC05 CLEAN UP":cleanUpCount++;document.getElementById("cleanUpDisplay").textContent=
-cleanUpCount;displayResult.textContent=zjob+" clean up found";break;case "DTS Shift Turnover (turnover)":turnOverCount++;document.getElementById("turnoverDisplay").textContent=turnOverCount;displayResult.textContent=zjob+" turnover found";break;default:}}
+cleanUpCount;displayResult.textContent=zjob+" clean up found";break;case "DTS Shift Turnover (turnover)":turnOverCount++;document.getElementById("turnoverDisplay").textContent=turnOverCount;displayResult.textContent=zjob+" turnover found";break;case "Define jobs":jobDefinitionCount++;document.getElementById("jobDefinitionDisplay").textContent=jobDefinitionCount;displayResult.textContent=zjob+" job definition found";break;default:}}
 function inputValidation(){document.getElementById("abendsTbody").innerHTML="";document.getElementById("longRunningTbody").innerHTML="";var abendsTable=$("#abendsTable").DataTable().clear().draw();var nonAbendsTable=$("#longRunningTable").DataTable().clear().draw();document.getElementById("abendUndefinedDisplayDiv").style.display="none";document.getElementById("abendUndefinedDisplay").textContent=abendUndefinedCount;document.getElementById("abendAlertDisplayDiv").style.display="none";document.getElementById("abendAlertDisplay").textContent=
 abendAlertCount;document.getElementById("nonAbendUndefinedDisplayDiv").style.display="none";document.getElementById("nonAbendUndefinedDisplay").textContent=nonAbendUndefinedCount;document.getElementById("nonAbendAlertDisplayDiv").style.display="none";document.getElementById("nonAbendAlertDisplay").textContent=nonAbendAlertCount;document.getElementById("mcPsDisplay").textContent=mcPsCount;document.getElementById("mcDisplay").textContent=mcCount;document.getElementById("notifyDisplay").textContent=
 abendCount;document.getElementById("rrPsDisplay").textContent=rrPsCount;document.getElementById("rerunDisplay").textContent=rrCount;document.getElementById("dueOutDisplay").textContent=dueOutCount;document.getElementById("longRunDisplay").textContent=longRunCount;document.getElementById("stuckDisplay").textContent=stuckCount;document.getElementById("pcnDisplay").textContent=pcnCount;document.getElementById("cappingDisplay").textContent=cappingCount;document.getElementById("holdReleaseDisplay").textContent=
-holdReleaseCount;document.getElementById("cancellingDisplay").textContent=cancelledCount;document.getElementById("forceDisplay").textContent=forceCount;document.getElementById("tpipeDisplay").textContent=tpipeCount;document.getElementById("cleanUpDisplay").textContent=cleanUpCount;document.getElementById("turnoverDisplay").textContent=turnOverCount;document.getElementById("insertDisplay").textContent=insertCount;var folderName=document.getElementById("folderName").value;var signatureName=document.getElementById("signatureName").value;
-var abendNotifyKeywords=document.getElementById("abendNotifyKeywords").value;var rerunKeywords=document.getElementById("rerunKeywords").value;var mcKeywords=document.getElementById("mcKeywords").value;var longRunningKeywords=document.getElementById("longRunningKeywords").value;var holdReleaseKeywords=document.getElementById("holdReleaseKeywords").value;var missedDueOutKeywords=document.getElementById("missedDueOutKeywords").value;var cappingKeywords=document.getElementById("cappingKeywords").value;
-var tpipeKeywords=document.getElementById("tpipeKeywords").value;var stuckKeywords=document.getElementById("stuckKeywords").value;var cleanUpKeywords=document.getElementById("cleanUpKeywords").value;var forceKeywords=document.getElementById("forceKeywords").value;var cancelledKeywords=document.getElementById("cancelledKeywords").value;var insertKeywords=document.getElementById("insertKeywords").value;var pcnKeywords=document.getElementById("pcnKeywords").value;var newAbendNotifyKeywordsExpression=
-"";for(var a=0;a<abendNotifyKeywords.split(";").length;a++){newAbendNotifyKeywordsExpression+="myBody.indexOf('"+abendNotifyKeywords.split(";")[a]+"')>0";a!=abendNotifyKeywords.split(";").length-1?newAbendNotifyKeywordsExpression+=" || ":""}var newRerunKeywordsExpression="";for(var r=0;r<rerunKeywords.split(";").length;r++){newRerunKeywordsExpression+="myBody.indexOf('"+rerunKeywords.split(";")[r]+"')>0";r!=rerunKeywords.split(";").length-1?newRerunKeywordsExpression+=" || ":""}var newMcKeywordsExpression=
-"";for(var m=0;m<mcKeywords.split(";").length;m++){newMcKeywordsExpression+="myBody.indexOf('"+mcKeywords.split(";")[m]+"')>0";m!=mcKeywords.split(";").length-1?newMcKeywordsExpression+=" || ":""}var newLongRunningKeywordsExpression="";for(var l=0;l<longRunningKeywords.split(";").length;l++){newLongRunningKeywordsExpression+="myBody.indexOf('"+longRunningKeywords.split(";")[l]+"')>0";l!=longRunningKeywords.split(";").length-1?newLongRunningKeywordsExpression+=" || ":""}console.log("newLR: "+newLongRunningKeywordsExpression);
-var newHoldReleaseKeywordsExpression="";for(var h=0;h<holdReleaseKeywords.split(";").length;h++){newHoldReleaseKeywordsExpression+="myBody.indexOf('"+holdReleaseKeywords.split(";")[h]+"')>0";h!=holdReleaseKeywords.split(";").length-1?newHoldReleaseKeywordsExpression+=" || ":""}var newMissedDueOutKeywordsExpression="";for(var d=0;d<missedDueOutKeywords.split(";").length;d++){newMissedDueOutKeywordsExpression+="myBody.indexOf('"+missedDueOutKeywords.split(";")[d]+"')>0";d!=missedDueOutKeywords.split(";").length-
-1?newMissedDueOutKeywordsExpression+=" || ":""}var newCappingKeywordsExpression="";for(var c=0;c<cappingKeywords.split(";").length;c++){newCappingKeywordsExpression+="myBody.indexOf('"+cappingKeywords.split(";")[c]+"')>0";c!=cappingKeywords.split(";").length-1?newCappingKeywordsExpression+=" || ":""}var newTpipeKeywordsExpression="";for(var t=0;t<tpipeKeywords.split(";").length;t++){newTpipeKeywordsExpression+="myBody.indexOf('"+tpipeKeywords.split(";")[t]+"')>0";t!=tpipeKeywords.split(";").length-
-1?newTpipeKeywordsExpression+=" || ":""}var newStuckKeywordsExpression="";for(var s=0;s<stuckKeywords.split(";").length;s++){newStuckKeywordsExpression+="myBody.indexOf('"+stuckKeywords.split(";")[s]+"')>0";s!=stuckKeywords.split(";").length-1?newStuckKeywordsExpression+=" || ":""}var newCleanUpKeywordsExpression="";for(var u=0;u<cleanUpKeywords.split(";").length;u++){newCleanUpKeywordsExpression+="myBody.indexOf('"+cleanUpKeywords.split(";")[u]+"')>0";u!=cleanUpKeywords.split(";").length-1?newCleanUpKeywordsExpression+=
-" || ":""}var newForceKeywordsExpression="";for(var f=0;f<forceKeywords.split(";").length;f++){newForceKeywordsExpression+="myBody.indexOf('"+forceKeywords.split(";")[f]+"')>0";f!=forceKeywords.split(";").length-1?newForceKeywordsExpression+=" || ":""}var newCancelledKeywordsExpression="";for(var x=0;x<cancelledKeywords.split(";").length;x++){newCancelledKeywordsExpression+="myBody.indexOf('"+cancelledKeywords.split(";")[x]+"')>0";x!=cancelledKeywords.split(";").length-1?newCancelledKeywordsExpression+=
-" || ":""}var newInsertKeywordsExpression="";for(var i=0;i<insertKeywords.split(";").length;i++){newInsertKeywordsExpression+="myBody.indexOf('"+insertKeywords.split(";")[i]+"')>0";i!=insertKeywords.split(";").length-1?newInsertKeywordsExpression+=" || ":""}var newPCNKeywordsExpression="";for(var p=0;p<pcnKeywords.split(";").length;p++){newPCNKeywordsExpression+="myBody.indexOf('"+pcnKeywords.split(";")[p]+"')>0";p!=pcnKeywords.split(";").length-1?newPCNKeywordsExpression+=" || ":""}startEmailsManipulation(newAbendNotifyKeywordsExpression,
-newRerunKeywordsExpression,newMcKeywordsExpression,newLongRunningKeywordsExpression,newHoldReleaseKeywordsExpression,newMissedDueOutKeywordsExpression,newCappingKeywordsExpression,newTpipeKeywordsExpression,newStuckKeywordsExpression,newCleanUpKeywordsExpression,newForceKeywordsExpression,newCancelledKeywordsExpression,newInsertKeywordsExpression,newPCNKeywordsExpression)}
+holdReleaseCount;document.getElementById("cancellingDisplay").textContent=cancelledCount;document.getElementById("forceDisplay").textContent=forceCount;document.getElementById("tpipeDisplay").textContent=tpipeCount;document.getElementById("cleanUpDisplay").textContent=cleanUpCount;document.getElementById("turnoverDisplay").textContent=turnOverCount;document.getElementById("insertDisplay").textContent=insertCount;document.getElementById("jobDefinitionDisplay").textContent=jobDefinitionCount;var folderName=
+document.getElementById("folderName").value;var signatureName=document.getElementById("signatureName").value;var abendNotifyKeywords=document.getElementById("abendNotifyKeywords").value;var rerunKeywords=document.getElementById("rerunKeywords").value;var mcKeywords=document.getElementById("mcKeywords").value;var longRunningKeywords=document.getElementById("longRunningKeywords").value;var holdReleaseKeywords=document.getElementById("holdReleaseKeywords").value;var missedDueOutKeywords=document.getElementById("missedDueOutKeywords").value;
+var cappingKeywords=document.getElementById("cappingKeywords").value;var tpipeKeywords=document.getElementById("tpipeKeywords").value;var stuckKeywords=document.getElementById("stuckKeywords").value;var cleanUpKeywords=document.getElementById("cleanUpKeywords").value;var forceKeywords=document.getElementById("forceKeywords").value;var cancelledKeywords=document.getElementById("cancelledKeywords").value;var insertKeywords=document.getElementById("insertKeywords").value;var pcnKeywords=document.getElementById("pcnKeywords").value;
+var jobDefinitionKeywords=document.getElementById("jobDefinitionKeywords").value;var newAbendNotifyKeywordsExpression="";for(var a=0;a<abendNotifyKeywords.split(";").length;a++){newAbendNotifyKeywordsExpression+="myBody.indexOf('"+abendNotifyKeywords.split(";")[a]+"')>0";a!=abendNotifyKeywords.split(";").length-1?newAbendNotifyKeywordsExpression+=" || ":""}var newRerunKeywordsExpression="";for(var r=0;r<rerunKeywords.split(";").length;r++){newRerunKeywordsExpression+="myBody.indexOf('"+rerunKeywords.split(";")[r]+
+"')>0";r!=rerunKeywords.split(";").length-1?newRerunKeywordsExpression+=" || ":""}var newMcKeywordsExpression="";for(var m=0;m<mcKeywords.split(";").length;m++){newMcKeywordsExpression+="myBody.indexOf('"+mcKeywords.split(";")[m]+"')>0";m!=mcKeywords.split(";").length-1?newMcKeywordsExpression+=" || ":""}var newLongRunningKeywordsExpression="";for(var l=0;l<longRunningKeywords.split(";").length;l++){newLongRunningKeywordsExpression+="myBody.indexOf('"+longRunningKeywords.split(";")[l]+"')>0";l!=longRunningKeywords.split(";").length-
+1?newLongRunningKeywordsExpression+=" || ":""}console.log("newLR: "+newLongRunningKeywordsExpression);var newHoldReleaseKeywordsExpression="";for(var h=0;h<holdReleaseKeywords.split(";").length;h++){newHoldReleaseKeywordsExpression+="myBody.indexOf('"+holdReleaseKeywords.split(";")[h]+"')>0";h!=holdReleaseKeywords.split(";").length-1?newHoldReleaseKeywordsExpression+=" || ":""}var newMissedDueOutKeywordsExpression="";for(var d=0;d<missedDueOutKeywords.split(";").length;d++){newMissedDueOutKeywordsExpression+=
+"myBody.indexOf('"+missedDueOutKeywords.split(";")[d]+"')>0";d!=missedDueOutKeywords.split(";").length-1?newMissedDueOutKeywordsExpression+=" || ":""}var newCappingKeywordsExpression="";for(var c=0;c<cappingKeywords.split(";").length;c++){newCappingKeywordsExpression+="myBody.indexOf('"+cappingKeywords.split(";")[c]+"')>0";c!=cappingKeywords.split(";").length-1?newCappingKeywordsExpression+=" || ":""}var newTpipeKeywordsExpression="";for(var t=0;t<tpipeKeywords.split(";").length;t++){newTpipeKeywordsExpression+=
+"myBody.indexOf('"+tpipeKeywords.split(";")[t]+"')>0";t!=tpipeKeywords.split(";").length-1?newTpipeKeywordsExpression+=" || ":""}var newStuckKeywordsExpression="";for(var s=0;s<stuckKeywords.split(";").length;s++){newStuckKeywordsExpression+="myBody.indexOf('"+stuckKeywords.split(";")[s]+"')>0";s!=stuckKeywords.split(";").length-1?newStuckKeywordsExpression+=" || ":""}var newCleanUpKeywordsExpression="";for(var u=0;u<cleanUpKeywords.split(";").length;u++){newCleanUpKeywordsExpression+="myBody.indexOf('"+
+cleanUpKeywords.split(";")[u]+"')>0";u!=cleanUpKeywords.split(";").length-1?newCleanUpKeywordsExpression+=" || ":""}var newForceKeywordsExpression="";for(var f=0;f<forceKeywords.split(";").length;f++){newForceKeywordsExpression+="myBody.indexOf('"+forceKeywords.split(";")[f]+"')>0";f!=forceKeywords.split(";").length-1?newForceKeywordsExpression+=" || ":""}var newCancelledKeywordsExpression="";for(var x=0;x<cancelledKeywords.split(";").length;x++){newCancelledKeywordsExpression+="myBody.indexOf('"+
+cancelledKeywords.split(";")[x]+"')>0";x!=cancelledKeywords.split(";").length-1?newCancelledKeywordsExpression+=" || ":""}var newInsertKeywordsExpression="";for(var i=0;i<insertKeywords.split(";").length;i++){newInsertKeywordsExpression+="myBody.indexOf('"+insertKeywords.split(";")[i]+"')>0";i!=insertKeywords.split(";").length-1?newInsertKeywordsExpression+=" || ":""}var newPCNKeywordsExpression="";for(var p=0;p<pcnKeywords.split(";").length;p++){newPCNKeywordsExpression+="myBody.indexOf('"+pcnKeywords.split(";")[p]+
+"')>0";p!=pcnKeywords.split(";").length-1?newPCNKeywordsExpression+=" || ":""}var newJobDefinitionKeywordsExpression="";for(var j=0;j<jobDefinitionKeywords.split(";").length;j++){newJobDefinitionKeywordsExpression+="myBody.indexOf('"+jobDefinitionKeywords.split(";")[j]+"')>0";j!=jobDefinitionKeywords.split(";").length-1?newJobDefinitionKeywordsExpression+=" || ":""}startEmailsManipulation(newAbendNotifyKeywordsExpression,newRerunKeywordsExpression,newMcKeywordsExpression,newLongRunningKeywordsExpression,
+newHoldReleaseKeywordsExpression,newMissedDueOutKeywordsExpression,newCappingKeywordsExpression,newTpipeKeywordsExpression,newStuckKeywordsExpression,newCleanUpKeywordsExpression,newForceKeywordsExpression,newCancelledKeywordsExpression,newInsertKeywordsExpression,newPCNKeywordsExpression,newJobDefinitionKeywordsExpression)}
 function timeStringConverter(timeInString){var d=new Date;timeInString.split(":")[0]>12?timeInString=timeInString+" PM":timeInString=timeInString+" AM";parts=timeInString.match(/(\d+):(\d+) (\w+)/),console.log(parts);minutes=parseInt(parts[2],10);if(parts[3]=="AM")hours=parseInt(parts[1],10);else parts[1]==12?hours=parseInt(parts[1],10):hours=parseInt(parts[1],10)+12;console.log("hours->"+parseInt(parts[1],10)+" minute-> "+minutes);d.setHours(parseInt(parts[1],10),minutes,1);return d}var zjobs=[];
 var abendsTbody;var longRunningTbody;var convertedDate;var recipients;var globalEmailSubject;var globalEmail;var i=1;var emailsGlobalVar;
-function startEmailsManipulation(abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression,pcnExpression){var outlookApp=new ActiveXObject("Outlook.Application");var nameSpace=outlookApp.getNameSpace("MAPI");try{var mailFolder=nameSpace.GetDefaultFolder(6).Folders(document.getElementById("folderName").value).Items.Item(1).ConversationTopic;
+function startEmailsManipulation(abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression,pcnExpression,jobDefinitionExpression){var outlookApp=new ActiveXObject("Outlook.Application");var nameSpace=outlookApp.getNameSpace("MAPI");try{var mailFolder=nameSpace.GetDefaultFolder(6).Folders(document.getElementById("folderName").value).Items.Item(1).ConversationTopic;
 $("#progressBarDiv").slideDown(1E3);setMultipleAttributes(document.getElementById("createLogButton"),{"style":"background-color:grey;border-color:white"});document.getElementById("createLogButton").setAttribute("disabled")}catch(error){alert('Folder named "'+document.getElementById("folderName").value+'" cannot be found or the folder is empty.');setMultipleAttributes(document.getElementById("createLogButton"),{"style":"background-color:grey;border-color:white"});document.getElementById("createLogButton").setAttribute("disabled")}var emails=
 nameSpace.GetDefaultFolder(6).Folders(document.getElementById("folderName").value).Items;emailsGlobalVar=emails;abendsTbody=document.getElementById("abendsTbody");longRunningTbody=document.getElementById("longRunningTbody");var emailCount=emails.count;document.getElementById("myBar").setAttribute("max",emails.count);console.log(emailCount);i=0;resetCounter();document.getElementById("myBar2").setAttribute("class","progress-bar bg-danger progress-bar-striped progress-bar-animated");document.getElementById("emailsCountDisplay").textContent=
-emailCount;myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression,pcnExpression)}
-function myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression,pcnExpression){try{setTimeout(function(){var elem=document.getElementById("myBar");var elem2=document.getElementById("myBar2");if(i==emailCount){console.log("100% complete.");document.getElementById("myBar").style.display="none";
-document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-fullPercent progress-bar-striped progress-bar-animated");document.getElementById("myBar2").innerHTML="100% COMPLETE";$("#progressBarDiv").slideUp(2E3);elem2.setAttribute("style","width:"+parseInt(i/emailCount*100)+"%");elem2.setAttribute("style","width:100%");return}elem.value=i;elem2.setAttribute("style","width:"+parseInt(i/emailCount*100)+"%");console.log(parseInt(i/emailCount*100));elem2.innerHTML=parseInt(i/emailCount*
-100)+"%";document.getElementById("emailsCountStartDisplay").textContent=i;if(i/emailCount*100<10)document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-tenPercent progress-bar-striped progress-bar-animated");else if(i/emailCount*100>10&&i/emailCount*100<20)document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-twentyPercent progress-bar-striped progress-bar-animated");else if(i/emailCount*100>20&&i/emailCount*100<30)document.getElementById("myBar2").setAttribute("class",
+emailCount;myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression,pcnExpression,jobDefinitionExpression)}
+function myLoop(emailCount,emails,abendNotifyExpression,rerunExpression,mcExpression,longRunningExpression,holdReleaseExpression,missedDueOutExpression,cappingExpression,tpipeExpression,stuckExpression,cleanUpExpression,forceExpression,cancelledExpression,insertExpression,pcnExpression,jobDefinitionExpression){try{setTimeout(function(){var elem=document.getElementById("myBar");var elem2=document.getElementById("myBar2");if(i==emailCount){console.log("100% complete.");document.getElementById("myBar").style.display=
+"none";document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-fullPercent progress-bar-striped progress-bar-animated");document.getElementById("myBar2").innerHTML="100% COMPLETE";$("#progressBarDiv").slideUp(2E3);elem2.setAttribute("style","width:"+parseInt(i/emailCount*100)+"%");elem2.setAttribute("style","width:100%");return}elem.value=i;elem2.setAttribute("style","width:"+parseInt(i/emailCount*100)+"%");console.log(parseInt(i/emailCount*100));elem2.innerHTML=parseInt(i/
+emailCount*100)+"%";document.getElementById("emailsCountStartDisplay").textContent=i;if(i/emailCount*100<10)document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-tenPercent progress-bar-striped progress-bar-animated");else if(i/emailCount*100>10&&i/emailCount*100<20)document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-twentyPercent progress-bar-striped progress-bar-animated");else if(i/emailCount*100>20&&i/emailCount*100<30)document.getElementById("myBar2").setAttribute("class",
 "progress-bar progress-bar-thirtyPercent progress-bar-striped progress-bar-animated");else if(i/emailCount*100>30&&i/emailCount*100<40)document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-fourtyPercent progress-bar-striped progress-bar-animated");else if(i/emailCount*100>40&&i/emailCount*100<50)document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-fiftyPercent progress-bar-striped progress-bar-animated");else if(i/emailCount*100>50&&i/emailCount*
 100<60)document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-sixtyPercent progress-bar-striped progress-bar-animated");else if(i/emailCount*100>60&&i/emailCount*100<70)document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-seventyPercent progress-bar-striped progress-bar-animated");else if(i/emailCount*100>70&&i/emailCount*100<80)document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-eightyPercent progress-bar-striped progress-bar-animated");
 else if(i/emailCount*100>80&&i/emailCount*100<90)document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-ninetyPercent progress-bar-striped progress-bar-animated");else if(i/emailCount*100>90&&i/emailCount*100<100)document.getElementById("myBar2").setAttribute("class","progress-bar progress-bar-hundredPercent progress-bar-striped progress-bar-animated");var theEmail=emails.Item(i+1);var myBody=theEmail.Body;var fullEmail=theEmail.Body;var limitUntilLine=theEmail.Body.indexOf(document.getElementById("signatureName").value);
@@ -460,8 +532,10 @@ previousTime);extractJobs(emailSubject,myBody,where,fullEmail,tempDate,site,i+1)
 timeResult,action,logType,recipients,globalEmailSubject,i+1)}if(eval(holdReleaseExpression)){var logType="holdRelease";var action="Hold and Release of jobs";var where="holdRelease";var timeResult=(new Date(tempDate.setMinutes(tempDate.getMinutes()-3))).toTimeString().split(" ")[0];extractJobs(emailSubject,myBody,where,fullEmail);console.log("email["+i+","+emailSubject+"]-> hold & release-"+zjobs.length+" found");displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,
 i+1)}if(eval(missedDueOutExpression)){var logType="missedDue";var action="Missed Due Out";var where="missedDue";if(fullEmail.split("From").length==2){var tempPreviousTime=previousTime;globalPreviousEmailTime=previousTime;if(tempPreviousTime==""){tempPreviousTime=(new Date(tempDate.setMinutes(tempDate.getMinutes()-3))).toTimeString().split(" ")[0];tempPreviousTime=tempPreviousTime.slice(0,tempPreviousTime.indexOf(":")+3)}}else var tempPreviousTime=(new Date(tempDate.setMinutes(tempDate.getMinutes()-
 3))).toTimeString().split(" ")[0];extractJobs(emailSubject,myBody,where,fullEmail);console.log("email["+i+","+emailSubject+"]-> missedDueout-"+zjobs.length+" found");displayRow(zjobs,site,convertedDate,tempPreviousTime,action,logType,recipients,globalEmailSubject,i+1)}if(eval(cappingExpression)&&myBody.indexOf("%")>=0){var title=[emailSubject];var site="Undefined";var timeResult=(new Date(tempDate.setMinutes(tempDate.getMinutes()-cappingMinute))).toTimeString().split(" ")[0];var action="Capping";
-var logType="capping";var recipient="";console.log("email["+i+","+emailSubject+"]-> Capping-"+zjobs.length+" found");displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1)}if(fullEmail.indexOf("TPIPE")>0||fullEmail.indexOf("L$")>=0){var myArray=myBody.split("\n");var mySecondArray=fullEmail.split("\n");if(fullEmail.split("From").length==2){var title=[];for(var j=myArray.length;j<=mySecondArray.length-1;j++){var lineN=mySecondArray[j];var temp="";if(lineN.indexOf("L$")>=
-0){temp=lineN.substring(lineN.indexOf("L$"),lineN.indexOf("L$")+6).trim();if(title.indexOf(temp)<0)title.push(temp)}if(lineN.indexOf("L@")>=0){temp=lineN.substring(lineN.indexOf("L@"),lineN.indexOf("L@")+6).trim();if(title.indexOf(temp)<0)title.push(temp)}}var site="Undefined";var tempPreviousTime=previousTime;globalPreviousEmailTime=previousTime;if(tempPreviousTime==""){tempPreviousTime=(new Date(tempDate.setMinutes(tempDate.getMinutes()-3))).toTimeString().split(" ")[0];tempPreviousTime=tempPreviousTime.slice(0,
+var logType="capping";var recipient="";console.log("email["+i+","+emailSubject+"]-> Capping-"+zjobs.length+" found");displayRow(title,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1)}if(eval(jobDefinitionExpression)&&fullEmail.indexOf("job definition request form")>0){var myArray=myBody.split("job definition request form");var mySecondArray=fullEmail.split("\n");var title=[];for(var j=myArray.length;j<=mySecondArray.length-1;j++){var lineN=mySecondArray[j];var temp=
+"";if(lineN.indexOf("Z")>=0){temp=lineN.substring(lineN.indexOf("Z"),lineN.length).split("\t")[0].trim();if(title.indexOf(temp)<0)title.push(temp)}}var site="Undefined";var tempPreviousTime=previousTime;globalPreviousEmailTime=previousTime;if(tempPreviousTime==""){tempPreviousTime=(new Date(tempDate.setMinutes(tempDate.getMinutes()-3))).toTimeString().split(" ")[0];tempPreviousTime=tempPreviousTime.slice(0,tempPreviousTime.indexOf(":")+3)}var action="Define jobs";var logType="defineJobs";var recipient=
+"";console.log("email["+i+","+emailSubject+"]-> Job Definition-"+zjobs.length+" found");displayRow(title,site,convertedDate,tempPreviousTime,action,logType,recipients,globalEmailSubject,i+1)}if(fullEmail.indexOf("TPIPE")>0||fullEmail.indexOf("L$")>=0){var myArray=myBody.split("\n");var mySecondArray=fullEmail.split("\n");if(fullEmail.split("From").length==2){var title=[];for(var j=myArray.length;j<=mySecondArray.length-1;j++){var lineN=mySecondArray[j];var temp="";if(lineN.indexOf("L$")>=0){temp=
+lineN.substring(lineN.indexOf("L$"),lineN.indexOf("L$")+6).trim();if(title.indexOf(temp)<0)title.push(temp)}if(lineN.indexOf("L@")>=0){temp=lineN.substring(lineN.indexOf("L@"),lineN.indexOf("L@")+6).trim();if(title.indexOf(temp)<0)title.push(temp)}}var site="Undefined";var tempPreviousTime=previousTime;globalPreviousEmailTime=previousTime;if(tempPreviousTime==""){tempPreviousTime=(new Date(tempDate.setMinutes(tempDate.getMinutes()-3))).toTimeString().split(" ")[0];tempPreviousTime=tempPreviousTime.slice(0,
 tempPreviousTime.indexOf(":")+3)}var action="Tpipe";var logType="tpipe";var recipient="";console.log("email["+i+","+emailSubject+"]-> Turnover-"+zjobs.length+" found");displayRow(title,site,convertedDate,tempPreviousTime,action,logType,recipients,globalEmailSubject,i+1)}}if(eval(stuckExpression)){var logType="stuckInSubmit";var action="Stuck in Submit";var where="stuck";var timeResult=(new Date(tempDate.setMinutes(tempDate.getMinutes()-stuckMinute))).toTimeString().split(" ")[0];extractJobs(emailSubject,
 myBody,where,fullEmail);console.log("email["+i+","+emailSubject+"]-> stuck-"+zjobs.length+" found");displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1)}if(eval(cleanUpExpression)){var logType="cleanUp";var action="PPC05 CLEAN UP";var where="cleanUp";var timeResult=(new Date(tempDate.setMinutes(tempDate.getMinutes()-0))).toTimeString().split(" ")[0];extractJobs(emailSubject,myBody,where,fullEmail);console.log("email["+i+","+emailSubject+"]-> cleanUp-"+zjobs.length+
 " found");displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,i+1)}if(eval(forceExpression)){var logType="force";var action="Force running";var where="force";var timeResult=(new Date(tempDate.setMinutes(tempDate.getMinutes()-3))).toTimeString().split(" ")[0];extractJobs(emailSubject,myBody,where,fullEmail);console.log("email["+i+","+emailSubject+"]-> force-"+zjobs.length+" found");displayRow(zjobs,site,convertedDate,timeResult,action,logType,recipients,globalEmailSubject,
@@ -505,12 +579,14 @@ convertedDate.toJSON().split("T")[0];cellThree=timeResult;cellFour=action;if(log
 t1.row.add([zjobs[0],cellTwoAbend,convertedDate.toJSON().split("T")[0],timeResult,action,cellSixAbend,globalEmailSubject]).draw(false).node();for(var i=0;i<6;i++)$(temp).find("td:eq("+i+")").attr({"data-email":emailIndex,"data-toggle":"popover","data-placement":"bottom","data-trigger":"focus"});console.log("SUCCESS");createSummary(action,zjobs[0])}else{var cellOne=zjobs[0];var temp=t2.row.add([zjobs[0],convertedDate.toJSON().split("T")[0],timeResult,action,cellFiveLongRun,convertedDate.toTimeString().split(" ")[0].split(":")[0]+
 ":"+convertedDate.toTimeString().split(" ")[0].split(":")[1],globalEmailSubject]).draw(false).node();for(var i=0;i<6;i++)$(temp).find("td:eq("+i+")").attr({"data-email":emailIndex,"data-toggle":"popover","data-placement":"bottom","data-trigger":"focus"});console.log("SUCCESS");createSummary(action,zjobs[0])}}else{console.log("multiple zjobs executing..."+zjobs.length);if(zjobs.length>1)for(var i=0;i<zjobs.length;i++){cellOne=zjobs[i];if(logType==="abend")if(site!="Undefined")cellTwoAbend=site;else cellTwoAbend=
 "Undefined";cellTwo=convertedDate.toJSON().split("T")[0];cellThree=timeResult.split(" ")[0].split(":")[0]+":"+timeResult.split(" ")[0].split(":")[1];cellFour=action;if(logType==="abend"){if(action=="rerun as per ps25"||action=="mark complete as per ps25"){if(action=="mark complete as per ps25"){var myVariables=solveTimeColumnsForMC(myBody,fullEmail,convertedDate,timeResult);timeResult=myVariables[0];cellSixAbend=myVariables[1]}if(action=="rerun as per ps25")cellSixAbend=timeResult}else cellSixAbend=
-convertedDate.toTimeString().split(" ")[0].split(":")[0]+":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];cellSeven=globalEmailSubject}if(logType=="longRunning"||logType=="holdRelease"||logType=="missedDue"||logType=="stuckInSubmit"||logType=="cleanUp"||logType=="force"||logType==="pcn"||logType=="inserted"||logType==="cancelled"||logType==="tpipe"){if(recipients.indexOf("data_mart")>=0)var team="Datamart";else if(recipients.indexOf("scssupport")>=0)var team="SCS";else if(recipients.indexOf("firm")>=
-0)var team="Firm";else if(recipients.indexOf("logistics")>=0)var team="Logistics";else if(recipients.indexOf("ap-mmpp")>=0)var team="Ap-mmpp";else if(recipients.indexOf("obsresv")>=0)var team="Obsersv";else if(recipients.indexOf("dcit")>=0)var team="Dcit";else if(recipients.indexOf("emk-dba")>=0)var team="Emk-Dba";else if(recipients.indexOf("hrsprodsup")>=0)var team="Hrsprodsup";else if(recipients.indexOf("busit")>=0)var team="Tt-ops/Bizzaps";else if(recipients.indexOf("bizapps")>=0)var team="Tt-ops/Bizzaps";
-else if(recipients.indexOf("vendavo")>=0)var team="Vendavo";else if(recipients.indexOf("wwmit_qms")>=0)var team="wwmit_qms";else if(recipients.indexOf("fs_oncall")>=0)var team="Fs_oncall";else if(recipients.indexOf("debatch")>=0)var team="Debatch";else if(recipients.indexOf("mpder")>=0)var team="Mpder";else if(recipients.indexOf("sapbw")>=0)var team="Sapbw";else if(recipients.indexOf("sap")>=0)var team="SAP";else var team="undefined";if(team!="undefined")cellFive=team;else cellFive="Undefined";cellSix=
-convertedDate.toTimeString().split(" ")[0].split(":")[0]+":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];cellSeven=globalEmailSubject}if(logType==="abend"){var temp=t1.row.add([zjobs[i],cellTwoAbend,convertedDate.toJSON().split("T")[0],timeResult.split(" ")[0].split(":")[0]+":"+timeResult.split(" ")[0].split(":")[1],action,cellSixAbend,globalEmailSubject]).draw(false).node();for(var j=0;j<6;j++)$(temp).find("td:eq("+j+")").attr({"data-email":emailIndex,"data-toggle":"popover","data-placement":"bottom",
-"data-trigger":"focus"});console.log("SUCCESS("+i+")");createSummary(action,zjobs[i])}else{var temp=t2.row.add([zjobs[i],convertedDate.toJSON().split("T")[0],timeResult.split(" ")[0].split(":")[0]+":"+timeResult.split(" ")[0].split(":")[1],action,cellFive,convertedDate.toTimeString().split(" ")[0].split(":")[0]+":"+convertedDate.toTimeString().split(" ")[0].split(":")[1],globalEmailSubject]).draw(false).node();for(var h=0;h<6;h++)$(temp).find("td:eq("+h+")").attr({"data-email":emailIndex,"data-toggle":"popover",
-"data-placement":"bottom","data-trigger":"focus"});console.log("SUCCESS ("+i+")");createSummary(action,zjobs[i])}}}};
-</script>
+convertedDate.toTimeString().split(" ")[0].split(":")[0]+":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];cellSeven=globalEmailSubject}if(logType=="longRunning"||logType=="holdRelease"||logType=="missedDue"||logType=="stuckInSubmit"||logType=="cleanUp"||logType=="force"||logType==="pcn"||logType=="inserted"||logType==="cancelled"||logType==="tpipe"||logType=="defineJobs"){if(recipients.indexOf("data_mart")>=0)var team="Datamart";else if(recipients.indexOf("scssupport")>=0)var team="SCS";
+else if(recipients.indexOf("firm")>=0)var team="Firm";else if(recipients.indexOf("logistics")>=0)var team="Logistics";else if(recipients.indexOf("ap-mmpp")>=0)var team="Ap-mmpp";else if(recipients.indexOf("obsresv")>=0)var team="Obsersv";else if(recipients.indexOf("dcit")>=0)var team="Dcit";else if(recipients.indexOf("emk-dba")>=0)var team="Emk-Dba";else if(recipients.indexOf("hrsprodsup")>=0)var team="Hrsprodsup";else if(recipients.indexOf("busit")>=0)var team="Tt-ops/Bizzaps";else if(recipients.indexOf("bizapps")>=
+0)var team="Tt-ops/Bizzaps";else if(recipients.indexOf("vendavo")>=0)var team="Vendavo";else if(recipients.indexOf("wwmit_qms")>=0)var team="wwmit_qms";else if(recipients.indexOf("fs_oncall")>=0)var team="Fs_oncall";else if(recipients.indexOf("debatch")>=0)var team="Debatch";else if(recipients.indexOf("mpder")>=0)var team="Mpder";else if(recipients.indexOf("sapbw")>=0)var team="Sapbw";else if(recipients.indexOf("sap")>=0)var team="SAP";else var team="undefined";if(team!="undefined")cellFive=team;
+else cellFive="Undefined";cellSix=convertedDate.toTimeString().split(" ")[0].split(":")[0]+":"+convertedDate.toTimeString().split(" ")[0].split(":")[1];cellSeven=globalEmailSubject}if(logType==="abend"){var temp=t1.row.add([zjobs[i],cellTwoAbend,convertedDate.toJSON().split("T")[0],timeResult.split(" ")[0].split(":")[0]+":"+timeResult.split(" ")[0].split(":")[1],action,cellSixAbend,globalEmailSubject]).draw(false).node();for(var j=0;j<6;j++)$(temp).find("td:eq("+j+")").attr({"data-email":emailIndex,
+"data-toggle":"popover","data-placement":"bottom","data-trigger":"focus"});console.log("SUCCESS("+i+")");createSummary(action,zjobs[i])}else{var temp=t2.row.add([zjobs[i],convertedDate.toJSON().split("T")[0],timeResult.split(" ")[0].split(":")[0]+":"+timeResult.split(" ")[0].split(":")[1],action,cellFive,convertedDate.toTimeString().split(" ")[0].split(":")[0]+":"+convertedDate.toTimeString().split(" ")[0].split(":")[1],globalEmailSubject]).draw(false).node();for(var h=0;h<6;h++)$(temp).find("td:eq("+
+h+")").attr({"data-email":emailIndex,"data-toggle":"popover","data-placement":"bottom","data-trigger":"focus"});console.log("SUCCESS ("+i+")");createSummary(action,zjobs[i])}}}};
+
+	
+	</script>
 
 </html>
