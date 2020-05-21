@@ -16,7 +16,7 @@
 -->
 
 
-
+<link rel="shortcut icon" type="image/x-icon" href="Automation_Log-logo2.png">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -131,22 +131,51 @@ progress[value]  {
 	 display: flex;
 }
   /* The alert message box */
-.alert {
+.alert-feature {
   padding: 20px;
   background-color: green; /* Red */
   color: white;
   margin-bottom: 15px;
   position:fixed;
-  text-align:center;
+  text-align:left;
   font-weight:bold;
 }
+.alert-maintenance {
+  padding: 20px;
+  background-color: red;
+  color: white;
+  margin-bottom: 15px;
+  position:fixed;
+  text-align:left;
+  font-weight:bold;
+}
+img.sticky {
+  position: -webkit-sticky;
+  position: fixed;
+  top: 0;
+  width: 200px;
+}
+
 
 
 </style>
 </head>
 
 <body oncontextmenu="return false">
-
+<div style="position:fixed">
+	<img class="sticky" src="Automation_Log-logo.png" alt="Automation_Log-logo">
+	<br><br><br>
+	<div class="alert-feature">
+	 NEW FEATURE ADDED: <br>
+	 &#10004;Job definition
+	</div>
+	<br><br><br><br>
+	<div class="alert-maintenance">
+	 UPCOMING MAINTENANCE: <br>
+	 *OCR<br>
+	 *Enterprise Authentication
+	</div>
+</div>
 <div class="container" >
 	<progress style="display:none" max="100" value="0" id="myBar" data-label="50%"></progress>
 	<div class="progress">
@@ -169,12 +198,7 @@ progress[value]  {
 	
 
 </div>
-	<div class="alert">
-	 
-	 NEW FEATURE ADDED: <br>
-	 &#10004;Job definition
-	 
-	</div>
+
 <br>
 <div >
 	<p id="displayTemp"> </p>
