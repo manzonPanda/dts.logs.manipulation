@@ -220,15 +220,16 @@ img.sticky {
 	<br><br><br>
 	<div class="alert-feature">
 	 NEW FEATURE ADDED: <br>
-	 &#10004;Job definition<br>
 	 &#10004; Firebase Integration <img src="Automation_Log-logo-firebase.png" width="30px" height="30px" >
 	</div>
 	<br><br><br><br> <br>
 	<div class="alert-maintenance">
-	 UPCOMING MAINTENANCE: <br>
-	 *Enterprise Authentication<br>
-	  *OCR<br>
-	 *Performance Enhancement
+	 UNDER MAINTENANCE: <br>
+	 &nbsp;&nbsp;&nbsp;*Job definition<br><br>
+	 UPCOMING FEATURE: <br>
+	 &nbsp;&nbsp;&nbsp;*OCR<br>
+	 &nbsp;&nbsp;&nbsp;*Enterprise Authentication<br>
+	 &nbsp;&nbsp;&nbsp;*Performance Enhancement
 	</div>
 </div>
 
@@ -360,7 +361,7 @@ img.sticky {
 			  <div class="input-group-prepend">
 				<span class="input-group-text" >Folder Name</span>
 			  </div>
-			  <input type="text" value="tempJanuary" id="folderName" class="form-control">
+			  <input type="text" value="tempSept" id="folderName" class="form-control">
 			   <div class="input-group-append">
 				<button id="createLogButton" style="border-color:green" class="btn btn-success" type="button" onclick="inputValidation()"> CREATE LOGS</button>
 				<!--<button id="showDebugButton" style="display:none" class="btn btn-danger" type="button" data-status="hidden" onclick="showDebug(this)"> HIDE DEBUG</button> -->
@@ -524,6 +525,9 @@ img.sticky {
 			  <input type="text" value="defined" id="jobDefinitionKeywords" class="form-control">
 			</div> 
 			
+			<div class="alert alert-danger" style="text-align:center;">
+			   Always indicate the <strong>status</strong> of the job in your email.
+			</div>
 			
 			</div>
 		</div>
@@ -647,7 +651,7 @@ Tesseract.recognize(
 		function findUser(signature){
 			var userName;
 			if(signature.toLowerCase().indexOf("manzon") >= 0 ){
-				userName = ["x1047437","Jake The Developer"];
+				userName = ["x1047437","Developer"];
 			}else if(signature.toLowerCase().indexOf("biag")>= 0){
 				userName = ["x0239970","Ronz Biag"];
 			}else if(signature.toLowerCase().indexOf("mendoza") >= 0){
@@ -678,7 +682,7 @@ Tesseract.recognize(
 		$(document).ready(function() {
 			//Welcome message
 			var x = document.getElementById("snackbar");
-			console.log("ready na..")
+			console.log("ready...")
 			x.className = "show";
 			setTimeout(function(){ x.className = x.className.replace("show", ""); }, 5000);
   
@@ -1751,7 +1755,7 @@ Tesseract.recognize(
 					}	
 					
 					//-> Job Definition expression=> myBody.indexOf("defined") >0 && fullEmail.indexOf("Job Definition") >0
-					if( eval(jobDefinitionExpression) && fullEmail.indexOf("job definition request") >=0 ){ //
+					if( eval(jobDefinitionExpression) || fullEmail.indexOf("Job Definition Request") >=0 ){
 						var myArray = myBody.split("job definition request form");
 						var mySecondArray = fullEmail.split("\n");
 						var title = [];
@@ -1759,7 +1763,10 @@ Tesseract.recognize(
 							var lineN = mySecondArray[j];
 							var temp = "";
 							if( lineN.indexOf("Z") >= 0 ){
-								temp = lineN.substring( lineN.indexOf("Z") , lineN.length).split("\t")[0].trim();	
+								//&nbsp;
+								temp = lineN.substring( lineN.indexOf("Z") , lineN.length).split(" ")[0].trim(); //trim space	
+								temp = temp.split("\t")[0].trim() //trim tab
+								//temp = lineN.substring( lineN.indexOf("Z") , lineN.length).split("\t")[0].trim();	
 								if( title.indexOf(temp) < 0 ){ //-1 if not found
 									title.push(temp)									
 								}
